@@ -37,10 +37,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware(['role:Teacher'])->group(function () {
         Route::get('/teacher/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+        Route::get('/teacher/my-attendance', [App\Http\Controllers\TeacherAttendanceController::class, 'myAttendance'])->name('teacher.my-attendance');
     });
 
     Route::middleware(['role:Student'])->group(function () {
         Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
+        Route::get('/student/my-attendance', [StudentDashboardController::class, 'myAttendance'])->name('student.my-attendance');
     });
 
     Route::middleware(['role:Parent'])->group(function () {
@@ -68,10 +70,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('classes/{schoolClass}/sections', [SchoolClassController::class, 'getSections'])->name('classes.sections');
         Route::get('classes/{schoolClass}/subjects', [SchoolClassController::class, 'getSubjects'])->name('classes.subjects');
 
-        // Attendance Management
+        // Student Attendance Management
         Route::get('attendance', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance.index');
+        Route::get('attendance/report', [App\Http\Controllers\AttendanceController::class, 'report'])->name('attendance.report'); // Report must be before create to avoid conflict with {param} if any
         Route::get('attendance/create', [App\Http\Controllers\AttendanceController::class, 'create'])->name('attendance.create');
         Route::post('attendance', [App\Http\Controllers\AttendanceController::class, 'store'])->name('attendance.store');
+    });
+
+    // Teacher Attendance Management (Accessible by Admin)
+    Route::middleware(['role:Super Admin|School Admin'])->group(function () {
+        Route::get('teacher-attendance', [App\Http\Controllers\TeacherAttendanceController::class, 'index'])->name('teacher-attendance.index');
+        Route::get('teacher-attendance/report', [App\Http\Controllers\TeacherAttendanceController::class, 'report'])->name('teacher-attendance.report');
+        Route::get('teacher-attendance/create', [App\Http\Controllers\TeacherAttendanceController::class, 'create'])->name('teacher-attendance.create');
+        Route::post('teacher-attendance', [App\Http\Controllers\TeacherAttendanceController::class, 'store'])->name('teacher-attendance.store');
     });
 
     // Student Management (Accessible by Admin and Teacher)

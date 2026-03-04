@@ -4,7 +4,10 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <span>Attendance History</span>
-        <a href="{{ route('attendance.create') }}" class="btn btn-sm btn-primary">Take Attendance</a>
+        <div>
+            <a href="{{ route('attendance.report') }}" class="btn btn-sm btn-info text-white">Monthly Report</a>
+            <a href="{{ route('attendance.create') }}" class="btn btn-sm btn-primary">Take Attendance</a>
+        </div>
     </div>
     <div class="card-body">
         <form action="{{ route('attendance.index') }}" method="GET" class="row g-3 mb-4">

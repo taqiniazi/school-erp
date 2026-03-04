@@ -15,6 +15,30 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @role('Super Admin|School Admin')
+                    <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.*')">
+                        {{ __('Student Attendance') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('teacher-attendance.index')" :active="request()->routeIs('teacher-attendance.*')">
+                        {{ __('Teacher Attendance') }}
+                    </x-nav-link>
+                    @endrole
+
+                    @role('Teacher')
+                    <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.*')">
+                        {{ __('Take Attendance') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('teacher.my-attendance')" :active="request()->routeIs('teacher.my-attendance')">
+                        {{ __('My Attendance') }}
+                    </x-nav-link>
+                    @endrole
+
+                    @role('Student|Parent')
+                    <x-nav-link :href="route('student.my-attendance')" :active="request()->routeIs('student.my-attendance')">
+                        {{ __('My Attendance') }}
+                    </x-nav-link>
+                    @endrole
                 </div>
             </div>
 
