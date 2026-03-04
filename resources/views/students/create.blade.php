@@ -13,25 +13,25 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="first_name" class="form-label">First Name *</label>
-                            <input type="text" class="form-control" name="first_name" required>
+                            <input type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" required>
                         </div>
                         <div class="col-md-6">
                             <label for="last_name" class="form-label">Last Name *</label>
-                            <input type="text" class="form-control" name="last_name" required>
+                            <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" required>
                         </div>
                     </div>
                     
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="dob" class="form-label">Date of Birth *</label>
-                            <input type="date" class="form-control" name="dob" required>
+                            <input type="date" class="form-control" name="dob" value="{{ old('dob') }}" required>
                         </div>
                         <div class="col-md-4">
                             <label for="gender" class="form-label">Gender *</label>
                             <select class="form-select" name="gender" required>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
+                                <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                                <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+                                <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
                             </select>
                         </div>
                         <div class="col-md-4">
@@ -44,15 +44,15 @@
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="admission_number" class="form-label">Admission Number *</label>
-                            <input type="text" class="form-control" name="admission_number" required>
+                            <input type="text" class="form-control" name="admission_number" value="{{ old('admission_number') }}" required>
                         </div>
                         <div class="col-md-4">
                             <label for="admission_date" class="form-label">Admission Date *</label>
-                            <input type="date" class="form-control" name="admission_date" required>
+                            <input type="date" class="form-control" name="admission_date" value="{{ old('admission_date') }}" required>
                         </div>
                         <div class="col-md-4">
                             <label for="roll_number" class="form-label">Roll Number</label>
-                            <input type="text" class="form-control" name="roll_number">
+                            <input type="text" class="form-control" name="roll_number" value="{{ old('roll_number') }}">
                         </div>
                     </div>
 
@@ -62,7 +62,7 @@
                             <select class="form-select" name="school_class_id" id="school_class_id" required>
                                 <option value="">Select Class</option>
                                 @foreach($classes as $class)
-                                    <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                    <option value="{{ $class->id }}" {{ old('school_class_id') == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -123,31 +123,43 @@
 
 @push('scripts')
 <script>
-    document.getElementById('school_class_id').addEventListener('change', function() {
-        const classId = this.value;
-        const sectionSelect = document.getElementById('section_id');
-        
+    const classSelect = document.getElementById('school_class_id');
+    const sectionSelect = document.getElementById('section_id');
+    const oldSectionId = "{{ old('section_id') }}";
+
+    function loadSections(classId, selectedId = null) {
         sectionSelect.innerHTML = '<option value="">Loading...</option>';
         sectionSelect.disabled = true;
-
-        if (classId) {
-            fetch(`/classes/${classId}/sections`)
-                .then(response => response.json())
-                .then(data => {
-                    sectionSelect.innerHTML = '<option value="">Select Section</option>';
-                    data.forEach(section => {
-                        const option = document.createElement('option');
-                        option.value = section.id;
-                        option.textContent = section.name;
-                        sectionSelect.appendChild(option);
-                    });
-                    sectionSelect.disabled = false;
+        
+        fetch(`/classes/${classId}/sections`)
+            .then(response => response.json())
+            .then(data => {
+                sectionSelect.innerHTML = '<option value="">Select Section</option>';
+                data.forEach(section => {
+                    const option = document.createElement('option');
+                    option.value = section.id;
+                    option.textContent = section.name;
+                    if (selectedId && section.id == selectedId) {
+                        option.selected = true;
+                    }
+                    sectionSelect.appendChild(option);
                 });
+                sectionSelect.disabled = false;
+            });
+    }
+
+    classSelect.addEventListener('change', function() {
+        if (this.value) {
+            loadSections(this.value);
         } else {
             sectionSelect.innerHTML = '<option value="">Select Class First</option>';
             sectionSelect.disabled = true;
         }
     });
+
+    if (classSelect.value) {
+        loadSections(classSelect.value, oldSectionId);
+    }
 </script>
 @endpush
 @endsection

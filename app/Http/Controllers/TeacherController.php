@@ -164,9 +164,24 @@ class TeacherController extends Controller
     public function storeAllocation(Request $request, Teacher $teacher)
     {
         $validated = $request->validate([
-            'subject_id' => 'required|exists:subjects,id',
             'school_class_id' => 'required|exists:school_classes,id',
             'section_id' => 'required|exists:sections,id',
+            'subject_id' => [
+                'required',
+                'exists:subjects,id',
+                function ($attribute, $value, $fail) use ($request) {
+                    $classId = $request->input('school_class_id');
+                    if ($classId) {
+                         $exists = DB::table('school_class_subject')
+                            ->where('school_class_id', $classId)
+                            ->where('subject_id', $value)
+                            ->exists();
+                         if (!$exists) {
+                             $fail('The selected subject is not assigned to this class.');
+                         }
+                    }
+                },
+            ],
         ]);
 
         // Check for duplicate allocation
