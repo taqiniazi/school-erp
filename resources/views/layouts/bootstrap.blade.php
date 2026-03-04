@@ -15,8 +15,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link active" href="{{ route('students.index') }}">Students</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('students.*') ? 'active' : '' }}" href="{{ route('students.index') }}">Students</a></li>
+                @role('Super Admin|School Admin')
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('teachers.*') ? 'active' : '' }}" href="{{ route('teachers.index') }}">Teachers</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('classes.*') ? 'active' : '' }}" href="{{ route('classes.index') }}">Classes</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('subjects.*') ? 'active' : '' }}" href="{{ route('subjects.index') }}">Subjects</a></li>
+                @endrole
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
