@@ -222,6 +222,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('my-invoices/{feeInvoice}/pdf', [App\Http\Controllers\FeeInvoiceController::class, 'downloadPdf'])->name('student.invoices.pdf');
     });
 
+    // Reports & Analytics (Admin)
+    Route::middleware(['role:Super Admin|School Admin'])->prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [App\Http\Controllers\ReportController::class, 'index'])->name('index');
+        Route::get('/academic', [App\Http\Controllers\ReportController::class, 'academic'])->name('academic');
+        Route::get('/financial', [App\Http\Controllers\ReportController::class, 'financial'])->name('financial');
+        Route::get('/attendance', [App\Http\Controllers\ReportController::class, 'attendance'])->name('attendance');
+        Route::get('/hr', [App\Http\Controllers\ReportController::class, 'hr'])->name('hr');
+    });
+
     // Communication Module
     Route::prefix('communication')->name('communication.')->group(function () {
         // Notices
