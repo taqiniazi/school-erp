@@ -69,6 +69,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // JSON Data for Dynamic Forms
         Route::get('classes/{schoolClass}/sections', [SchoolClassController::class, 'getSections'])->name('classes.sections');
         Route::get('classes/{schoolClass}/subjects', [SchoolClassController::class, 'getSubjects'])->name('classes.subjects');
+        Route::get('sections/{section}/students', [SchoolClassController::class, 'getStudents'])->name('sections.students');
 
         // Student Attendance Management
         Route::get('attendance', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance.index');
@@ -95,6 +96,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('teachers', \App\Http\Controllers\TeacherController::class);
         Route::post('teachers/{teacher}/allocations', [\App\Http\Controllers\TeacherController::class, 'storeAllocation'])->name('teachers.allocations.store');
         Route::delete('allocations/{allocation}', [\App\Http\Controllers\TeacherController::class, 'destroyAllocation'])->name('teachers.allocations.destroy');
+    });
+
+    // Examination Management (Admin)
+    Route::middleware(['role:Super Admin|School Admin'])->group(function () {
+        Route::resource('exams', App\Http\Controllers\ExamController::class);
+        Route::get('exams/{exam}/schedules', [App\Http\Controllers\ExamController::class, 'schedules'])->name('exams.schedules');
+        Route::post('exams/{exam}/schedules', [App\Http\Controllers\ExamController::class, 'storeSchedule'])->name('exams.schedules.store');
+        Route::delete('exams/schedules/{schedule}', [App\Http\Controllers\ExamController::class, 'deleteSchedule'])->name('exams.schedules.destroy');
+        Route::post('exams/{exam}/publish', [App\Http\Controllers\ExamController::class, 'publish'])->name('exams.publish');
+        Route::post('exams/{exam}/unpublish', [App\Http\Controllers\ExamController::class, 'unpublish'])->name('exams.unpublish');
+        
+        Route::resource('grades', App\Http\Controllers\GradeController::class);
+    });
+
+    // Marks Management (Admin & Teacher)
+    Route::middleware(['role:Super Admin|School Admin|Teacher'])->group(function () {
+        Route::get('marks', [App\Http\Controllers\MarkController::class, 'index'])->name('marks.index');
+        Route::get('marks/create', [App\Http\Controllers\MarkController::class, 'create'])->name('marks.create');
+        Route::post('marks', [App\Http\Controllers\MarkController::class, 'store'])->name('marks.store');
+        
+        // Report Cards (Admin & Teacher View)
+        Route::get('report-cards', [App\Http\Controllers\MarkController::class, 'reportCard'])->name('marks.report_card');
+        Route::get('report-cards/generate', [App\Http\Controllers\MarkController::class, 'generateReportCard'])->name('marks.generate_report_card');
+    });
+
+    // Student/Parent View Report Cards
+    Route::middleware(['role:Student|Parent'])->group(function () {
+         Route::get('my-report-card', [App\Http\Controllers\MarkController::class, 'myReportCard'])->name('student.report_card');
     });
 });
 

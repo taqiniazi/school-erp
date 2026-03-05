@@ -23,6 +23,18 @@
                     <x-nav-link :href="route('teacher-attendance.index')" :active="request()->routeIs('teacher-attendance.*')">
                         {{ __('Teacher Attendance') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('exams.index')" :active="request()->routeIs('exams.*')">
+                        {{ __('Exams') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('grades.index')" :active="request()->routeIs('grades.*')">
+                        {{ __('Grades') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('marks.index')" :active="request()->routeIs('marks.index') || request()->routeIs('marks.create')">
+                        {{ __('Marks Entry') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('marks.report_card')" :active="request()->routeIs('marks.report_card')">
+                        {{ __('Report Cards') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('Teacher')
@@ -32,11 +44,20 @@
                     <x-nav-link :href="route('teacher.my-attendance')" :active="request()->routeIs('teacher.my-attendance')">
                         {{ __('My Attendance') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('marks.index')" :active="request()->routeIs('marks.index') || request()->routeIs('marks.create')">
+                        {{ __('Marks Entry') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('marks.report_card')" :active="request()->routeIs('marks.report_card')">
+                        {{ __('Report Cards') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('Student|Parent')
                     <x-nav-link :href="route('student.my-attendance')" :active="request()->routeIs('student.my-attendance')">
                         {{ __('My Attendance') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('student.report_card')" :active="request()->routeIs('student.report_card')">
+                        {{ __('Report Card') }}
                     </x-nav-link>
                     @endrole
                 </div>
