@@ -163,6 +163,37 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Accounting: Reports
         Route::get('accounting/reports/profit-loss', [App\Http\Controllers\AccountingReportController::class, 'profitLoss'])->name('accounting.reports.profit_loss');
+
+        // Payroll: Salaries
+        Route::get('payroll/salaries', [App\Http\Controllers\PayrollController::class, 'index'])->name('payroll.salaries.index');
+        Route::get('payroll/salaries/create', [App\Http\Controllers\PayrollController::class, 'create'])->name('payroll.salaries.create');
+        Route::post('payroll/salaries', [App\Http\Controllers\PayrollController::class, 'store'])->name('payroll.salaries.store');
+        Route::get('payroll/salaries/{salary}/edit', [App\Http\Controllers\PayrollController::class, 'edit'])->name('payroll.salaries.edit');
+        Route::put('payroll/salaries/{salary}', [App\Http\Controllers\PayrollController::class, 'update'])->name('payroll.salaries.update');
+        Route::delete('payroll/salaries/{salary}', [App\Http\Controllers\PayrollController::class, 'destroy'])->name('payroll.salaries.destroy');
+
+        // Payroll: Allowances
+        Route::get('payroll/allowances', [App\Http\Controllers\PayrollController::class, 'allowances'])->name('payroll.allowances.index');
+        Route::get('payroll/allowances/create', [App\Http\Controllers\PayrollController::class, 'createAllowance'])->name('payroll.allowances.create');
+        Route::post('payroll/allowances', [App\Http\Controllers\PayrollController::class, 'storeAllowance'])->name('payroll.allowances.store');
+        Route::get('payroll/allowances/{allowance}/edit', [App\Http\Controllers\PayrollController::class, 'editAllowance'])->name('payroll.allowances.edit');
+        Route::put('payroll/allowances/{allowance}', [App\Http\Controllers\PayrollController::class, 'updateAllowance'])->name('payroll.allowances.update');
+        Route::delete('payroll/allowances/{allowance}', [App\Http\Controllers\PayrollController::class, 'destroyAllowance'])->name('payroll.allowances.destroy');
+
+        // Payroll: Deductions
+        Route::get('payroll/deductions', [App\Http\Controllers\PayrollController::class, 'deductions'])->name('payroll.deductions.index');
+        Route::get('payroll/deductions/create', [App\Http\Controllers\PayrollController::class, 'createDeduction'])->name('payroll.deductions.create');
+        Route::post('payroll/deductions', [App\Http\Controllers\PayrollController::class, 'storeDeduction'])->name('payroll.deductions.store');
+        Route::get('payroll/deductions/{deduction}/edit', [App\Http\Controllers\PayrollController::class, 'editDeduction'])->name('payroll.deductions.edit');
+        Route::put('payroll/deductions/{deduction}', [App\Http\Controllers\PayrollController::class, 'updateDeduction'])->name('payroll.deductions.update');
+        Route::delete('payroll/deductions/{deduction}', [App\Http\Controllers\PayrollController::class, 'destroyDeduction'])->name('payroll.deductions.destroy');
+
+        // Payroll: Payslips
+        Route::get('payroll/payslips', [App\Http\Controllers\PayslipController::class, 'index'])->name('payroll.payslips.index');
+        Route::get('payroll/payslips/create', [App\Http\Controllers\PayslipController::class, 'create'])->name('payroll.payslips.create');
+        Route::post('payroll/payslips', [App\Http\Controllers\PayslipController::class, 'store'])->name('payroll.payslips.store');
+        Route::get('payroll/payslips/{payslip}', [App\Http\Controllers\PayslipController::class, 'show'])->name('payroll.payslips.show');
+        Route::get('payroll/payslips/{payslip}/print', [App\Http\Controllers\PayslipController::class, 'print'])->name('payroll.payslips.print');
     });
 
     // Fee Collection (Admin & Teacher)

@@ -56,6 +56,9 @@
                     <x-nav-link :href="route('accounting.reports.profit_loss')" :active="request()->routeIs('accounting.reports.profit_loss')">
                         {{ __('Profit & Loss') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('payroll.salaries.index')" :active="request()->routeIs('payroll.*')">
+                        {{ __('Payroll') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('Teacher')
