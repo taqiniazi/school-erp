@@ -239,6 +239,35 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('payroll/payslips/{payslip}/print', [App\Http\Controllers\PayslipController::class, 'print'])->name('payroll.payslips.print');
     });
 
+    // Transport Management (Admin)
+    Route::middleware(['role:Super Admin|School Admin'])->group(function () {
+        Route::get('transport/drivers', [\App\Http\Controllers\DriverController::class, 'index'])->name('transport.drivers.index');
+        Route::get('transport/drivers/create', [\App\Http\Controllers\DriverController::class, 'create'])->name('transport.drivers.create');
+        Route::post('transport/drivers', [\App\Http\Controllers\DriverController::class, 'store'])->name('transport.drivers.store');
+        Route::get('transport/drivers/{driver}/edit', [\App\Http\Controllers\DriverController::class, 'edit'])->name('transport.drivers.edit');
+        Route::put('transport/drivers/{driver}', [\App\Http\Controllers\DriverController::class, 'update'])->name('transport.drivers.update');
+        Route::delete('transport/drivers/{driver}', [\App\Http\Controllers\DriverController::class, 'destroy'])->name('transport.drivers.destroy');
+
+        Route::get('transport/routes', [\App\Http\Controllers\TransportRouteController::class, 'index'])->name('transport.routes.index');
+        Route::get('transport/routes/create', [\App\Http\Controllers\TransportRouteController::class, 'create'])->name('transport.routes.create');
+        Route::post('transport/routes', [\App\Http\Controllers\TransportRouteController::class, 'store'])->name('transport.routes.store');
+        Route::get('transport/routes/{transportRoute}/edit', [\App\Http\Controllers\TransportRouteController::class, 'edit'])->name('transport.routes.edit');
+        Route::put('transport/routes/{transportRoute}', [\App\Http\Controllers\TransportRouteController::class, 'update'])->name('transport.routes.update');
+        Route::delete('transport/routes/{transportRoute}', [\App\Http\Controllers\TransportRouteController::class, 'destroy'])->name('transport.routes.destroy');
+
+        Route::get('transport/vehicles', [\App\Http\Controllers\VehicleController::class, 'index'])->name('transport.vehicles.index');
+        Route::get('transport/vehicles/create', [\App\Http\Controllers\VehicleController::class, 'create'])->name('transport.vehicles.create');
+        Route::post('transport/vehicles', [\App\Http\Controllers\VehicleController::class, 'store'])->name('transport.vehicles.store');
+        Route::get('transport/vehicles/{vehicle}/edit', [\App\Http\Controllers\VehicleController::class, 'edit'])->name('transport.vehicles.edit');
+        Route::put('transport/vehicles/{vehicle}', [\App\Http\Controllers\VehicleController::class, 'update'])->name('transport.vehicles.update');
+        Route::delete('transport/vehicles/{vehicle}', [\App\Http\Controllers\VehicleController::class, 'destroy'])->name('transport.vehicles.destroy');
+
+        Route::get('transport/assignments', [\App\Http\Controllers\StudentTransportController::class, 'index'])->name('transport.assignments.index');
+        Route::get('transport/assignments/create', [\App\Http\Controllers\StudentTransportController::class, 'create'])->name('transport.assignments.create');
+        Route::post('transport/assignments', [\App\Http\Controllers\StudentTransportController::class, 'store'])->name('transport.assignments.store');
+        Route::delete('transport/assignments/{studentTransport}', [\App\Http\Controllers\StudentTransportController::class, 'destroy'])->name('transport.assignments.destroy');
+    });
+
     // Fee Collection (Admin & Teacher)
     Route::middleware(['role:Super Admin|School Admin|Teacher'])->group(function () {
         Route::get('fee-invoices', [App\Http\Controllers\FeeInvoiceController::class, 'index'])->name('fee-invoices.index');

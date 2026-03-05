@@ -65,6 +65,9 @@
                     <x-nav-link :href="route('inventory.items.index')" :active="request()->routeIs('inventory.*')">
                         {{ __('Inventory') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('transport.vehicles.index')" :active="request()->routeIs('transport.*')">
+                        {{ __('Transport') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('Teacher')
