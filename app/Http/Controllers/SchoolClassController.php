@@ -169,4 +169,18 @@ class SchoolClassController extends Controller
             
         return response()->json($students);
     }
+
+    /**
+     * Get students for a specific class (JSON).
+     */
+    public function getStudentsByClass(SchoolClass $schoolClass)
+    {
+        $students = \App\Models\Student::where('school_class_id', $schoolClass->id)
+            ->orderBy('first_name')
+            ->orderBy('last_name')
+            ->select('id', 'first_name', 'last_name', 'roll_number', 'admission_number')
+            ->get();
+            
+        return response()->json($students);
+    }
 }

@@ -35,6 +35,15 @@
                     <x-nav-link :href="route('marks.report_card')" :active="request()->routeIs('marks.report_card')">
                         {{ __('Report Cards') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('fee-types.index')" :active="request()->routeIs('fee-types.*')">
+                        {{ __('Fee Types') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('fee-structures.index')" :active="request()->routeIs('fee-structures.*')">
+                        {{ __('Fee Structures') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('fee-invoices.index')" :active="request()->routeIs('fee-invoices.*')">
+                        {{ __('Fee Invoices') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('Teacher')
@@ -50,6 +59,9 @@
                     <x-nav-link :href="route('marks.report_card')" :active="request()->routeIs('marks.report_card')">
                         {{ __('Report Cards') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('fee-invoices.index')" :active="request()->routeIs('fee-invoices.*')">
+                        {{ __('Fee Collection') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('Student|Parent')
@@ -58,6 +70,9 @@
                     </x-nav-link>
                     <x-nav-link :href="route('student.report_card')" :active="request()->routeIs('student.report_card')">
                         {{ __('Report Card') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('student.invoices')" :active="request()->routeIs('student.invoices')">
+                        {{ __('My Invoices') }}
                     </x-nav-link>
                     @endrole
                 </div>

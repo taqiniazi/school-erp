@@ -69,6 +69,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // JSON Data for Dynamic Forms
         Route::get('classes/{schoolClass}/sections', [SchoolClassController::class, 'getSections'])->name('classes.sections');
         Route::get('classes/{schoolClass}/subjects', [SchoolClassController::class, 'getSubjects'])->name('classes.subjects');
+        Route::get('classes/{schoolClass}/students', [SchoolClassController::class, 'getStudentsByClass'])->name('classes.students');
         Route::get('sections/{section}/students', [SchoolClassController::class, 'getStudents'])->name('sections.students');
 
         // Student Attendance Management
@@ -124,6 +125,38 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Student/Parent View Report Cards
     Route::middleware(['role:Student|Parent'])->group(function () {
          Route::get('my-report-card', [App\Http\Controllers\MarkController::class, 'myReportCard'])->name('student.report_card');
+    });
+
+    // Fee Management (Admin)
+    Route::middleware(['role:Super Admin|School Admin'])->group(function () {
+        Route::resource('fee-types', App\Http\Controllers\FeeTypeController::class);
+        Route::resource('fee-structures', App\Http\Controllers\FeeStructureController::class);
+        
+        // Fee Invoices (Admin Only for Generation)
+        Route::get('fee-invoices/create', [App\Http\Controllers\FeeInvoiceController::class, 'create'])->name('fee-invoices.create');
+        Route::post('fee-invoices', [App\Http\Controllers\FeeInvoiceController::class, 'store'])->name('fee-invoices.store');
+        Route::get('fee-invoices/{feeInvoice}/edit', [App\Http\Controllers\FeeInvoiceController::class, 'edit'])->name('fee-invoices.edit');
+        Route::put('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'update'])->name('fee-invoices.update');
+        Route::delete('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'destroy'])->name('fee-invoices.destroy');
+    });
+
+    // Fee Collection (Admin & Teacher)
+    Route::middleware(['role:Super Admin|School Admin|Teacher'])->group(function () {
+        Route::get('fee-invoices', [App\Http\Controllers\FeeInvoiceController::class, 'index'])->name('fee-invoices.index');
+        Route::get('fee-invoices/{feeInvoice}/collect', [App\Http\Controllers\FeeInvoiceController::class, 'collect'])->name('fee-invoices.collect');
+        Route::post('fee-invoices/{feeInvoice}/pay', [App\Http\Controllers\FeeInvoiceController::class, 'pay'])->name('fee-invoices.pay');
+        Route::get('fee-payments', [App\Http\Controllers\FeePaymentController::class, 'index'])->name('fee-payments.index');
+    });
+
+    // Fee Invoices (Shared Access)
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'show'])->name('fee-invoices.show');
+        Route::get('fee-invoices/{feeInvoice}/print', [App\Http\Controllers\FeeInvoiceController::class, 'print'])->name('fee-invoices.print');
+    });
+
+    // Student/Parent View Fees
+    Route::middleware(['role:Student|Parent'])->group(function () {
+         Route::get('my-invoices', [App\Http\Controllers\FeeInvoiceController::class, 'myInvoices'])->name('student.invoices');
     });
 });
 
