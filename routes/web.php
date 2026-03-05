@@ -198,122 +198,38 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Fee Invoices (Admin Only for Generation)
         Route::get('fee-invoices/create', [App\Http\Controllers\FeeInvoiceController::class, 'create'])->name('fee-invoices.create');
         Route::post('fee-invoices', [App\Http\Controllers\FeeInvoiceController::class, 'store'])->name('fee-invoices.store');
+        
+        // Adjustments (Admin Only)
         Route::get('fee-invoices/{feeInvoice}/edit', [App\Http\Controllers\FeeInvoiceController::class, 'edit'])->name('fee-invoices.edit');
         Route::put('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'update'])->name('fee-invoices.update');
-        Route::delete('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'destroy'])->name('fee-invoices.destroy');
 
-        // Accounting: Financial Years
-        Route::resource('financial-years', App\Http\Controllers\FinancialYearController::class)->parameters([
-            'financial-years' => 'financialYear'
-        ]);
-        Route::post('financial-years/{financialYear}/set-current', [App\Http\Controllers\FinancialYearController::class, 'setCurrent'])->name('financial-years.set-current');
-
-        // Accounting: Income
-        Route::get('accounting/income', [App\Http\Controllers\IncomeController::class, 'index'])->name('accounting.income.index');
-        Route::get('accounting/income/create', [App\Http\Controllers\IncomeController::class, 'create'])->name('accounting.income.create');
-        Route::post('accounting/income', [App\Http\Controllers\IncomeController::class, 'store'])->name('accounting.income.store');
-        Route::get('accounting/income/{income}/edit', [App\Http\Controllers\IncomeController::class, 'edit'])->name('accounting.income.edit');
-        Route::put('accounting/income/{income}', [App\Http\Controllers\IncomeController::class, 'update'])->name('accounting.income.update');
-        Route::delete('accounting/income/{income}', [App\Http\Controllers\IncomeController::class, 'destroy'])->name('accounting.income.destroy');
-
-        // Accounting: Expenses
-        Route::get('accounting/expense', [App\Http\Controllers\ExpenseController::class, 'index'])->name('accounting.expense.index');
-        Route::get('accounting/expense/create', [App\Http\Controllers\ExpenseController::class, 'create'])->name('accounting.expense.create');
-        Route::post('accounting/expense', [App\Http\Controllers\ExpenseController::class, 'store'])->name('accounting.expense.store');
-        Route::get('accounting/expense/{expense}/edit', [App\Http\Controllers\ExpenseController::class, 'edit'])->name('accounting.expense.edit');
-        Route::put('accounting/expense/{expense}', [App\Http\Controllers\ExpenseController::class, 'update'])->name('accounting.expense.update');
-        Route::delete('accounting/expense/{expense}', [App\Http\Controllers\ExpenseController::class, 'destroy'])->name('accounting.expense.destroy');
-
-        // Accounting: Reports
-        Route::get('accounting/reports/profit-loss', [App\Http\Controllers\AccountingReportController::class, 'profitLoss'])->name('accounting.reports.profit_loss');
-
-        // Payroll: Salaries
-        Route::get('payroll/salaries', [App\Http\Controllers\PayrollController::class, 'index'])->name('payroll.salaries.index');
-        Route::get('payroll/salaries/create', [App\Http\Controllers\PayrollController::class, 'create'])->name('payroll.salaries.create');
-        Route::post('payroll/salaries', [App\Http\Controllers\PayrollController::class, 'store'])->name('payroll.salaries.store');
-        Route::get('payroll/salaries/{salary}/edit', [App\Http\Controllers\PayrollController::class, 'edit'])->name('payroll.salaries.edit');
-        Route::put('payroll/salaries/{salary}', [App\Http\Controllers\PayrollController::class, 'update'])->name('payroll.salaries.update');
-        Route::delete('payroll/salaries/{salary}', [App\Http\Controllers\PayrollController::class, 'destroy'])->name('payroll.salaries.destroy');
-
-        // Payroll: Allowances
-        Route::get('payroll/allowances', [App\Http\Controllers\PayrollController::class, 'allowances'])->name('payroll.allowances.index');
-        Route::get('payroll/allowances/create', [App\Http\Controllers\PayrollController::class, 'createAllowance'])->name('payroll.allowances.create');
-        Route::post('payroll/allowances', [App\Http\Controllers\PayrollController::class, 'storeAllowance'])->name('payroll.allowances.store');
-        Route::get('payroll/allowances/{allowance}/edit', [App\Http\Controllers\PayrollController::class, 'editAllowance'])->name('payroll.allowances.edit');
-        Route::put('payroll/allowances/{allowance}', [App\Http\Controllers\PayrollController::class, 'updateAllowance'])->name('payroll.allowances.update');
-        Route::delete('payroll/allowances/{allowance}', [App\Http\Controllers\PayrollController::class, 'destroyAllowance'])->name('payroll.allowances.destroy');
-
-        // Payroll: Deductions
-        Route::get('payroll/deductions', [App\Http\Controllers\PayrollController::class, 'deductions'])->name('payroll.deductions.index');
-        Route::get('payroll/deductions/create', [App\Http\Controllers\PayrollController::class, 'createDeduction'])->name('payroll.deductions.create');
-        Route::post('payroll/deductions', [App\Http\Controllers\PayrollController::class, 'storeDeduction'])->name('payroll.deductions.store');
-        Route::get('payroll/deductions/{deduction}/edit', [App\Http\Controllers\PayrollController::class, 'editDeduction'])->name('payroll.deductions.edit');
-        Route::put('payroll/deductions/{deduction}', [App\Http\Controllers\PayrollController::class, 'updateDeduction'])->name('payroll.deductions.update');
-        Route::delete('payroll/deductions/{deduction}', [App\Http\Controllers\PayrollController::class, 'destroyDeduction'])->name('payroll.deductions.destroy');
-
-        // Payroll: Payslips
-        Route::get('payroll/payslips', [App\Http\Controllers\PayslipController::class, 'index'])->name('payroll.payslips.index');
-        Route::get('payroll/payslips/create', [App\Http\Controllers\PayslipController::class, 'create'])->name('payroll.payslips.create');
-        Route::post('payroll/payslips', [App\Http\Controllers\PayslipController::class, 'store'])->name('payroll.payslips.store');
-        Route::get('payroll/payslips/{payslip}', [App\Http\Controllers\PayslipController::class, 'show'])->name('payroll.payslips.show');
-        Route::get('payroll/payslips/{payslip}/print', [App\Http\Controllers\PayslipController::class, 'print'])->name('payroll.payslips.print');
-    });
-
-    // Transport Management (Admin)
-    Route::middleware(['role:Super Admin|School Admin'])->group(function () {
-        Route::get('transport/drivers', [\App\Http\Controllers\DriverController::class, 'index'])->name('transport.drivers.index');
-        Route::get('transport/drivers/create', [\App\Http\Controllers\DriverController::class, 'create'])->name('transport.drivers.create');
-        Route::post('transport/drivers', [\App\Http\Controllers\DriverController::class, 'store'])->name('transport.drivers.store');
-        Route::get('transport/drivers/{driver}/edit', [\App\Http\Controllers\DriverController::class, 'edit'])->name('transport.drivers.edit');
-        Route::put('transport/drivers/{driver}', [\App\Http\Controllers\DriverController::class, 'update'])->name('transport.drivers.update');
-        Route::delete('transport/drivers/{driver}', [\App\Http\Controllers\DriverController::class, 'destroy'])->name('transport.drivers.destroy');
-
-        Route::get('transport/routes', [\App\Http\Controllers\TransportRouteController::class, 'index'])->name('transport.routes.index');
-        Route::get('transport/routes/create', [\App\Http\Controllers\TransportRouteController::class, 'create'])->name('transport.routes.create');
-        Route::post('transport/routes', [\App\Http\Controllers\TransportRouteController::class, 'store'])->name('transport.routes.store');
-        Route::get('transport/routes/{transportRoute}/edit', [\App\Http\Controllers\TransportRouteController::class, 'edit'])->name('transport.routes.edit');
-        Route::put('transport/routes/{transportRoute}', [\App\Http\Controllers\TransportRouteController::class, 'update'])->name('transport.routes.update');
-        Route::delete('transport/routes/{transportRoute}', [\App\Http\Controllers\TransportRouteController::class, 'destroy'])->name('transport.routes.destroy');
-
-        Route::get('transport/vehicles', [\App\Http\Controllers\VehicleController::class, 'index'])->name('transport.vehicles.index');
-        Route::get('transport/vehicles/create', [\App\Http\Controllers\VehicleController::class, 'create'])->name('transport.vehicles.create');
-        Route::post('transport/vehicles', [\App\Http\Controllers\VehicleController::class, 'store'])->name('transport.vehicles.store');
-        Route::get('transport/vehicles/{vehicle}/edit', [\App\Http\Controllers\VehicleController::class, 'edit'])->name('transport.vehicles.edit');
-        Route::put('transport/vehicles/{vehicle}', [\App\Http\Controllers\VehicleController::class, 'update'])->name('transport.vehicles.update');
-        Route::delete('transport/vehicles/{vehicle}', [\App\Http\Controllers\VehicleController::class, 'destroy'])->name('transport.vehicles.destroy');
-
-        Route::get('transport/assignments', [\App\Http\Controllers\StudentTransportController::class, 'index'])->name('transport.assignments.index');
-        Route::get('transport/assignments/create', [\App\Http\Controllers\StudentTransportController::class, 'create'])->name('transport.assignments.create');
-        Route::post('transport/assignments', [\App\Http\Controllers\StudentTransportController::class, 'store'])->name('transport.assignments.store');
-        Route::delete('transport/assignments/{studentTransport}', [\App\Http\Controllers\StudentTransportController::class, 'destroy'])->name('transport.assignments.destroy');
-    });
-
-    // Fee Collection (Admin & Teacher)
-    Route::middleware(['role:Super Admin|School Admin|Teacher'])->group(function () {
         Route::get('fee-invoices', [App\Http\Controllers\FeeInvoiceController::class, 'index'])->name('fee-invoices.index');
-        Route::get('fee-invoices/{feeInvoice}/collect', [App\Http\Controllers\FeeInvoiceController::class, 'collect'])->name('fee-invoices.collect');
-        Route::post('fee-invoices/{feeInvoice}/pay', [App\Http\Controllers\FeeInvoiceController::class, 'pay'])->name('fee-invoices.pay');
-        Route::get('fee-payments', [App\Http\Controllers\FeePaymentController::class, 'index'])->name('fee-payments.index');
-
-        // HR: Teacher Leave Requests (Self-Service)
-        Route::get('my-leave', [\App\Http\Controllers\LeaveRequestController::class, 'myIndex'])->name('hr.leave.my');
-        Route::get('my-leave/create', [\App\Http\Controllers\LeaveRequestController::class, 'create'])->name('hr.leave.create');
-        Route::post('my-leave', [\App\Http\Controllers\LeaveRequestController::class, 'store'])->name('hr.leave.store');
-    });
-
-    // Fee Invoices (Shared Access)
-    Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'show'])->name('fee-invoices.show');
-        Route::get('fee-invoices/{feeInvoice}/print', [App\Http\Controllers\FeeInvoiceController::class, 'print'])->name('fee-invoices.print');
+        
+        // Payments (Admin)
+        Route::post('fee-invoices/{feeInvoice}/pay', [App\Http\Controllers\FeePaymentController::class, 'store'])->name('fee-payments.store');
+        Route::get('fee-payments/history', [App\Http\Controllers\FeePaymentController::class, 'history'])->name('fee-payments.history');
     });
 
-    // Student/Parent View Fees
+    // Student Fee View
     Route::middleware(['role:Student|Parent'])->group(function () {
-         Route::get('my-invoices', [App\Http\Controllers\FeeInvoiceController::class, 'myInvoices'])->name('student.invoices');
+        Route::get('my-invoices', [App\Http\Controllers\FeeInvoiceController::class, 'myInvoices'])->name('student.invoices');
+        Route::get('my-invoices/{feeInvoice}/pdf', [App\Http\Controllers\FeeInvoiceController::class, 'downloadPdf'])->name('student.invoices.pdf');
     });
-});
 
-Route::middleware('auth')->group(function () {
+    // Communication Module
+    Route::prefix('communication')->name('communication.')->group(function () {
+        // Notices
+        Route::resource('notices', App\Http\Controllers\NoticeController::class);
+        
+        // Events
+        Route::resource('events', App\Http\Controllers\EventController::class);
+        
+        // Messages
+        Route::get('messages/sent', [App\Http\Controllers\MessageController::class, 'sent'])->name('messages.sent');
+        Route::resource('messages', App\Http\Controllers\MessageController::class);
+    });
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

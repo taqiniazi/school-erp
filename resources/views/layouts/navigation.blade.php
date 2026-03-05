@@ -108,6 +108,17 @@
                         {{ __('My Library') }}
                     </x-nav-link>
                     @endrole
+
+                    <!-- Communication (All Roles) -->
+                    <x-nav-link :href="route('communication.notices.index')" :active="request()->routeIs('communication.notices.*')">
+                        {{ __('Notices') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('communication.events.index')" :active="request()->routeIs('communication.events.*')">
+                        {{ __('Events') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('communication.messages.index')" :active="request()->routeIs('communication.messages.*')">
+                        {{ __('Messages') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -162,6 +173,17 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+
+            <!-- Communication -->
+            <x-responsive-nav-link :href="route('communication.notices.index')" :active="request()->routeIs('communication.notices.*')">
+                {{ __('Notices') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('communication.events.index')" :active="request()->routeIs('communication.events.*')">
+                {{ __('Events') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('communication.messages.index')" :active="request()->routeIs('communication.messages.*')">
+                {{ __('Messages') }}
             </x-responsive-nav-link>
         </div>
 
