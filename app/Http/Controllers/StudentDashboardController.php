@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\Event;
+use App\Models\ExamSchedule;
+use App\Models\FeeInvoice;
+use App\Models\Mark;
+use App\Models\Notice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,7 +15,61 @@ class StudentDashboardController extends Controller
 {
     public function index()
     {
-        return view('student.dashboard');
+        $user = Auth::user();
+        $student = $user->studentProfile;
+        
+        if (!$student) {
+             // Fallback
+             $student = \App\Models\Student::where('email', $user->email)->first();
+        }
+
+        if (!$student) {
+            return view('student.dashboard', [
+                'attendancePercentage' => 0,
+                'unpaidInvoices' => 0,
+                'averageMarks' => 0,
+                'upcomingExams' => collect(),
+                'upcomingEvents' => collect(),
+                'recentNotices' => collect()
+            ]);
+        }
+
+        // KPIs
+        $totalAttendance = Attendance::where('student_id', $student->id)->count();
+        $presentAttendance = Attendance::where('student_id', $student->id)->where('status', 'present')->count();
+        $attendancePercentage = $totalAttendance > 0 ? round(($presentAttendance / $totalAttendance) * 100, 1) : 0;
+
+        $unpaidInvoices = FeeInvoice::where('student_id', $student->id)->where('status', 'unpaid')->count();
+        
+        $averageMarks = Mark::where('student_id', $student->id)->avg('marks_obtained');
+        $averageMarks = $averageMarks ? round($averageMarks, 1) : 0;
+
+        // Alerts
+        $upcomingExams = ExamSchedule::where('school_class_id', $student->school_class_id)
+            ->where('date', '>=', now())
+            ->orderBy('date')
+            ->with(['exam', 'subject'])
+            ->take(3)
+            ->get();
+            
+        $upcomingEvents = Event::where('start_date', '>=', now())
+            ->orderBy('start_date')
+            ->take(3)
+            ->get();
+            
+        $recentNotices = Notice::whereIn('audience_role', ['all', 'Student'])
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('student.dashboard', compact(
+            'attendancePercentage',
+            'unpaidInvoices',
+            'averageMarks',
+            'upcomingExams',
+            'upcomingEvents',
+            'recentNotices'
+        ));
     }
 
     /**
@@ -65,5 +124,47 @@ class StudentDashboardController extends Controller
             });
 
         return view('student.my_attendance', compact('student', 'attendances', 'month', 'year', 'daysInMonth', 'children'));
+    }
+
+    /**
+     * Show student's invoices.
+     */
+    public function myInvoices(Request $request)
+    {
+        $user = Auth::user();
+        $student = null;
+        $children = collect();
+
+        if ($user->hasRole('Student')) {
+            $student = $user->studentProfile; 
+            if (!$student) {
+                 $student = \App\Models\Student::where('email', $user->email)->first();
+            }
+        } elseif ($user->hasRole('Parent')) {
+            $children = $user->students;
+            
+            if ($children->isEmpty()) {
+                return redirect()->back()->with('error', 'No students linked to your account.');
+            }
+            
+            if ($request->has('student_id')) {
+                $student = $children->where('id', $request->student_id)->first();
+                if (!$student) {
+                    return redirect()->back()->with('error', 'Invalid student selected.');
+                }
+            } else {
+                $student = $children->first();
+            }
+        }
+
+        if (!$student) {
+            return redirect()->back()->with('error', 'Student record not found.');
+        }
+
+        $invoices = FeeInvoice::where('student_id', $student->id)
+            ->orderBy('issue_date', 'desc')
+            ->get();
+
+        return view('student.my_invoices', compact('student', 'invoices', 'children'));
     }
 }

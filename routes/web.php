@@ -42,11 +42,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware(['role:Student'])->group(function () {
         Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
-        Route::get('/student/my-attendance', [StudentDashboardController::class, 'myAttendance'])->name('student.my-attendance');
     });
 
     Route::middleware(['role:Parent'])->group(function () {
         Route::get('/parent/dashboard', [ParentDashboardController::class, 'index'])->name('parent.dashboard');
+    });
+
+    // Shared Student/Parent Resources
+    Route::middleware(['role:Student|Parent'])->group(function () {
+        Route::get('/student/my-attendance', [StudentDashboardController::class, 'myAttendance'])->name('student.my-attendance');
+        Route::get('/student/my-invoices', [StudentDashboardController::class, 'myInvoices'])->name('student.invoices');
     });
 
     // Academic Management (Accessible by Admin)
