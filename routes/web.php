@@ -118,6 +118,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('hr/performance/{performanceReview}/edit', [\App\Http\Controllers\PerformanceReviewController::class, 'edit'])->name('hr.performance.edit');
         Route::put('hr/performance/{performanceReview}', [\App\Http\Controllers\PerformanceReviewController::class, 'update'])->name('hr.performance.update');
         Route::delete('hr/performance/{performanceReview}', [\App\Http\Controllers\PerformanceReviewController::class, 'destroy'])->name('hr.performance.destroy');
+
+        // Inventory Management
+        Route::get('inventory/items', [\App\Http\Controllers\InventoryItemController::class, 'index'])->name('inventory.items.index');
+        Route::get('inventory/items/create', [\App\Http\Controllers\InventoryItemController::class, 'create'])->name('inventory.items.create');
+        Route::post('inventory/items', [\App\Http\Controllers\InventoryItemController::class, 'store'])->name('inventory.items.store');
+        Route::get('inventory/items/{inventoryItem}/edit', [\App\Http\Controllers\InventoryItemController::class, 'edit'])->name('inventory.items.edit');
+        Route::put('inventory/items/{inventoryItem}', [\App\Http\Controllers\InventoryItemController::class, 'update'])->name('inventory.items.update');
+        Route::delete('inventory/items/{inventoryItem}', [\App\Http\Controllers\InventoryItemController::class, 'destroy'])->name('inventory.items.destroy');
+
+        Route::get('inventory/purchases', [\App\Http\Controllers\InventoryPurchaseController::class, 'index'])->name('inventory.purchases.index');
+        Route::get('inventory/purchases/create', [\App\Http\Controllers\InventoryPurchaseController::class, 'create'])->name('inventory.purchases.create');
+        Route::post('inventory/purchases', [\App\Http\Controllers\InventoryPurchaseController::class, 'store'])->name('inventory.purchases.store');
+
+        Route::get('inventory/issues', [\App\Http\Controllers\InventoryIssueController::class, 'index'])->name('inventory.issues.index');
+        Route::get('inventory/issues/create', [\App\Http\Controllers\InventoryIssueController::class, 'create'])->name('inventory.issues.create');
+        Route::post('inventory/issues', [\App\Http\Controllers\InventoryIssueController::class, 'store'])->name('inventory.issues.store');
+
+        Route::get('inventory/returns', [\App\Http\Controllers\InventoryReturnController::class, 'index'])->name('inventory.returns.index');
+        Route::get('inventory/returns/create', [\App\Http\Controllers\InventoryReturnController::class, 'create'])->name('inventory.returns.create');
+        Route::post('inventory/returns', [\App\Http\Controllers\InventoryReturnController::class, 'store'])->name('inventory.returns.store');
+
+        Route::get('inventory/alerts/low-stock', [\App\Http\Controllers\InventoryAlertController::class, 'lowStock'])->name('inventory.alerts.low_stock');
     });
 
     // Examination Management (Admin)

@@ -62,6 +62,9 @@
                     <x-nav-link :href="route('hr.staff.index')" :active="request()->routeIs('hr.*')">
                         {{ __('HR') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('inventory.items.index')" :active="request()->routeIs('inventory.*')">
+                        {{ __('Inventory') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('Teacher')
