@@ -44,6 +44,18 @@
                     <x-nav-link :href="route('fee-invoices.index')" :active="request()->routeIs('fee-invoices.*')">
                         {{ __('Fee Invoices') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('financial-years.index')" :active="request()->routeIs('financial-years.*')">
+                        {{ __('Financial Years') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('accounting.income.index')" :active="request()->routeIs('accounting.income.*')">
+                        {{ __('Income') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('accounting.expense.index')" :active="request()->routeIs('accounting.expense.*')">
+                        {{ __('Expenses') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('accounting.reports.profit_loss')" :active="request()->routeIs('accounting.reports.profit_loss')">
+                        {{ __('Profit & Loss') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('Teacher')

@@ -138,6 +138,31 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('fee-invoices/{feeInvoice}/edit', [App\Http\Controllers\FeeInvoiceController::class, 'edit'])->name('fee-invoices.edit');
         Route::put('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'update'])->name('fee-invoices.update');
         Route::delete('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'destroy'])->name('fee-invoices.destroy');
+
+        // Accounting: Financial Years
+        Route::resource('financial-years', App\Http\Controllers\FinancialYearController::class)->parameters([
+            'financial-years' => 'financialYear'
+        ]);
+        Route::post('financial-years/{financialYear}/set-current', [App\Http\Controllers\FinancialYearController::class, 'setCurrent'])->name('financial-years.set-current');
+
+        // Accounting: Income
+        Route::get('accounting/income', [App\Http\Controllers\IncomeController::class, 'index'])->name('accounting.income.index');
+        Route::get('accounting/income/create', [App\Http\Controllers\IncomeController::class, 'create'])->name('accounting.income.create');
+        Route::post('accounting/income', [App\Http\Controllers\IncomeController::class, 'store'])->name('accounting.income.store');
+        Route::get('accounting/income/{income}/edit', [App\Http\Controllers\IncomeController::class, 'edit'])->name('accounting.income.edit');
+        Route::put('accounting/income/{income}', [App\Http\Controllers\IncomeController::class, 'update'])->name('accounting.income.update');
+        Route::delete('accounting/income/{income}', [App\Http\Controllers\IncomeController::class, 'destroy'])->name('accounting.income.destroy');
+
+        // Accounting: Expenses
+        Route::get('accounting/expense', [App\Http\Controllers\ExpenseController::class, 'index'])->name('accounting.expense.index');
+        Route::get('accounting/expense/create', [App\Http\Controllers\ExpenseController::class, 'create'])->name('accounting.expense.create');
+        Route::post('accounting/expense', [App\Http\Controllers\ExpenseController::class, 'store'])->name('accounting.expense.store');
+        Route::get('accounting/expense/{expense}/edit', [App\Http\Controllers\ExpenseController::class, 'edit'])->name('accounting.expense.edit');
+        Route::put('accounting/expense/{expense}', [App\Http\Controllers\ExpenseController::class, 'update'])->name('accounting.expense.update');
+        Route::delete('accounting/expense/{expense}', [App\Http\Controllers\ExpenseController::class, 'destroy'])->name('accounting.expense.destroy');
+
+        // Accounting: Reports
+        Route::get('accounting/reports/profit-loss', [App\Http\Controllers\AccountingReportController::class, 'profitLoss'])->name('accounting.reports.profit_loss');
     });
 
     // Fee Collection (Admin & Teacher)
