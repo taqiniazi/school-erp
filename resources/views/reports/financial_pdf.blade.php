@@ -29,7 +29,7 @@
                 <tr>
                     <td>{{ $payment->id }}</td>
                     <td>{{ $payment->feeInvoice->student->first_name ?? 'N/A' }} {{ $payment->feeInvoice->student->last_name ?? '' }}</td>
-                    <td>{{ $payment->feeInvoice->student->schoolClass->name ?? 'N/A' }}</td>
+                    <td>{{ optional($payment->feeInvoice->student->schoolClass)->name ?? 'N/A' }}</td>
                     <td>${{ number_format($payment->amount, 2) }}</td>
                     <td>{{ $payment->payment_date }}</td>
                     <td>{{ ucfirst($payment->payment_method) }}</td>

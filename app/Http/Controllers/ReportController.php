@@ -69,7 +69,7 @@ class ReportController extends Controller
         $startDate = $request->input('start_date', Carbon::now()->startOfMonth()->format('Y-m-d'));
         $endDate = $request->input('end_date', Carbon::now()->endOfMonth()->format('Y-m-d'));
         
-        $query = FeePayment::with(['feeInvoice.student'])
+        $query = FeePayment::with(['feeInvoice.student.schoolClass'])
             ->whereBetween('payment_date', [$startDate, $endDate]);
 
         $payments = $query->get();
@@ -166,7 +166,7 @@ class ReportController extends Controller
      */
     public function hr(Request $request)
     {
-        $staff = StaffProfile::with('user')->get();
+        $staff = StaffProfile::with('teacher.user')->get();
 
         if ($request->has('export')) {
             if ($request->export == 'pdf') {
@@ -174,13 +174,14 @@ class ReportController extends Controller
                 return $pdf->download('hr_report.pdf');
             } elseif ($request->export == 'excel') {
                 return $this->exportCsv($staff, ['Staff ID', 'Name', 'Department', 'Designation', 'Phone', 'Email', 'Status'], function($person) {
+                    $user = $person->teacher->user ?? null;
                     return [
                         $person->id,
-                        $person->first_name . ' ' . $person->last_name,
+                        $user ? $user->name : 'N/A',
                         $person->department,
                         $person->designation,
                         $person->phone,
-                        $person->email,
+                        $user ? $user->email : 'N/A',
                         ucfirst($person->status)
                     ];
                 }, 'hr_report.csv');

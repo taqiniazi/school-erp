@@ -63,7 +63,7 @@
                                                 {{ $payment->feeInvoice->student->first_name ?? 'N/A' }} {{ $payment->feeInvoice->student->last_name ?? '' }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $payment->feeInvoice->student->schoolClass->name ?? 'N/A' }}
+                                                {{ optional($payment->feeInvoice->student->schoolClass)->name ?? 'N/A' }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${{ number_format($payment->amount, 2) }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $payment->payment_date }}</td>

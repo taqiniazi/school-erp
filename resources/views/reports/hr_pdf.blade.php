@@ -25,11 +25,11 @@
         <tbody>
             @foreach($staff as $person)
                 <tr>
-                    <td>{{ $person->first_name }} {{ $person->last_name }}</td>
+                    <td>{{ $person->teacher->user->name ?? 'N/A' }}</td>
                     <td>{{ $person->department }}</td>
                     <td>{{ $person->designation }}</td>
                     <td>{{ $person->phone }}</td>
-                    <td>{{ $person->email }}</td>
+                    <td>{{ $person->teacher->user->email ?? 'N/A' }}</td>
                     <td>{{ ucfirst($person->status) }}</td>
                 </tr>
             @endforeach

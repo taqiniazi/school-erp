@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\RecordsActivity;
 
 class SchoolClass extends Model
 {
-    use HasFactory;
+    use HasFactory, RecordsActivity;
     
     protected $fillable = ['name', 'numeric_value'];
     

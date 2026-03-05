@@ -231,6 +231,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hr', [App\Http\Controllers\ReportController::class, 'hr'])->name('hr');
     });
 
+    // Audit Logs (Admin)
+    Route::middleware(['role:Super Admin|School Admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('audit-logs', [App\Http\Controllers\AuditLogController::class, 'index'])->name('audit-logs.index');
+        Route::get('audit-logs/{auditLog}', [App\Http\Controllers\AuditLogController::class, 'show'])->name('audit-logs.show');
+    });
+
     // Communication Module
     Route::prefix('communication')->name('communication.')->group(function () {
         // Notices
