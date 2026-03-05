@@ -154,6 +154,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('grades', App\Http\Controllers\GradeController::class);
     });
 
+    // Library Management (Admin)
+    Route::middleware(['role:Super Admin|School Admin'])->group(function () {
+        Route::get('library/books', [\App\Http\Controllers\LibraryBookController::class, 'index'])->name('library.books.index');
+        Route::get('library/books/create', [\App\Http\Controllers\LibraryBookController::class, 'create'])->name('library.books.create');
+        Route::post('library/books', [\App\Http\Controllers\LibraryBookController::class, 'store'])->name('library.books.store');
+        Route::get('library/books/{libraryBook}/edit', [\App\Http\Controllers\LibraryBookController::class, 'edit'])->name('library.books.edit');
+        Route::put('library/books/{libraryBook}', [\App\Http\Controllers\LibraryBookController::class, 'update'])->name('library.books.update');
+        Route::delete('library/books/{libraryBook}', [\App\Http\Controllers\LibraryBookController::class, 'destroy'])->name('library.books.destroy');
+
+        Route::get('library/loans', [\App\Http\Controllers\LibraryLoanController::class, 'index'])->name('library.loans.index');
+        Route::get('library/loans/create', [\App\Http\Controllers\LibraryLoanController::class, 'create'])->name('library.loans.create');
+        Route::post('library/loans', [\App\Http\Controllers\LibraryLoanController::class, 'store'])->name('library.loans.store');
+        Route::post('library/loans/{libraryLoan}/return', [\App\Http\Controllers\LibraryLoanController::class, 'returnBook'])->name('library.loans.return');
+    });
+
+    // My Library (Student & Teacher)
+    Route::middleware(['role:Student|Teacher'])->group(function () {
+        Route::get('my-library', [\App\Http\Controllers\MyLibraryController::class, 'index'])->name('library.my');
+    });
+
     // Marks Management (Admin & Teacher)
     Route::middleware(['role:Super Admin|School Admin|Teacher'])->group(function () {
         Route::get('marks', [App\Http\Controllers\MarkController::class, 'index'])->name('marks.index');

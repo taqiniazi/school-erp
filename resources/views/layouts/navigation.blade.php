@@ -80,6 +80,9 @@
                     <x-nav-link :href="route('hr.leave.my')" :active="request()->routeIs('hr.leave.*')">
                         {{ __('My Leave') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('library.my')" :active="request()->routeIs('library.my')">
+                        {{ __('My Library') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('marks.index')" :active="request()->routeIs('marks.index') || request()->routeIs('marks.create')">
                         {{ __('Marks Entry') }}
                     </x-nav-link>
@@ -100,6 +103,9 @@
                     </x-nav-link>
                     <x-nav-link :href="route('student.invoices')" :active="request()->routeIs('student.invoices')">
                         {{ __('My Invoices') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('library.my')" :active="request()->routeIs('library.my')">
+                        {{ __('My Library') }}
                     </x-nav-link>
                     @endrole
                 </div>
