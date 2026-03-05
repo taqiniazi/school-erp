@@ -97,6 +97,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('teachers', \App\Http\Controllers\TeacherController::class);
         Route::post('teachers/{teacher}/allocations', [\App\Http\Controllers\TeacherController::class, 'storeAllocation'])->name('teachers.allocations.store');
         Route::delete('allocations/{allocation}', [\App\Http\Controllers\TeacherController::class, 'destroyAllocation'])->name('teachers.allocations.destroy');
+
+        // HR: Staff Profiles
+        Route::get('hr/staff', [\App\Http\Controllers\StaffProfileController::class, 'index'])->name('hr.staff.index');
+        Route::get('hr/staff/create', [\App\Http\Controllers\StaffProfileController::class, 'create'])->name('hr.staff.create');
+        Route::post('hr/staff', [\App\Http\Controllers\StaffProfileController::class, 'store'])->name('hr.staff.store');
+        Route::get('hr/staff/{staffProfile}/edit', [\App\Http\Controllers\StaffProfileController::class, 'edit'])->name('hr.staff.edit');
+        Route::put('hr/staff/{staffProfile}', [\App\Http\Controllers\StaffProfileController::class, 'update'])->name('hr.staff.update');
+        Route::delete('hr/staff/{staffProfile}', [\App\Http\Controllers\StaffProfileController::class, 'destroy'])->name('hr.staff.destroy');
+
+        // HR: Leave Management Approval
+        Route::get('hr/leave', [\App\Http\Controllers\LeaveRequestController::class, 'index'])->name('hr.leave.index');
+        Route::post('hr/leave/{leaveRequest}/approve', [\App\Http\Controllers\LeaveRequestController::class, 'approve'])->name('hr.leave.approve');
+        Route::post('hr/leave/{leaveRequest}/reject', [\App\Http\Controllers\LeaveRequestController::class, 'reject'])->name('hr.leave.reject');
+
+        // HR: Performance Reviews
+        Route::get('hr/performance', [\App\Http\Controllers\PerformanceReviewController::class, 'index'])->name('hr.performance.index');
+        Route::get('hr/performance/create', [\App\Http\Controllers\PerformanceReviewController::class, 'create'])->name('hr.performance.create');
+        Route::post('hr/performance', [\App\Http\Controllers\PerformanceReviewController::class, 'store'])->name('hr.performance.store');
+        Route::get('hr/performance/{performanceReview}/edit', [\App\Http\Controllers\PerformanceReviewController::class, 'edit'])->name('hr.performance.edit');
+        Route::put('hr/performance/{performanceReview}', [\App\Http\Controllers\PerformanceReviewController::class, 'update'])->name('hr.performance.update');
+        Route::delete('hr/performance/{performanceReview}', [\App\Http\Controllers\PerformanceReviewController::class, 'destroy'])->name('hr.performance.destroy');
     });
 
     // Examination Management (Admin)
@@ -202,6 +223,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('fee-invoices/{feeInvoice}/collect', [App\Http\Controllers\FeeInvoiceController::class, 'collect'])->name('fee-invoices.collect');
         Route::post('fee-invoices/{feeInvoice}/pay', [App\Http\Controllers\FeeInvoiceController::class, 'pay'])->name('fee-invoices.pay');
         Route::get('fee-payments', [App\Http\Controllers\FeePaymentController::class, 'index'])->name('fee-payments.index');
+
+        // HR: Teacher Leave Requests (Self-Service)
+        Route::get('my-leave', [\App\Http\Controllers\LeaveRequestController::class, 'myIndex'])->name('hr.leave.my');
+        Route::get('my-leave/create', [\App\Http\Controllers\LeaveRequestController::class, 'create'])->name('hr.leave.create');
+        Route::post('my-leave', [\App\Http\Controllers\LeaveRequestController::class, 'store'])->name('hr.leave.store');
     });
 
     // Fee Invoices (Shared Access)

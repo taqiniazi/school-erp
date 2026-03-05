@@ -59,6 +59,9 @@
                     <x-nav-link :href="route('payroll.salaries.index')" :active="request()->routeIs('payroll.*')">
                         {{ __('Payroll') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('hr.staff.index')" :active="request()->routeIs('hr.*')">
+                        {{ __('HR') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('Teacher')
@@ -67,6 +70,9 @@
                     </x-nav-link>
                     <x-nav-link :href="route('teacher.my-attendance')" :active="request()->routeIs('teacher.my-attendance')">
                         {{ __('My Attendance') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('hr.leave.my')" :active="request()->routeIs('hr.leave.*')">
+                        {{ __('My Leave') }}
                     </x-nav-link>
                     <x-nav-link :href="route('marks.index')" :active="request()->routeIs('marks.index') || request()->routeIs('marks.create')">
                         {{ __('Marks Entry') }}
