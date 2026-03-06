@@ -8,6 +8,8 @@ use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
+use Illuminate\Support\Facades\Cache;
+
 class SchoolClassController extends Controller
 {
     /**
@@ -15,7 +17,9 @@ class SchoolClassController extends Controller
      */
     public function index()
     {
-        $classes = SchoolClass::with(['sections', 'subjects'])->orderBy('numeric_value')->get();
+        $classes = Cache::remember('classes_index', 3600, function () {
+            return SchoolClass::with(['sections', 'subjects'])->orderBy('numeric_value')->get();
+        });
         return view('classes.index', compact('classes'));
     }
 
@@ -38,6 +42,9 @@ class SchoolClassController extends Controller
         ]);
 
         SchoolClass::create($validated);
+        
+        Cache::forget('classes_index'); // Clear cache
+        Cache::forget('all_classes'); // Clear simple list cache
 
         return redirect()->route('classes.index')->with('success', 'Class created successfully.');
     }
@@ -54,7 +61,10 @@ class SchoolClassController extends Controller
         // Let's use $class.
         
         $schoolClass->load(['sections', 'subjects']);
-        $allSubjects = Subject::all();
+        
+        $allSubjects = Cache::remember('all_subjects', 3600, function () {
+            return Subject::all();
+        });
         
         return view('classes.show', compact('schoolClass', 'allSubjects'));
     }
@@ -78,6 +88,9 @@ class SchoolClassController extends Controller
         ]);
 
         $schoolClass->update($validated);
+        
+        Cache::forget('classes_index'); // Clear cache
+        Cache::forget('all_classes'); // Clear simple list cache
 
         return redirect()->route('classes.index')->with('success', 'Class updated successfully.');
     }
@@ -88,6 +101,10 @@ class SchoolClassController extends Controller
     public function destroy(SchoolClass $schoolClass)
     {
         $schoolClass->delete();
+        
+        Cache::forget('classes_index'); // Clear cache
+        Cache::forget('all_classes'); // Clear simple list cache
+        
         return redirect()->route('classes.index')->with('success', 'Class deleted successfully.');
     }
 
@@ -108,6 +125,8 @@ class SchoolClassController extends Controller
         }
 
         $schoolClass->sections()->create($validated);
+        
+        Cache::forget('classes_index'); // Clear cache
 
         return back()->with('success', 'Section added successfully.');
     }
@@ -115,6 +134,9 @@ class SchoolClassController extends Controller
     public function destroySection(Section $section)
     {
         $section->delete();
+        
+        Cache::forget('classes_index'); // Clear cache
+        
         return back()->with('success', 'Section removed successfully.');
     }
 
@@ -130,6 +152,8 @@ class SchoolClassController extends Controller
         }
 
         $schoolClass->subjects()->attach($validated['subject_id']);
+        
+        Cache::forget('classes_index'); // Clear cache
 
         return back()->with('success', 'Subject assigned to class successfully.');
     }
@@ -137,6 +161,9 @@ class SchoolClassController extends Controller
     public function destroySubject(SchoolClass $schoolClass, Subject $subject)
     {
         $schoolClass->subjects()->detach($subject->id);
+        
+        Cache::forget('classes_index'); // Clear cache
+        
         return back()->with('success', 'Subject removed from class successfully.');
     }
 

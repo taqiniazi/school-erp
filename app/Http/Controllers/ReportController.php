@@ -103,7 +103,9 @@ class ReportController extends Controller
      */
     public function attendance(Request $request)
     {
-        $classes = SchoolClass::all();
+        $classes = Cache::remember('all_classes', 3600, function () {
+            return SchoolClass::all();
+        });
         $attendances = collect();
         $month = $request->input('month', date('m'));
         $year = $request->input('year', date('Y'));

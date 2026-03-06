@@ -11,6 +11,8 @@ use App\Models\Notice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Cache;
+
 class StudentDashboardController extends Controller
 {
     public function index()
@@ -34,42 +36,47 @@ class StudentDashboardController extends Controller
             ]);
         }
 
-        // KPIs
-        $totalAttendance = Attendance::where('student_id', $student->id)->count();
-        $presentAttendance = Attendance::where('student_id', $student->id)->where('status', 'present')->count();
-        $attendancePercentage = $totalAttendance > 0 ? round(($presentAttendance / $totalAttendance) * 100, 1) : 0;
+        // Cache dashboard data for 15 minutes
+        $data = Cache::remember('student_dashboard_' . $student->id, 900, function () use ($student) {
+            // KPIs
+            $totalAttendance = Attendance::where('student_id', $student->id)->count();
+            $presentAttendance = Attendance::where('student_id', $student->id)->where('status', 'present')->count();
+            $attendancePercentage = $totalAttendance > 0 ? round(($presentAttendance / $totalAttendance) * 100, 1) : 0;
 
-        $unpaidInvoices = FeeInvoice::where('student_id', $student->id)->where('status', 'unpaid')->count();
-        
-        $averageMarks = Mark::where('student_id', $student->id)->avg('marks_obtained');
-        $averageMarks = $averageMarks ? round($averageMarks, 1) : 0;
-
-        // Alerts
-        $upcomingExams = ExamSchedule::where('school_class_id', $student->school_class_id)
-            ->where('date', '>=', now())
-            ->orderBy('date')
-            ->with(['exam', 'subject'])
-            ->take(3)
-            ->get();
+            $unpaidInvoices = FeeInvoice::where('student_id', $student->id)->where('status', 'unpaid')->count();
             
-        $upcomingEvents = Event::where('start_date', '>=', now())
-            ->orderBy('start_date')
-            ->take(3)
-            ->get();
-            
-        $recentNotices = Notice::whereIn('audience_role', ['all', 'Student'])
-            ->latest()
-            ->take(3)
-            ->get();
+            $averageMarks = Mark::where('student_id', $student->id)->avg('marks_obtained');
+            $averageMarks = $averageMarks ? round($averageMarks, 1) : 0;
 
-        return view('student.dashboard', compact(
-            'attendancePercentage',
-            'unpaidInvoices',
-            'averageMarks',
-            'upcomingExams',
-            'upcomingEvents',
-            'recentNotices'
-        ));
+            // Alerts
+            $upcomingExams = ExamSchedule::where('school_class_id', $student->school_class_id)
+                ->where('date', '>=', now())
+                ->orderBy('date')
+                ->with(['exam', 'subject'])
+                ->take(3)
+                ->get();
+                
+            $upcomingEvents = Event::where('start_date', '>=', now())
+                ->orderBy('start_date')
+                ->take(3)
+                ->get();
+                
+            $recentNotices = Notice::whereIn('audience_role', ['all', 'Student'])
+                ->latest()
+                ->take(3)
+                ->get();
+
+            return compact(
+                'attendancePercentage',
+                'unpaidInvoices',
+                'averageMarks',
+                'upcomingExams',
+                'upcomingEvents',
+                'recentNotices'
+            );
+        });
+
+        return view('student.dashboard', $data);
     }
 
     /**

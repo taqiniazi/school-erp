@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Cache;
+
 class SubjectController extends Controller
 {
     /**
@@ -36,6 +38,8 @@ class SubjectController extends Controller
         ]);
 
         Subject::create($validated);
+        
+        Cache::forget('all_subjects');
 
         return redirect()->route('subjects.index')->with('success', 'Subject created successfully.');
     }
@@ -68,6 +72,8 @@ class SubjectController extends Controller
         ]);
 
         $subject->update($validated);
+        
+        Cache::forget('all_subjects');
 
         return redirect()->route('subjects.index')->with('success', 'Subject updated successfully.');
     }
@@ -78,6 +84,9 @@ class SubjectController extends Controller
     public function destroy(Subject $subject)
     {
         $subject->delete();
+        
+        Cache::forget('all_subjects');
+        
         return redirect()->route('subjects.index')->with('success', 'Subject deleted successfully.');
     }
 }

@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
+use Illuminate\Support\Facades\Cache;
+
 class TeacherController extends Controller
 {
     /**
@@ -33,7 +35,9 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        $salaryStructures = SalaryStructure::all();
+        $salaryStructures = Cache::remember('all_salary_structures', 86400, function () {
+            return SalaryStructure::all();
+        });
         return view('teachers.create', compact('salaryStructures'));
     }
 
@@ -91,8 +95,15 @@ class TeacherController extends Controller
     public function show(Teacher $teacher)
     {
         $teacher->load(['user', 'salaryStructure', 'allocations.subject', 'allocations.schoolClass', 'allocations.section']);
-        $subjects = Subject::all();
-        $classes = SchoolClass::all();
+        
+        $subjects = Cache::remember('all_subjects', 3600, function () {
+            return Subject::all();
+        });
+        
+        $classes = Cache::remember('all_classes', 3600, function () {
+            return SchoolClass::all();
+        });
+        
         return view('teachers.show', compact('teacher', 'subjects', 'classes'));
     }
 

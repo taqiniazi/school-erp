@@ -10,6 +10,8 @@ use App\Models\TeacherAllocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Cache;
+
 class TeacherDashboardController extends Controller
 {
     public function index()
@@ -28,36 +30,44 @@ class TeacherDashboardController extends Controller
              ]);
         }
 
-        // KPIs
-        $totalClasses = $teacher->allocations()->distinct('school_class_id')->count('school_class_id');
-        
-        // Get sections assigned to teacher
-        $sectionIds = $teacher->allocations()->pluck('section_id')->unique();
-        
-        $totalStudents = Student::whereIn('section_id', $sectionIds)->count();
-        
-        $presentToday = Attendance::whereIn('student_id', Student::whereIn('section_id', $sectionIds)->pluck('id'))
-            ->whereDate('date', today())
-            ->where('status', 'present')
-            ->count();
-
-        // Alerts
-        $upcomingEvents = Event::where('start_date', '>=', now())
-            ->orderBy('start_date')
-            ->take(5)
-            ->get();
+        // Cache dashboard data for 15 minutes
+        $data = Cache::remember('teacher_dashboard_' . $teacher->id, 900, function () use ($teacher) {
+            // KPIs
+            $totalClasses = $teacher->allocations()->distinct('school_class_id')->count('school_class_id');
             
-        $recentNotices = Notice::whereIn('audience_role', ['all', 'Teacher'])
-            ->latest()
-            ->take(5)
-            ->get();
+            // Get sections assigned to teacher
+            $sectionIds = $teacher->allocations()->pluck('section_id')->unique();
+            
+            $totalStudents = Student::whereIn('section_id', $sectionIds)->count();
+            
+            // Optimized query for present today using whereHas
+            $presentToday = Attendance::whereHas('student', function ($query) use ($sectionIds) {
+                    $query->whereIn('section_id', $sectionIds);
+                })
+                ->whereDate('date', today())
+                ->where('status', 'present')
+                ->count();
 
-        return view('teacher.dashboard', compact(
-            'totalClasses',
-            'totalStudents',
-            'presentToday',
-            'upcomingEvents',
-            'recentNotices'
-        ));
+            // Alerts
+            $upcomingEvents = Event::where('start_date', '>=', now())
+                ->orderBy('start_date')
+                ->take(5)
+                ->get();
+                
+            $recentNotices = Notice::whereIn('audience_role', ['all', 'Teacher'])
+                ->latest()
+                ->take(5)
+                ->get();
+
+            return compact(
+                'totalClasses',
+                'totalStudents',
+                'presentToday',
+                'upcomingEvents',
+                'recentNotices'
+            );
+        });
+
+        return view('teacher.dashboard', $data);
     }
 }

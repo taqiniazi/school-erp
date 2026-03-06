@@ -10,29 +10,26 @@ use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Cache;
+
 class AdminDashboardController extends Controller
 {
     public function index()
     {
-        // KPIs
-        $totalStudents = Student::count();
-        $totalTeachers = Teacher::count();
-        $totalClasses = SchoolClass::count();
-        $monthlyFeeCollection = FeePayment::whereMonth('payment_date', now()->month)
-            ->whereYear('payment_date', now()->year)
-            ->sum('amount');
+        // KPIs - Cached for 30 minutes
+        $stats = Cache::remember('admin_dashboard_stats', 1800, function () {
+            return [
+                'totalStudents' => Student::count(),
+                'totalTeachers' => Teacher::count(),
+                'totalClasses' => SchoolClass::count(),
+                'monthlyFeeCollection' => FeePayment::whereMonth('payment_date', now()->month)
+                    ->whereYear('payment_date', now()->year)
+                    ->sum('amount'),
+                'lowStockItems' => InventoryItem::whereColumn('current_stock', '<=', 'reorder_level')->count(),
+                'pendingLeaveRequests' => LeaveRequest::where('status', 'pending')->count(),
+            ];
+        });
 
-        // Alerts
-        $lowStockItems = InventoryItem::whereColumn('quantity', '<=', 'reorder_level')->count();
-        $pendingLeaveRequests = LeaveRequest::where('status', 'pending')->count();
-
-        return view('admin.dashboard', compact(
-            'totalStudents',
-            'totalTeachers',
-            'totalClasses',
-            'monthlyFeeCollection',
-            'lowStockItems',
-            'pendingLeaveRequests'
-        ));
+        return view('admin.dashboard', $stats);
     }
 }

@@ -47,7 +47,9 @@ class AttendanceController extends Controller
      */
     public function create(Request $request)
     {
-        $classes = SchoolClass::all();
+        $classes = Cache::remember('all_classes', 3600, function () {
+            return SchoolClass::all();
+        });
         
         $selectedClass = $request->input('school_class_id');
         $selectedSection = $request->input('section_id');

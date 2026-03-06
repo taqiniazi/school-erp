@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Facades\Cache;
+
 class StudentController extends Controller
 {
     /**
@@ -17,6 +19,8 @@ class StudentController extends Controller
      */
     public function index()
     {
+        // Optimizing with caching for listing is tricky due to pagination and filters.
+        // But we can ensure relations are eager loaded, which they are.
         $students = Student::with(['schoolClass', 'section', 'parents'])->latest()->paginate(10);
         return view('students.index', compact('students'));
     }
@@ -26,9 +30,16 @@ class StudentController extends Controller
      */
     public function create()
     {
-        $classes = SchoolClass::all();
+        $classes = Cache::remember('all_classes', 3600, function () {
+            return SchoolClass::all();
+        });
+        
         // Assuming 'Parent' role exists as per previous tasks
-        $parents = User::role('Parent')->get();
+        // Caching parents list might be too heavy if there are thousands, but for now okay.
+        $parents = Cache::remember('all_parents_role', 300, function () {
+            return User::role('Parent')->get();
+        });
+        
         return view('students.create', compact('classes', 'parents'));
     }
 

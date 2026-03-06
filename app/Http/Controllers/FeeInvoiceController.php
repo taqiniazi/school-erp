@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Cache;
+
 class FeeInvoiceController extends Controller
 {
     /**
@@ -36,7 +38,10 @@ class FeeInvoiceController extends Controller
         }
 
         $invoices = $query->orderBy('issue_date', 'desc')->paginate(20);
-        $classes = SchoolClass::all();
+        
+        $classes = Cache::remember('all_classes', 3600, function () {
+            return SchoolClass::all();
+        });
 
         return view('fees.invoices.index', compact('invoices', 'classes'));
     }
@@ -46,7 +51,9 @@ class FeeInvoiceController extends Controller
      */
     public function create()
     {
-        $classes = SchoolClass::all();
+        $classes = Cache::remember('all_classes', 3600, function () {
+            return SchoolClass::all();
+        });
         return view('fees.invoices.create', compact('classes'));
     }
 
