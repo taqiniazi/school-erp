@@ -18,9 +18,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RolesAndPermissionsSeeder::class,
+            FinancialYearSeeder::class,
             SchoolClassSeeder::class,
             SubjectSeeder::class,
             SalaryStructureSeeder::class,
+            FeeTypeSeeder::class,
         ]);
 
         // Create admin user
@@ -33,6 +35,14 @@ class DatabaseSeeder extends Seeder
         );
         $admin->assignRole('Super Admin');
 
+        // Seed demo data only in local environment
+        if (app()->isLocal()) {
+            $this->seedDemoData();
+        }
+    }
+
+    private function seedDemoData()
+    {
         // Create teacher user
         $teacherUser = User::firstOrCreate(
             ['email' => 'teacher@school.com'],
@@ -52,6 +62,7 @@ class DatabaseSeeder extends Seeder
                 'joining_date' => now(),
                 'address' => '123 School Lane',
                 'phone' => '1234567890',
+                'emergency_contact' => '0987654321',
                 'salary_structure_id' => $salaryStructure ? $salaryStructure->id : null,
                 'status' => 'active',
             ]);
