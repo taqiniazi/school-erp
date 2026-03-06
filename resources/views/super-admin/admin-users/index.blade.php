@@ -16,6 +16,7 @@
                                     <tr class="text-left text-gray-500">
                                         <th class="py-2 pr-4">Name</th>
                                         <th class="py-2 pr-4">Email</th>
+                                        <th class="py-2 pr-4">Phone</th>
                                         <th class="py-2 pr-4">School</th>
                                     </tr>
                                 </thead>
@@ -24,6 +25,7 @@
                                     <tr class="border-t">
                                         <td class="py-2 pr-4">{{ $u->name }}</td>
                                         <td class="py-2 pr-4">{{ $u->email }}</td>
+                                        <td class="py-2 pr-4">{{ $u->phone_number }}</td>
                                         <td class="py-2 pr-4">{{ optional($u->school)->name }}</td>
                                     </tr>
                                     @endforeach
@@ -41,24 +43,32 @@
                         <form method="POST" action="{{ route('super-admin.admin-users.store') }}" class="space-y-4">
                             @csrf
                             <div>
-                                <label class="block text-sm text-gray-700">Name</label>
-                                <input name="name" class="mt-1 w-full border rounded p-2" required />
+                                <label class="block text-sm text-gray-700">School Name</label>
+                                <input name="school_name" class="mt-1 w-full border rounded p-2" required />
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-700">Address</label>
+                                <input name="address" class="mt-1 w-full border rounded p-2" required />
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-700">Number of Campuses (optional)</label>
+                                <input name="campus_count" type="number" min="1" class="mt-1 w-full border rounded p-2" />
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-700">Admin Name</label>
+                                <input name="admin_name" class="mt-1 w-full border rounded p-2" required />
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-700">Email</label>
                                 <input name="email" type="email" class="mt-1 w-full border rounded p-2" required />
                             </div>
                             <div>
-                                <label class="block text-sm text-gray-700">Password</label>
-                                <input name="password" type="password" class="mt-1 w-full border rounded p-2" required />
+                                <label class="block text-sm text-gray-700">Phone</label>
+                                <input name="phone_number" class="mt-1 w-full border rounded p-2" required />
                             </div>
                             <div>
-                                <label class="block text-sm text-gray-700">School</label>
-                                <select name="school_id" class="mt-1 w-full border rounded p-2" required>
-                                    @foreach ($schools as $s)
-                                        <option value="{{ $s->id }}">{{ $s->name }}</option>
-                                    @endforeach
-                                </select>
+                                <label class="block text-sm text-gray-700">Password</label>
+                                <input name="password" type="password" class="mt-1 w-full border rounded p-2" required />
                             </div>
                             <div class="pt-2">
                                 <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create</button>

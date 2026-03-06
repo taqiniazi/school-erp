@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\Billing\SubscriptionSelectionController;
 use App\Http\Controllers\ParentDashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolClassController;
-use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\SubjectController;
@@ -30,7 +30,12 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
+    Route::middleware(['role:School Admin'])->prefix('billing')->name('billing.')->group(function () {
+        Route::get('choose-plan', [SubscriptionSelectionController::class, 'create'])->name('choose-plan');
+        Route::post('choose-plan', [SubscriptionSelectionController::class, 'store'])->name('choose-plan.store');
+    });
+
     Route::middleware(['role:Super Admin|School Admin'])->group(function () {
         Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     });
@@ -60,11 +65,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('classes', SchoolClassController::class)->parameters(['classes' => 'schoolClass']);
         Route::post('classes/{schoolClass}/sections', [SchoolClassController::class, 'storeSection'])->name('classes.sections.store');
         Route::delete('sections/{section}', [SchoolClassController::class, 'destroySection'])->name('sections.destroy');
-        
+
         // Class-Subject Mapping
         Route::post('classes/{schoolClass}/subjects', [SchoolClassController::class, 'storeSubject'])->name('classes.subjects.store');
         Route::delete('classes/{schoolClass}/subjects/{subject}', [SchoolClassController::class, 'destroySubject'])->name('classes.subjects.destroy');
-        
+
         // Subjects
         Route::resource('subjects', SubjectController::class);
     });
@@ -155,7 +160,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('exams/schedules/{schedule}', [App\Http\Controllers\ExamController::class, 'deleteSchedule'])->name('exams.schedules.destroy');
         Route::post('exams/{exam}/publish', [App\Http\Controllers\ExamController::class, 'publish'])->name('exams.publish');
         Route::post('exams/{exam}/unpublish', [App\Http\Controllers\ExamController::class, 'unpublish'])->name('exams.unpublish');
-        
+
         Route::resource('grades', App\Http\Controllers\GradeController::class);
     });
 
@@ -184,7 +189,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('marks', [App\Http\Controllers\MarkController::class, 'index'])->name('marks.index');
         Route::get('marks/create', [App\Http\Controllers\MarkController::class, 'create'])->name('marks.create');
         Route::post('marks', [App\Http\Controllers\MarkController::class, 'store'])->name('marks.store');
-        
+
         // Report Cards (Admin & Teacher View)
         Route::get('report-cards', [App\Http\Controllers\MarkController::class, 'reportCard'])->name('marks.report_card');
         Route::get('report-cards/generate', [App\Http\Controllers\MarkController::class, 'generateReportCard'])->name('marks.generate_report_card');
@@ -192,25 +197,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Student/Parent View Report Cards
     Route::middleware(['role:Student|Parent'])->group(function () {
-         Route::get('my-report-card', [App\Http\Controllers\MarkController::class, 'myReportCard'])->name('student.report_card');
+        Route::get('my-report-card', [App\Http\Controllers\MarkController::class, 'myReportCard'])->name('student.report_card');
     });
 
     // Fee Management (Admin)
     Route::middleware(['role:Super Admin|School Admin'])->group(function () {
         Route::resource('fee-types', App\Http\Controllers\FeeTypeController::class);
         Route::resource('fee-structures', App\Http\Controllers\FeeStructureController::class);
-        
+
         // Fee Invoices (Admin Only for Generation)
         Route::get('fee-invoices/create', [App\Http\Controllers\FeeInvoiceController::class, 'create'])->name('fee-invoices.create');
         Route::post('fee-invoices', [App\Http\Controllers\FeeInvoiceController::class, 'store'])->name('fee-invoices.store');
-        
+
         // Adjustments (Admin Only)
         Route::get('fee-invoices/{feeInvoice}/edit', [App\Http\Controllers\FeeInvoiceController::class, 'edit'])->name('fee-invoices.edit');
         Route::put('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'update'])->name('fee-invoices.update');
 
         Route::get('fee-invoices', [App\Http\Controllers\FeeInvoiceController::class, 'index'])->name('fee-invoices.index');
         Route::get('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'show'])->name('fee-invoices.show');
-        
+
         // Payments (Admin)
         Route::post('fee-invoices/{feeInvoice}/pay', [App\Http\Controllers\FeePaymentController::class, 'store'])->name('fee-payments.store');
         Route::get('fee-payments/history', [App\Http\Controllers\FeePaymentController::class, 'history'])->name('fee-payments.history');
@@ -241,10 +246,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('communication')->name('communication.')->group(function () {
         // Notices
         Route::resource('notices', App\Http\Controllers\NoticeController::class);
-        
+
         // Events
         Route::resource('events', App\Http\Controllers\EventController::class);
-        
+
         // Messages
         Route::get('messages/sent', [App\Http\Controllers\MessageController::class, 'sent'])->name('messages.sent');
         Route::resource('messages', App\Http\Controllers\MessageController::class);
