@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\RecordsActivity;
+use App\Traits\BelongsToSchool;
 
 class Event extends Model
 {
-    use HasFactory, RecordsActivity;
+    use HasFactory, RecordsActivity, BelongsToSchool;
 
     protected $fillable = [
         'title',

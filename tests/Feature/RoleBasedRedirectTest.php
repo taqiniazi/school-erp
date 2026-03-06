@@ -6,6 +6,7 @@ use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Services\SchoolContext;
 
 class RoleBasedRedirectTest extends TestCase
 {
@@ -16,6 +17,8 @@ class RoleBasedRedirectTest extends TestCase
         parent::setUp();
         // Seed roles and permissions
         $this->seed(RolesAndPermissionsSeeder::class);
+        // Ensure no tenant context bleeds between tests
+        SchoolContext::setSchoolId(null);
     }
 
     public function test_admin_redirects_to_admin_dashboard()

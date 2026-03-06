@@ -42,7 +42,7 @@
                         <div class="p-6 border-b border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Alerts & Notifications</h3>
                             
-                            @if($lowStockItems > 0)
+                            @if(isset($lowStockItems) && $lowStockItems > 0)
                                 <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
                                     <div class="flex">
                                         <div class="flex-shrink-0">
@@ -53,14 +53,16 @@
                                         <div class="ml-3">
                                             <p class="text-sm text-red-700">
                                                 <span class="font-bold">{{ $lowStockItems }}</span> inventory items are running low on stock.
+                                                @if (Route::has('inventory.alerts.low_stock'))
                                                 <a href="{{ route('inventory.alerts.low_stock') }}" class="font-bold underline hover:text-red-600">View Items</a>
+                                                @endif
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             @endif
 
-                            @if($pendingLeaveRequests > 0)
+                            @if(isset($pendingLeaveRequests) && $pendingLeaveRequests > 0)
                                 <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
                                     <div class="flex">
                                         <div class="flex-shrink-0">
@@ -71,14 +73,16 @@
                                         <div class="ml-3">
                                             <p class="text-sm text-yellow-700">
                                                 <span class="font-bold">{{ $pendingLeaveRequests }}</span> pending leave requests need approval.
+                                                @if (Route::has('hr.leave.index'))
                                                 <a href="{{ route('hr.leave.index') }}" class="font-bold underline hover:text-yellow-600">Review Requests</a>
+                                                @endif
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             @endif
 
-                            @if($lowStockItems == 0 && $pendingLeaveRequests == 0)
+                            @if((isset($lowStockItems) ? $lowStockItems : 0) == 0 && (isset($pendingLeaveRequests) ? $pendingLeaveRequests : 0) == 0)
                                 <p class="text-gray-500 italic">No active alerts at this time.</p>
                             @endif
                         </div>
@@ -91,18 +95,18 @@
                         <div class="p-6 border-b border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
                             <div class="grid grid-cols-1 gap-3">
-                                <a href="{{ route('students.create') }}" class="block px-4 py-2 bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition">
-                                    + Add New Student
-                                </a>
-                                <a href="{{ route('teachers.create') }}" class="block px-4 py-2 bg-green-50 text-green-700 rounded hover:bg-green-100 transition">
-                                    + Add New Teacher
-                                </a>
-                                <a href="{{ route('communication.notices.create') }}" class="block px-4 py-2 bg-indigo-50 text-indigo-700 rounded hover:bg-indigo-100 transition">
-                                    + Create Notice
-                                </a>
-                                <a href="{{ route('fee-invoices.create') }}" class="block px-4 py-2 bg-purple-50 text-purple-700 rounded hover:bg-purple-100 transition">
-                                    + Generate Invoice
-                                </a>
+                                @if (Route::has('students.create'))
+                                <a href="{{ route('students.create') }}" class="block px-4 py-2 bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition">+ Add New Student</a>
+                                @endif
+                                @if (Route::has('teachers.create'))
+                                <a href="{{ route('teachers.create') }}" class="block px-4 py-2 bg-green-50 text-green-700 rounded hover:bg-green-100 transition">+ Add New Teacher</a>
+                                @endif
+                                @if (Route::has('communication.notices.create'))
+                                <a href="{{ route('communication.notices.create') }}" class="block px-4 py-2 bg-indigo-50 text-indigo-700 rounded hover:bg-indigo-100 transition">+ Create Notice</a>
+                                @endif
+                                @if (Route::has('fee-invoices.create'))
+                                <a href="{{ route('fee-invoices.create') }}" class="block px-4 py-2 bg-purple-50 text-purple-700 rounded hover:bg-purple-100 transition">+ Generate Invoice</a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -112,9 +116,15 @@
                         <div class="p-6 border-b border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Reports</h3>
                             <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                @if (Route::has('attendance.report'))
                                 <li><a href="{{ route('attendance.report') }}" class="hover:text-blue-600 hover:underline">Attendance Report</a></li>
+                                @endif
+                                @if (Route::has('fee-payments.history'))
                                 <li><a href="{{ route('fee-payments.history') }}" class="hover:text-blue-600 hover:underline">Fee Collection Report</a></li>
+                                @endif
+                                @if (Route::has('inventory.items.index'))
                                 <li><a href="{{ route('inventory.items.index') }}" class="hover:text-blue-600 hover:underline">Inventory Report</a></li>
+                                @endif
                             </ul>
                         </div>
                     </div>

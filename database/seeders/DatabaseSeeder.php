@@ -2,20 +2,24 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Teacher;
 use App\Models\SalaryStructure;
-use Spatie\Permission\Models\Role;
+use App\Models\School;
+use App\Services\SchoolContext;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
+        $school = School::firstOrCreate(
+            ['slug' => 'default-school'],
+            ['name' => 'Default School', 'address' => '123 Main St', 'is_active' => true]
+        );
+
+        SchoolContext::setSchoolId($school->id);
+
         $this->call([
             RolesAndPermissionsSeeder::class,
             FinancialYearSeeder::class,
@@ -25,35 +29,33 @@ class DatabaseSeeder extends Seeder
             FeeTypeSeeder::class,
         ]);
 
-        // Create admin user
         $admin = User::firstOrCreate(
             ['email' => 'admin@school.com'],
             [
                 'name' => 'Admin User',
                 'password' => bcrypt('password'),
+                'school_id' => $school->id,
             ]
         );
         $admin->assignRole('Super Admin');
 
-        // Seed demo data only in local environment
         if (app()->isLocal()) {
-            $this->seedDemoData();
+            $this->seedDemoData($school);
         }
     }
 
-    private function seedDemoData()
+    private function seedDemoData($school)
     {
-        // Create teacher user
         $teacherUser = User::firstOrCreate(
             ['email' => 'teacher@school.com'],
             [
                 'name' => 'Teacher User',
                 'password' => bcrypt('password'),
+                'school_id' => $school->id,
             ]
         );
         $teacherUser->assignRole('Teacher');
         
-        // Create teacher profile if not exists
         if (!$teacherUser->teacherProfile) {
             $salaryStructure = SalaryStructure::first();
             Teacher::create([
@@ -68,22 +70,22 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Create student user
         $student = User::firstOrCreate(
             ['email' => 'student@school.com'],
             [
                 'name' => 'Student User',
                 'password' => bcrypt('password'),
+                'school_id' => $school->id,
             ]
         );
         $student->assignRole('Student');
 
-        // Create parent user
         $parent = User::firstOrCreate(
             ['email' => 'parent@school.com'],
             [
                 'name' => 'Parent User',
                 'password' => bcrypt('password'),
+                'school_id' => $school->id,
             ]
         );
         $parent->assignRole('Parent');
