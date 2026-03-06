@@ -256,3 +256,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::middleware(['auth', 'verified', 'role:Super Admin'])->prefix('super-admin')->name('super-admin.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\SuperAdmin\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/schools', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'index'])->name('schools.index');
+    Route::post('/schools/{school}/approve', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'approve'])->name('schools.approve');
+    Route::post('/schools/{school}/suspend', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'suspend'])->name('schools.suspend');
+    Route::get('/admin-users', [\App\Http\Controllers\SuperAdmin\AdminUserController::class, 'index'])->name('admin-users.index');
+    Route::post('/admin-users', [\App\Http\Controllers\SuperAdmin\AdminUserController::class, 'store'])->name('admin-users.store');
+    Route::resource('plans', \App\Http\Controllers\SuperAdmin\PlanController::class)->except(['show']);
+});

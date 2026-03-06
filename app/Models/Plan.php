@@ -5,25 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class School extends Model
+class Plan extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'slug',
-        'address',
-        'phone',
-        'email',
-        'website',
-        'logo_path',
+        'code',
+        'price',
+        'billing_cycle',
+        'features',
         'is_active',
     ];
 
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
+    protected $casts = [
+        'features' => 'array',
+        'price' => 'decimal:2',
+        'is_active' => 'boolean',
+    ];
 
     public function subscriptions()
     {
