@@ -18,7 +18,18 @@ class SubscriptionPayment extends Model
         'transaction_reference',
         'proof_file_path',
         'status',
-        'admin_note'
+        'admin_note',
+        'invoice_number',
+        'invoice_date',
+        'subtotal',
+        'tax_amount',
+        'tax_percentage',
+        'billing_details',
+    ];
+
+    protected $casts = [
+        'billing_details' => 'array',
+        'invoice_date' => 'date',
     ];
 
     public function school()

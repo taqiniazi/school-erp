@@ -35,9 +35,12 @@
                             </div>
                         </div>
 
-                        <div class="mt-6">
+                        <div class="mt-6 flex space-x-4">
                             <a href="{{ route('admin.subscription.upgrade') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
                                 Change Plan
+                            </a>
+                            <a href="{{ route('billing.payment.history') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
+                                Billing History
                             </a>
                         </div>
                     </div>

@@ -16,6 +16,7 @@ class School extends Model
         'address',
         'phone',
         'email',
+        'tax_id',
         'website',
         'logo_path',
         'is_active',

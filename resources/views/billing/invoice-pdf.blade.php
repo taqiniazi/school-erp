@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Invoice {{ $payment->transaction_reference }}</title>
+    <title>Invoice {{ $payment->invoice_number ?? $payment->transaction_reference }}</title>
     <style>
         body { font-family: sans-serif; }
         .invoice-box {
@@ -47,9 +47,9 @@
                                 Invoice
                             </td>
                             <td>
-                                Reference #: {{ $payment->transaction_reference }}<br>
-                                Created: {{ $payment->created_at->format('M d, Y') }}<br>
-                                Due: {{ $payment->created_at->format('M d, Y') }}
+                                Invoice #: {{ $payment->invoice_number ?? $payment->transaction_reference }}<br>
+                                Date: {{ $payment->invoice_date ? $payment->invoice_date->format('M d, Y') : $payment->created_at->format('M d, Y') }}<br>
+                                Transaction Ref: {{ $payment->transaction_reference }}
                             </td>
                         </tr>
                     </table>
@@ -61,9 +61,12 @@
                         <tr>
                             <td>
                                 <strong>Billed To:</strong><br>
-                                {{ $payment->school->name }}<br>
-                                {{ $payment->school->address }}<br>
-                                {{ $payment->school->email }}
+                                {{ $payment->billing_details['name'] ?? $payment->school->name }}<br>
+                                {{ $payment->billing_details['address'] ?? $payment->school->address }}<br>
+                                {{ $payment->billing_details['email'] ?? $payment->school->email }}<br>
+                                @if(isset($payment->billing_details['tax_id']))
+                                Tax ID: {{ $payment->billing_details['tax_id'] }}
+                                @endif
                             </td>
                             <td>
                                 <strong>Pay To:</strong><br>
@@ -85,8 +88,16 @@
                     {{ $payment->plan->name }} Plan ({{ ucfirst($payment->plan->billing_cycle) }})<br>
                     <small>Subscription Period: {{ $payment->subscription->current_period_start->format('M d, Y') }} - {{ $payment->subscription->current_period_end->format('M d, Y') }}</small>
                 </td>
-                <td>Rs. {{ number_format($payment->amount, 2) }}</td>
+                <td>Rs. {{ number_format($payment->subtotal ?? $payment->amount, 2) }}</td>
             </tr>
+            
+            @if(($payment->tax_amount ?? 0) > 0)
+            <tr class="item">
+                <td>Tax ({{ $payment->tax_percentage }}%)</td>
+                <td>Rs. {{ number_format($payment->tax_amount, 2) }}</td>
+            </tr>
+            @endif
+
             <tr class="total">
                 <td></td>
                 <td>Total: Rs. {{ number_format($payment->amount, 2) }}</td>

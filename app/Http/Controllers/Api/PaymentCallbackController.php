@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SubscriptionPayment;
 use App\Models\User;
 use App\Notifications\PaymentStatusUpdated;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,12 @@ use Illuminate\Support\Facades\Notification;
 
 class PaymentCallbackController extends Controller
 {
+    protected $paymentService;
+
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
     /**
      * Handle Easypaisa IPN Callback
      */
@@ -170,33 +177,8 @@ class PaymentCallbackController extends Controller
             return;
         }
 
-        DB::transaction(function () use ($payment, $gateway, $data) {
-            $payment->update([
-                'status' => 'approved',
-                'admin_note' => "Auto-approved via $gateway IPN. " . json_encode($data),
-            ]);
-
-            $subscription = $payment->subscription;
-            
-            // Cancel other active subscriptions for this school
-            $payment->school->subscriptions()
-                ->where('id', '!=', $subscription->id)
-                ->whereIn('status', ['active', 'trialing'])
-                ->update(['status' => 'canceled', 'canceled_at' => now()]);
-
-            // Activate this subscription
-            $start = now();
-            $end = match ($subscription->plan->billing_cycle) {
-                'yearly' => $start->copy()->addYear(),
-                default => $start->copy()->addMonth(),
-            };
-
-            $subscription->update([
-                'status' => 'active',
-                'current_period_start' => $start,
-                'current_period_end' => $end,
-            ]);
-        });
+        $note = "Auto-approved via $gateway IPN. " . json_encode($data);
+        $this->paymentService->approvePayment($payment, $note);
 
         // Send Notification
         $admins = User::role('School Admin')->where('school_id', $payment->school_id)->get();

@@ -6,12 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\SubscriptionPayment;
 use App\Models\User;
 use App\Notifications\PaymentStatusUpdated;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 class PaymentVerificationController extends Controller
 {
+    protected $paymentService;
+
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
+
     public function index()
     {
         $payments = SubscriptionPayment::with(['school', 'plan'])
@@ -28,37 +36,17 @@ class PaymentVerificationController extends Controller
             'admin_note' => ['nullable', 'string'],
         ]);
 
-        DB::transaction(function () use ($request, $payment) {
-            $payment->update([
-                'status' => $request->status,
-                'admin_note' => $request->admin_note,
-            ]);
-
-            if ($request->status === 'approved') {
-                $subscription = $payment->subscription;
-                
-                // Cancel other active subscriptions for this school
-                $payment->school->subscriptions()
-                    ->where('id', '!=', $subscription->id)
-                    ->whereIn('status', ['active', 'trialing'])
-                    ->update(['status' => 'canceled', 'canceled_at' => now()]);
-
-                // Activate this subscription
-                $start = now();
-                $end = match ($subscription->plan->billing_cycle) {
-                    'yearly' => $start->copy()->addYear(),
-                    default => $start->copy()->addMonth(),
-                };
-
-                $subscription->update([
-                    'status' => 'active',
-                    'current_period_start' => $start,
-                    'current_period_end' => $end,
+        if ($request->status === 'approved') {
+            $this->paymentService->approvePayment($payment, $request->admin_note);
+        } elseif ($request->status === 'rejected') {
+            DB::transaction(function () use ($request, $payment) {
+                $payment->update([
+                    'status' => 'rejected',
+                    'admin_note' => $request->admin_note,
                 ]);
-            } elseif ($request->status === 'rejected') {
                 $payment->subscription->update(['status' => 'canceled']);
-            }
-        });
+            });
+        }
 
         // Send Notification
         $admins = User::role('School Admin')->where('school_id', $payment->school_id)->get();

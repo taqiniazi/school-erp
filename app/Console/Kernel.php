@@ -14,6 +14,9 @@ class Kernel extends ConsoleKernel
     {
         // Run database backup daily at 1:00 AM
         $schedule->command('backup:run')->dailyAt('01:00');
+
+        // Send subscription renewal reminders daily at 9:00 AM
+        $schedule->command('subscription:send-renewal-reminders')->dailyAt('09:00');
     }
 
     /**
