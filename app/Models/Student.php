@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\RecordsActivity;
 use App\Traits\BelongsToSchool;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends Model
 {
-    use HasFactory, RecordsActivity, BelongsToSchool;
+    use HasFactory, RecordsActivity, BelongsToSchool, SoftDeletes;
     
     protected $fillable = [
+        'school_id',
         'user_id',
         'admission_number',
         'roll_number',

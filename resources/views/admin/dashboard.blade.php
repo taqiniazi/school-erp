@@ -1,57 +1,148 @@
-<x-app-layout>
-    <x-slot name="header">
-        {{ __('Admin Dashboard') }}
-    </x-slot>
+@extends('layouts.app')
 
-    <!-- KPIs -->
-    <div class="row g-4 mb-4">
-        <!-- Total Students -->
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-start border-4 border-primary h-100">
-                <div class="card-body">
-                    <div class="text-uppercase text-muted small fw-bold mb-1">Total Students</div>
-                    <div class="h3 mb-0 fw-bold text-dark">{{ $totalStudents }}</div>
-                </div>
-            </div>
-        </div>
+@section('title', 'Admin Dashboard')
 
-        <!-- Total Teachers -->
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-start border-4 border-success h-100">
-                <div class="card-body">
-                    <div class="text-uppercase text-muted small fw-bold mb-1">Total Teachers</div>
-                    <div class="h3 mb-0 fw-bold text-dark">{{ $totalTeachers }}</div>
-                </div>
-            </div>
-        </div>
+@section('content')
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <a href="{{ route('reports.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+        </a>
+    </div>
 
-        <!-- Total Classes -->
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-start border-4 border-warning h-100">
+    <!-- Subscription Status Card -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow border-left-primary">
                 <div class="card-body">
-                    <div class="text-uppercase text-muted small fw-bold mb-1">Total Classes</div>
-                    <div class="h3 mb-0 fw-bold text-dark">{{ $totalClasses }}</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Monthly Fees -->
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-start border-4 border-info h-100">
-                <div class="card-body">
-                    <div class="text-uppercase text-muted small fw-bold mb-1">Monthly Fees</div>
-                    <div class="h3 mb-0 fw-bold text-dark">${{ number_format($monthlyFeeCollection, 2) }}</div>
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Current Subscription
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{ $subscription['planName'] }} 
+                                <span class="badge bg-{{ $subscription['status'] === 'active' ? 'success' : 'warning' }}">
+                                    {{ ucfirst($subscription['status']) }}
+                                </span>
+                            </div>
+                            <div class="mt-2 small text-muted">
+                                Expires: {{ $subscription['expiresAt'] ? \Carbon\Carbon::parse($subscription['expiresAt'])->format('M d, Y') : 'Never' }}
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Students</div>
+                                    <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                        {{ $subscription['studentUsage'] }} / {{ $subscription['studentLimit'] > 0 ? $subscription['studentLimit'] : '∞' }}
+                                    </div>
+                                    <div class="progress progress-sm mt-1">
+                                        <div class="progress-bar bg-info" role="progressbar" 
+                                            style="width: {{ $subscription['studentLimit'] > 0 ? min(($subscription['studentUsage'] / $subscription['studentLimit']) * 100, 100) : 0 }}%" 
+                                            aria-valuenow="{{ $subscription['studentUsage'] }}" aria-valuemin="0" aria-valuemax="{{ $subscription['studentLimit'] }}"></div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Teachers</div>
+                                    <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                        {{ $subscription['teacherUsage'] }} / {{ $subscription['teacherLimit'] > 0 ? $subscription['teacherLimit'] : '∞' }}
+                                    </div>
+                                    <div class="progress progress-sm mt-1">
+                                        <div class="progress-bar bg-warning" role="progressbar" 
+                                            style="width: {{ $subscription['teacherLimit'] > 0 ? min(($subscription['teacherUsage'] / $subscription['teacherLimit']) * 100, 100) : 0 }}%" 
+                                            aria-valuenow="{{ $subscription['teacherUsage'] }}" aria-valuemin="0" aria-valuemax="{{ $subscription['teacherLimit'] }}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{{ route('billing.choose-plan') }}" class="btn btn-sm btn-outline-primary">Upgrade Plan</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row g-4">
+    <!-- KPIs -->
+    <div class="row">
+        <!-- Total Students -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Students</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalStudents }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Teachers -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Teachers</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalTeachers }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Classes -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Classes</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalClasses }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chalkboard fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Fees -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Monthly Fees</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rs. {{ number_format($monthlyFeeCollection, 2) }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <!-- Alerts & Notifications -->
-        <div class="col-lg-8">
-            <div class="card h-100">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0 card-title">Alerts & Notifications</h5>
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Alerts & Notifications</h6>
                 </div>
                 <div class="card-body">
                     @if(isset($lowStockItems) && $lowStockItems > 0)
@@ -85,10 +176,10 @@
         </div>
 
         <!-- Quick Actions -->
-        <div class="col-lg-4">
-            <div class="card h-100">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0 card-title">Quick Actions</h5>
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
@@ -109,4 +200,5 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

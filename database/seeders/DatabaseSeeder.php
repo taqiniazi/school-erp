@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Plan;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Models\Teacher;
 use App\Models\SalaryStructure;
@@ -22,12 +24,27 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             RolesAndPermissionsSeeder::class,
+            PlanSeeder::class,
+            PaymentMethodSeeder::class,
             FinancialYearSeeder::class,
             SchoolClassSeeder::class,
             SubjectSeeder::class,
             SalaryStructureSeeder::class,
             FeeTypeSeeder::class,
         ]);
+
+        // Assign Enterprise Plan to Default School
+        $plan = Plan::where('code', 'enterprise_monthly')->first();
+        if ($plan) {
+            Subscription::firstOrCreate(
+                ['school_id' => $school->id, 'status' => 'active'],
+                [
+                    'plan_id' => $plan->id,
+                    'current_period_start' => now(),
+                    'current_period_end' => now()->addYear(),
+                ]
+            );
+        }
 
         $superAdmin = User::firstOrCreate(
             ['email' => 'superadmin@school.com'],

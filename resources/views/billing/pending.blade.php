@@ -1,33 +1,32 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Subscription Pending
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200 text-center">
+@section('content')
+<div class="container-fluid">
+    <div class="row justify-content-center py-5">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow mb-4 border-left-warning">
+                <div class="card-body text-center p-5">
                     <div class="mb-4">
-                        <svg class="h-16 w-16 text-yellow-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                        <i class="fas fa-clock fa-4x text-warning"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Payment Verification Pending</h3>
-                    <p class="text-gray-600 mb-6">
-                        Thank you for your payment! We have received your subscription request and payment proof.<br>
-                        Our team is verifying your payment. This process usually takes 1-2 hours.
-                    </p>
-                    <p class="text-sm text-gray-500 mb-6">
-                        You will receive an email once your subscription is active.
+                    
+                    <h2 class="h3 mb-2 text-gray-800 font-weight-bold">Payment Verification Pending</h2>
+                    
+                    <p class="text-gray-600 mb-4 lead">
+                        Thank you for your payment! We have received your subscription request and payment proof.
                     </p>
                     
-                    <a href="{{ route('billing.payment.history') }}" class="text-blue-600 hover:text-blue-800 font-medium">
-                        View Payment History
+                    <div class="alert alert-info mb-4 text-start">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Our team is currently verifying your payment. This process usually takes 1-2 hours. You will receive an email notification once your subscription is active.
+                    </div>
+                    
+                    <a href="{{ route('billing.payment.history') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-history me-2"></i> View Payment History
                     </a>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

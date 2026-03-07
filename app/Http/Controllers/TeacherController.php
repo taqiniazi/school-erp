@@ -48,6 +48,12 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
+        // Check Plan Limits
+        $school = auth()->user()->school;
+        if (!$school->canAddTeacher()) {
+            return redirect()->back()->with('error', 'You have reached the maximum number of teachers allowed by your current plan. Please upgrade your subscription.');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',

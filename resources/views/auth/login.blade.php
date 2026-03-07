@@ -33,9 +33,6 @@
         <div class="mb-3">
             <div class="d-flex justify-content-between align-items-center">
                 <label for="password" class="form-label">Password</label>
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="text-sm text-decoration-none text-primary">Forgot Password?</a>
-                @endif
             </div>
             <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required autocomplete="current-password" placeholder="Enter your password">
             @error('password')
@@ -47,8 +44,18 @@
 
         <!-- Remember Me -->
         <div class="mb-4 form-check">
-            <input type="checkbox" class="form-check-input" id="remember_me" name="remember">
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="checkbox" class="form-check-input" id="remember_me" name="remember">
             <label class="form-check-label text-secondary" for="remember_me">Remember me</label>
+                </div>
+                <div class="col-md-6 text-end">
+                    @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}" class="text-sm text-decoration-none text-primary">Forgot Password?</a>
+                @endif
+                </div>
+            </div>
+            
         </div>
 
         <button type="submit" class="btn btn-primary-custom w-100 mb-4">

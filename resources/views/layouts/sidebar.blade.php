@@ -1,6 +1,6 @@
 <div class="sidebar-header">
     <a href="{{ route('dashboard') }}" class="sidebar-brand">
-        <i class="fas fa-graduation-cap fa-lg text-primary"></i>
+        <i class="fas fa-graduation-cap fa-lg"></i>
         <span>School ERP</span>
     </a>
 </div>
@@ -8,9 +8,21 @@
 <ul class="list-unstyled components">
     <!-- Dashboard -->
     <li>
-        <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            <i class="fas fa-tachometer-alt"></i> Dashboard
-        </a>
+        @role('Super Admin')
+            <a href="{{ route('super-admin.dashboard') }}" class="{{ request()->routeIs('super-admin.dashboard') ? 'active' : '' }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+        @else
+            @role('School Admin')
+                <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            @else
+                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            @endrole
+        @endrole
     </li>
 
     <!-- Super Admin -->
@@ -27,8 +39,28 @@
             </a>
         </li>
         <li>
+            <a href="{{ route('super-admin.roles.index') }}" class="{{ request()->routeIs('super-admin.roles.*') ? 'active' : '' }}">
+                <i class="fas fa-user-tag"></i> Roles
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('super-admin.plans.index') }}" class="{{ request()->routeIs('super-admin.plans.*') ? 'active' : '' }}">
+                <i class="fas fa-box-open"></i> Plans
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('super-admin.subscriptions.index') }}" class="{{ request()->routeIs('super-admin.subscriptions.*') ? 'active' : '' }}">
+                <i class="fas fa-file-invoice"></i> Subscriptions
+            </a>
+        </li>
+        <li>
             <a href="{{ route('super-admin.payments.index') }}" class="{{ request()->routeIs('super-admin.payments.*') ? 'active' : '' }}">
                 <i class="fas fa-money-bill-wave"></i> Payments
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('super-admin.payment-methods.index') }}" class="{{ request()->routeIs('super-admin.payment-methods.*') ? 'active' : '' }}">
+                <i class="fas fa-credit-card"></i> Payment Methods
             </a>
         </li>
     @endrole

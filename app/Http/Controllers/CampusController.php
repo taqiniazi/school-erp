@@ -29,6 +29,12 @@ class CampusController extends Controller
      */
     public function store(Request $request)
     {
+        // Check Plan Limits
+        $school = auth()->user()->school;
+        if (!$school->canAddCampus()) {
+            return redirect()->back()->with('error', 'You have reached the maximum number of campuses allowed by your current plan. Please upgrade your subscription.');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',

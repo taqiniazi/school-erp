@@ -12,8 +12,7 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     
     <!-- FontAwesome -->
-    <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
-    
+    <link rel="stylesheet" href="{{ asset('font-awesome/css/all.min.css') }}">    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>

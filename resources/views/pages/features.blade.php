@@ -123,8 +123,9 @@
         <!-- Feature 1 -->
         <div class="row align-items-center mb-5 pb-5">
             <div class="col-lg-6" data-aos="fade-right">
-                <div class="p-4 bg-light rounded-4 shadow-sm text-center" style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
-                     <i class="fas fa-chart-line fa-8x text-primary-custom opacity-50"></i>
+                <div class="bg-light rounded-4 shadow-sm text-center" style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
+                     <!-- <i class="fas fa-chart-line fa-8x text-primary-custom opacity-50"></i> -->
+                      <img src="{{ asset('images/marketing/barchart-kids.png') }}" alt="Analytics Dashboard" class="img-fluid"  style="border-radius: 10px;">
                 </div>
             </div>
             <div class="col-lg-6 ps-lg-5" data-aos="fade-left">
@@ -155,8 +156,8 @@
         <!-- Feature 2 -->
         <div class="row align-items-center mb-5 pb-5 flex-lg-row-reverse">
             <div class="col-lg-6" data-aos="fade-left">
-                 <div class="p-4 bg-light rounded-4 shadow-sm text-center" style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
-                     <i class="fas fa-mobile-alt fa-8x text-success opacity-50"></i>
+                 <div class="bg-light rounded-4 shadow-sm text-center" style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
+                      <img src="{{ asset('images/marketing/mobile_ready_portals.png') }}" alt="Mobile-Ready Portals" class="img-fluid" style="border-radius: 10px;">
                 </div>
             </div>
             <div class="col-lg-6 pe-lg-5" data-aos="fade-right">

@@ -15,6 +15,7 @@ class SubscriptionPayment extends Model
         'plan_id',
         'amount',
         'payment_method',
+        'payment_method_id', // Added
         'transaction_reference',
         'proof_file_path',
         'status',
@@ -45,5 +46,10 @@ class SubscriptionPayment extends Model
     public function plan()
     {
         return $this->belongsTo(Plan::class);
+    }
+    
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
     }
 }

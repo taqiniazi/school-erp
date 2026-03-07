@@ -1,82 +1,85 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Manage Admin Users
-        </h2>
-    </x-slot>
-    <div class="py-8">
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="bg-white shadow-sm sm:rounded-lg">
-                    <div class="p-6 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Admin Users</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full text-sm">
-                                <thead>
-                                    <tr class="text-left text-gray-500">
-                                        <th class="py-2 pr-4">Name</th>
-                                        <th class="py-2 pr-4">Email</th>
-                                        <th class="py-2 pr-4">Phone</th>
-                                        <th class="py-2 pr-4">School</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-gray-700">
-                                    @foreach ($admins as $u)
-                                    <tr class="border-t">
-                                        <td class="py-2 pr-4">{{ $u->name }}</td>
-                                        <td class="py-2 pr-4">{{ $u->email }}</td>
-                                        <td class="py-2 pr-4">{{ $u->phone_number }}</td>
-                                        <td class="py-2 pr-4">{{ optional($u->school)->name }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="mt-4">
-                            {{ $admins->links() }}
-                        </div>
-                    </div>
+@extends('layouts.app')
+
+@section('content')
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Admin Users</h1>
+        <a href="{{ route('super-admin.admin-users.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-plus fa-sm text-white-50"></i> Create New School Admin
+        </a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Existing School Admins</h6>
+        </div>
+        <div class="card-body">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div class="bg-white shadow-sm sm:rounded-lg">
-                    <div class="p-6 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Create Admin User</h3>
-                        <form method="POST" action="{{ route('super-admin.admin-users.store') }}" class="space-y-4">
-                            @csrf
-                            <div>
-                                <label class="block text-sm text-gray-700">School Name</label>
-                                <input name="school_name" class="mt-1 w-full border rounded p-2" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-700">Address</label>
-                                <input name="address" class="mt-1 w-full border rounded p-2" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-700">Number of Campuses (optional)</label>
-                                <input name="campus_count" type="number" min="1" class="mt-1 w-full border rounded p-2" />
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-700">Admin Name</label>
-                                <input name="admin_name" class="mt-1 w-full border rounded p-2" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-700">Email</label>
-                                <input name="email" type="email" class="mt-1 w-full border rounded p-2" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-700">Phone</label>
-                                <input name="phone_number" class="mt-1 w-full border rounded p-2" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-700">Password</label>
-                                <input name="password" type="password" class="mt-1 w-full border rounded p-2" required />
-                            </div>
-                            <div class="pt-2">
-                                <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create</button>
-                            </div>
-                        </form>
-                    </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+            @endif
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>School</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($admins as $u)
+                            <tr>
+                                <td>{{ $u->name }}</td>
+                                <td>{{ $u->email }}</td>
+                                <td>{{ $u->phone_number }}</td>
+                                <td>
+                                    @if($u->school)
+                                        <span class="badge bg-info text-white">{{ $u->school->name }}</span>
+                                    @else
+                                        <span class="badge bg-secondary">No School</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('super-admin.admin-users.edit', $u->id) }}" class="btn btn-sm btn-info text-white" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @if(auth()->id() !== $u->id)
+                                            <form action="{{ route('super-admin.admin-users.destroy', $u->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this admin and their school? This action cannot be undone.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center">No admin users found.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-3">
+                {{ $admins->links() }}
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

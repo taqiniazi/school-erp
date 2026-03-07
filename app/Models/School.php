@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class School extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -64,5 +65,42 @@ class School extends Model
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);
+    }
+
+    public function currentSubscription()
+    {
+        return $this->hasOne(Subscription::class)->where('status', 'active')->latest();
+    }
+
+    public function getCurrentPlanAttribute()
+    {
+        return $this->currentSubscription?->plan;
+    }
+
+    public function canAddStudent()
+    {
+        $plan = $this->current_plan;
+        if (!$plan) return false;
+        if (is_null($plan->max_students)) return true; // Unlimited
+
+        return $this->students()->count() < $plan->max_students;
+    }
+
+    public function canAddTeacher()
+    {
+        $plan = $this->current_plan;
+        if (!$plan) return false;
+        if (is_null($plan->max_teachers)) return true;
+
+        return $this->teachers()->count() < $plan->max_teachers;
+    }
+
+    public function canAddCampus()
+    {
+        $plan = $this->current_plan;
+        if (!$plan) return false;
+        if (is_null($plan->max_campuses)) return true;
+
+        return $this->campuses()->count() < $plan->max_campuses;
     }
 }

@@ -51,6 +51,12 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        // Check Plan Limits
+        $school = auth()->user()->school;
+        if (!$school->canAddStudent()) {
+            return redirect()->back()->with('error', 'You have reached the maximum number of students allowed by your current plan. Please upgrade your subscription.');
+        }
+
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',

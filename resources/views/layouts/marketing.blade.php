@@ -12,7 +12,7 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     
     <!-- FontAwesome -->
-    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('font-awesome/css/all.min.css') }}" rel="stylesheet">
     
     <!-- AOS Animation -->
     <link href="{{ asset('css/aos.css') }}" rel="stylesheet">

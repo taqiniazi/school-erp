@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Billing;
 
 use App\Http\Controllers\Controller;
+use App\Models\PaymentMethod;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\SubscriptionPayment;
@@ -24,26 +25,32 @@ class PaymentController extends Controller
 
     public function create(Plan $plan)
     {
+        $manualMethods = PaymentMethod::where('is_active', true)
+            ->where('type', 'manual')
+            ->get();
+
         return view('billing.payment', [
             'plan' => $plan,
             'school' => auth()->user()->school,
+            'manualMethods' => $manualMethods,
         ]);
     }
 
     public function store(Request $request, Plan $plan)
     {
         $request->validate([
-            'payment_method' => ['required', 'string', 'in:easypaisa,jazzcash,bank_transfer,wise,payoneer'],
+            'payment_method_id' => ['required', 'exists:payment_methods,id'],
             'transaction_reference' => ['nullable', 'string', 'max:255'],
             'proof_file' => ['required', 'image', 'max:2048'], // 2MB Max
         ]);
 
         $school = $request->user()->school;
+        $paymentMethod = PaymentMethod::findOrFail($request->payment_method_id);
         
         // Handle File Upload
         $path = $request->file('proof_file')->store('payment_proofs', 'public');
 
-        DB::transaction(function () use ($school, $plan, $request, $path) {
+        DB::transaction(function () use ($school, $plan, $request, $path, $paymentMethod) {
             // Cancel any previous pending subscriptions
             Subscription::where('school_id', $school->id)
                 ->where('status', 'pending_approval')
@@ -64,7 +71,8 @@ class PaymentController extends Controller
                 'subscription_id' => $subscription->id,
                 'plan_id' => $plan->id,
                 'amount' => $plan->price,
-                'payment_method' => $request->payment_method,
+                'payment_method' => $paymentMethod->name,
+                'payment_method_id' => $paymentMethod->id,
                 'transaction_reference' => $request->transaction_reference,
                 'proof_file_path' => $path,
                 'status' => 'pending',
@@ -94,7 +102,7 @@ class PaymentController extends Controller
     {
         Stripe::setApiKey(config('services.stripe.secret'));
 
-        $payment = $this->createPendingPayment($plan, 'stripe');
+        $payment = $this->createPendingPayment($plan, 'Stripe');
 
         $session = StripeSession::create([
             'payment_method_types' => ['card'],
@@ -152,7 +160,7 @@ class PaymentController extends Controller
         $provider->setApiCredentials(config('paypal'));
         $paypalToken = $provider->getAccessToken();
 
-        $payment = $this->createPendingPayment($plan, 'paypal');
+        $payment = $this->createPendingPayment($plan, 'PayPal');
 
         $response = $provider->createOrder([
             "intent" => "CAPTURE",

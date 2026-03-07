@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="col-12">
+        <!-- <div class="col-12">
             <div class="card shadow-sm border-danger">
                 <div class="card-body">
                     <div class="row justify-content-center">
@@ -38,6 +38,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </x-app-layout>

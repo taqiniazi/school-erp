@@ -22,7 +22,7 @@ class PaymentVerificationController extends Controller
 
     public function index()
     {
-        $payments = SubscriptionPayment::with(['school', 'plan'])
+        $payments = SubscriptionPayment::with(['school', 'plan', 'paymentMethod'])
             ->latest()
             ->paginate(20);
             

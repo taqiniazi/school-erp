@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Traits\BelongsToSchool;
 use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -13,7 +14,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use BelongsToSchool, HasApiTokens, HasFactory, HasRoles, Notifiable, RecordsActivity;
+    use BelongsToSchool, HasApiTokens, HasFactory, HasRoles, Notifiable, RecordsActivity, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

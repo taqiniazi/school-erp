@@ -2,9 +2,9 @@
     --primary-color: #4338ca; /* Indigo 700 */
     --primary-hover: #3730a3; /* Indigo 800 */
     --secondary-color: #64748b; /* Slate 500 */
-    --sidebar-bg: #1e1b4b; /* Indigo 950 */
-    --sidebar-text: #cbd5e1; /* Slate 300 */
-    --sidebar-active-bg: rgba(255, 255, 255, 0.1);
+    --sidebar-bg: #006496; /* Indigo 950 */
+    --sidebar-text: #ffffff; /* Slate 300 */
+    --sidebar-active-bg: rgba(0, 0, 0, 0.3);
     --sidebar-active-border: #818cf8; /* Indigo 400 */
     --body-bg: #f1f5f9; /* Slate 100 */
     --card-bg: #ffffff;
@@ -18,7 +18,12 @@ body {
     background-color: var(--body-bg);
     color: var(--text-main);
 }
-
+.card {
+    border-radius: 15px !important;
+}
+.card-header{
+    border-radius: 15px 15px 0 0 !important;
+}
 /* Layout */
 .wrapper {
     display: flex;
@@ -95,7 +100,7 @@ body {
 
 #sidebar ul li a.active i {
     opacity: 1;
-    color: var(--sidebar-active-border);
+    color: #fff;
 }
 
 .sidebar-heading {
@@ -103,7 +108,7 @@ body {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #6b7280; /* Gray 500 */
+    color: #ddd; /* Gray 500 */
     font-weight: 700;
 }
 

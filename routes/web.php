@@ -80,15 +80,26 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
 
     // Super Admin Payment Verification
     Route::middleware(['role:Super Admin'])->prefix('super-admin')->name('super-admin.')->group(function () {
+        Route::get('dashboard', [\App\Http\Controllers\SuperAdmin\DashboardController::class, 'index'])->name('dashboard');
         Route::get('payments', [\App\Http\Controllers\SuperAdmin\PaymentVerificationController::class, 'index'])->name('payments.index');
         Route::put('payments/{payment}', [\App\Http\Controllers\SuperAdmin\PaymentVerificationController::class, 'update'])->name('payments.update');
         
+        Route::resource('plans', \App\Http\Controllers\SuperAdmin\PlanController::class);
+        
+        // Payment Methods Management
+        Route::resource('payment-methods', \App\Http\Controllers\SuperAdmin\PaymentMethodController::class);
+
         Route::get('schools', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'index'])->name('schools.index');
         Route::post('schools/{school}/activate', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'activate'])->name('schools.activate');
         Route::post('schools/{school}/deactivate', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'deactivate'])->name('schools.deactivate');
 
-        Route::get('admin-users', [\App\Http\Controllers\SuperAdmin\AdminUserController::class, 'index'])->name('admin-users.index');
-        Route::post('admin-users', [\App\Http\Controllers\SuperAdmin\AdminUserController::class, 'store'])->name('admin-users.store');
+        Route::resource('admin-users', \App\Http\Controllers\SuperAdmin\AdminUserController::class);
+
+        Route::get('subscriptions', [\App\Http\Controllers\SuperAdmin\SubscriptionController::class, 'index'])->name('subscriptions.index');
+        Route::post('subscriptions/{subscription}/cancel', [\App\Http\Controllers\SuperAdmin\SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
+        Route::post('subscriptions/{subscription}/activate', [\App\Http\Controllers\SuperAdmin\SubscriptionController::class, 'activate'])->name('subscriptions.activate');
+
+        Route::resource('roles', \App\Http\Controllers\SuperAdmin\RoleController::class);
     });
 
     Route::middleware(['role:Teacher'])->group(function () {
