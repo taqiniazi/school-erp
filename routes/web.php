@@ -67,6 +67,7 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
 
     Route::middleware(['role:Super Admin|School Admin'])->group(function () {
         Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/admin/analytics', [App\Http\Controllers\AnalyticsController::class, 'index'])->name('analytics.index');
     });
 
     // Super Admin Payment Verification

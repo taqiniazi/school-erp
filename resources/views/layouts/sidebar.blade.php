@@ -44,6 +44,11 @@
         @endrole
 
         @role('Super Admin|School Admin')
+        <div class="pt-4 pb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Analytics</div>
+        <x-nav-link-sidebar :href="route('analytics.index')" :active="request()->routeIs('analytics.index')" icon="fas fa-chart-pie">
+            {{ __('Analytics Dashboard') }}
+        </x-nav-link-sidebar>
+
         <div class="pt-4 pb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Academic</div>
         <x-nav-link-sidebar :href="route('attendance.index')" :active="request()->routeIs('attendance.*')" icon="fas fa-calendar-check">
             {{ __('Student Attendance') }}
