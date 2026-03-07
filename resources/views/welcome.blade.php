@@ -6,342 +6,19 @@
     <title>{{ config('app.name', 'School ERP') }} - Modern School Management System</title>
     
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="{{ asset('css/inter.css') }}" rel="stylesheet">
     
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     
     <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
     
     <!-- AOS Animation -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="{{ asset('css/aos.css') }}" rel="stylesheet">
 
-    <style>
-        :root {
-            --primary-color: #4f46e5;
-            --secondary-color: #818cf8;
-            --accent-color: #c7d2fe;
-            --dark-color: #1e1b4b;
-            --light-color: #f8fafc;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            color: #334155;
-            overflow-x: hidden;
-        }
-
-        /* Navbar */
-        .navbar {
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            padding: 1rem 0;
-            transition: all 0.3s ease;
-        }
-        
-        .navbar-brand {
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-        
-        .nav-link {
-            font-weight: 500;
-            color: #64748b;
-            margin: 0 0.5rem;
-            transition: color 0.2s;
-        }
-        
-        .nav-link:hover, .nav-link.active {
-            color: var(--primary-color);
-        }
-        
-        .btn-primary-custom {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: white;
-            padding: 0.6rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary-custom:hover {
-            background-color: #4338ca;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
-        }
-
-        .btn-outline-custom {
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 0.6rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .btn-outline-custom:hover {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        /* Hero Section */
-        .hero-section {
-            padding: 8rem 0 5rem;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, var(--primary-color), #2563eb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .hero-subtitle {
-            font-size: 1.25rem;
-            color: #64748b;
-            margin-bottom: 2.5rem;
-        }
-        
-        .hero-image {
-            border-radius: 1rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
-            transition: transform 0.5s ease;
-        }
-        
-        .hero-image:hover {
-            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
-        }
-
-        /* Features Section */
-        .section-padding {
-            padding: 6rem 0;
-        }
-        
-        .section-title {
-            font-weight: 700;
-            color: var(--dark-color);
-            margin-bottom: 1rem;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 4px;
-            background: var(--primary-color);
-            border-radius: 2px;
-        }
-        
-        .feature-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-            height: 100%;
-            border: 1px solid #f1f5f9;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            border-color: var(--accent-color);
-        }
-        
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: #e0e7ff;
-            color: var(--primary-color);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Modules Section */
-        .modules-section {
-            background-color: #f8fafc;
-        }
-        
-        .module-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .module-item i {
-            color: var(--primary-color);
-            margin-right: 10px;
-        }
-
-        /* Pricing Section */
-        .pricing-card {
-            border: none;
-            border-radius: 1.5rem;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-        
-        .pricing-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-        
-        .pricing-card.popular {
-            border: 2px solid var(--primary-color);
-            transform: scale(1.05);
-            z-index: 1;
-        }
-        
-        .pricing-card.popular:hover {
-            transform: scale(1.05) translateY(-10px);
-        }
-        
-        .popular-badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: var(--primary-color);
-            color: white;
-            padding: 0.5rem 1.5rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border-bottom-left-radius: 1rem;
-        }
-        
-        .price-tag {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--dark-color);
-        }
-        
-        .price-period {
-            font-size: 1rem;
-            color: #64748b;
-            font-weight: 400;
-        }
-
-        /* Testimonials */
-        .testimonial-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-        
-        .testimonial-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 1.5rem;
-            border: 3px solid var(--accent-color);
-        }
-
-        /* Screenshots */
-        .screenshot-item {
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        
-        .screenshot-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* CTA Section */
-        .cta-section {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #4338ca 100%);
-            color: white;
-            padding: 5rem 0;
-        }
-
-        /* Footer */
-        .footer {
-            background-color: var(--dark-color);
-            color: #94a3b8;
-            padding: 4rem 0 2rem;
-        }
-        
-        .footer-title {
-            color: white;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-        }
-        
-        .footer-link {
-            color: #94a3b8;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.8rem;
-            transition: color 0.2s;
-        }
-        
-        .footer-link:hover {
-            color: white;
-        }
-        
-        .social-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            margin-right: 0.5rem;
-            transition: all 0.3s;
-        }
-        
-        .social-icon:hover {
-            background: var(--primary-color);
-            transform: translateY(-3px);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 991px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            .pricing-card.popular {
-                transform: scale(1);
-                margin: 2rem 0;
-            }
-            .pricing-card.popular:hover {
-                transform: translateY(-10px);
-            }
-        }
-    </style>
+    <!-- Custom CSS -->
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 <body>
 
@@ -388,61 +65,168 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero-section d-flex align-items-center">
-        <div class="container">
+        <div class="hero-bg-pattern"></div>
+        <div class="hero-shape-1"></div>
+        <div class="hero-shape-2"></div>
+        
+        <div class="container position-relative z-1">
             <div class="row align-items-center">
                 <div class="col-lg-6" data-aos="fade-right">
-                    <h1 class="hero-title">Manage Your School With Confidence</h1>
-                    <p class="hero-subtitle">The most comprehensive ERP solution for modern educational institutions. Streamline administration, enhance learning, and simplify communication.</p>
-                    <div class="d-flex gap-3">
-                        <a href="{{ route('register') }}" class="btn btn-primary-custom btn-lg">Start Free Trial</a>
-                        <a href="#features" class="btn btn-outline-custom btn-lg">Learn More</a>
+                    <div class="d-inline-block px-3 py-1 mb-3 text-sm font-semibold text-primary bg-light rounded-pill border border-primary-subtle">
+                        <i class="fas fa-star me-1 text-warning"></i> #1 School Management System
                     </div>
-                    <div class="mt-4 text-muted small">
-                        <i class="fas fa-check-circle text-success me-2"></i> No credit card required
-                        <i class="fas fa-check-circle text-success ms-3 me-2"></i> 14-day free trial
+                    <h1 class="hero-title">Manage Your School <br>With <span class="text-primary" style="background: linear-gradient(135deg, #4f46e5 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Confidence</span></h1>
+                    <p class="hero-subtitle">The most comprehensive ERP solution for modern educational institutions. Streamline administration, enhance learning, and simplify communication.</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="{{ route('register') }}" class="btn btn-primary-custom btn-lg shadow-lg">
+                            <i class="fas fa-rocket me-2"></i> Start Free Trial
+                        </a>
+                        <a href="#features" class="btn btn-outline-custom btn-lg">
+                            <i class="fas fa-play-circle me-2"></i> Watch Demo
+                        </a>
+                    </div>
+                    <div class="mt-4 pt-2 d-flex align-items-center gap-4 text-muted small">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-check-circle text-success me-2"></i> No credit card required
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-check-circle text-success me-2"></i> 14-day free trial
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left">
-                    <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="School ERP Dashboard" class="img-fluid hero-image">
+                <div class="col-lg-6 mt-5 mt-lg-0 position-relative" data-aos="fade-left">
+                    <!-- Floating Stats Cards -->
+                    <div class="floating-card floating-card-1">
+                        <div class="stats-icon bg-success">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark">5,000+</div>
+                            <div class="small text-muted">Active Students</div>
+                        </div>
+                    </div>
+                    
+                    <div class="floating-card floating-card-2">
+                        <div class="stats-icon bg-primary">
+                            <i class="fas fa-school"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark">99.9%</div>
+                            <div class="small text-muted">Uptime Guarantee</div>
+                        </div>
+                    </div>
+
+                    <!-- Browser Window -->
+                    <div class="browser-window">
+                        <div class="browser-header">
+                            <div class="browser-dots">
+                                <div class="browser-dot dot-red"></div>
+                                <div class="browser-dot dot-yellow"></div>
+                                <div class="browser-dot dot-green"></div>
+                            </div>
+                            <div class="browser-address-bar"></div>
+                        </div>
+                        <img src="{{ asset('images/hero-dashboard.jpg') }}" alt="School ERP Dashboard" class="hero-image">
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="section-padding">
+    <section id="features" class="section-padding bg-light">
         <div class="container">
             <div class="text-center mb-5" data-aos="fade-up">
-                <h2 class="section-title">Why Choose Us?</h2>
-                <p class="text-muted mt-3">Built with modern technology to serve the needs of future-ready schools.</p>
+                <h2 class="section-title">Comprehensive Features</h2>
+                <p class="text-muted mt-3">Everything you need to manage your educational institution efficiently.</p>
             </div>
             
             <div class="row g-4">
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-cloud"></i>
+                <!-- Student Management -->
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="feature-icon mx-auto mb-4">
+                            <i class="fas fa-user-graduate"></i>
                         </div>
-                        <h4>Cloud Based</h4>
-                        <p class="text-muted">Access your school data from anywhere, anytime. Secure and reliable cloud infrastructure.</p>
+                        <h5 class="fw-bold mb-3">Student Management</h5>
+                        <p class="text-muted small">Complete lifecycle management from admission to alumni. Track academic progress and personal details.</p>
                     </div>
                 </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
+
+                <!-- Attendance Tracking -->
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="150">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="feature-icon mx-auto mb-4">
+                            <i class="fas fa-calendar-check"></i>
                         </div>
-                        <h4>Secure & Safe</h4>
-                        <p class="text-muted">Role-based access control, data encryption, and regular backups keep your data safe.</p>
+                        <h5 class="fw-bold mb-3">Attendance Tracking</h5>
+                        <p class="text-muted small">Real-time attendance for students and staff. Biometric integration and automated reports.</p>
                     </div>
                 </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-line"></i>
+
+                <!-- Exam Management -->
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="feature-icon mx-auto mb-4">
+                            <i class="fas fa-file-alt"></i>
                         </div>
-                        <h4>Insightful Reports</h4>
-                        <p class="text-muted">Generate comprehensive reports for attendance, finance, academics, and HR.</p>
+                        <h5 class="fw-bold mb-3">Exam Management</h5>
+                        <p class="text-muted small">Schedule exams, manage grading systems, and generate automated report cards and result analysis.</p>
+                    </div>
+                </div>
+
+                <!-- Fee Management -->
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="250">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="feature-icon mx-auto mb-4">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Fee Management</h5>
+                        <p class="text-muted small">Automated fee generation, online payments, receipt printing, and dues tracking.</p>
+                    </div>
+                </div>
+
+                <!-- Payroll System -->
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="feature-icon mx-auto mb-4">
+                            <i class="fas fa-money-check-alt"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Payroll System</h5>
+                        <p class="text-muted small">Manage staff salaries, deductions, bonuses, and generate payslips automatically.</p>
+                    </div>
+                </div>
+
+                <!-- Library Management -->
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="350">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="feature-icon mx-auto mb-4">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Library Management</h5>
+                        <p class="text-muted small">Catalog books, manage issues/returns, track inventory, and calculate fines.</p>
+                    </div>
+                </div>
+
+                <!-- Transport Management -->
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="feature-icon mx-auto mb-4">
+                            <i class="fas fa-bus"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Transport Management</h5>
+                        <p class="text-muted small">Manage routes, vehicles, drivers, and track student transport details.</p>
+                    </div>
+                </div>
+
+                <!-- Communication System -->
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="450">
+                    <div class="feature-card h-100 text-center p-4">
+                        <div class="feature-icon mx-auto mb-4">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Communication System</h5>
+                        <p class="text-muted small">SMS and Email alerts for parents, students, and staff. Notice board and event management.</p>
                     </div>
                 </div>
             </div>
@@ -454,7 +238,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
-                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Modules Overview" class="img-fluid rounded-4 shadow-lg">
+                    <img src="{{ asset('images/modules-overview.jpg') }}" alt="Modules Overview" class="img-fluid rounded-4 shadow-lg">
                 </div>
                 <div class="col-lg-6 ps-lg-5" data-aos="fade-left">
                     <h2 class="section-title mb-4">All-in-One School Management</h2>
@@ -508,9 +292,18 @@
     <!-- Pricing Section -->
     <section id="pricing" class="section-padding">
         <div class="container">
-            <div class="text-center mb-5" data-aos="fade-up">
+            <div class="text-center mb-4" data-aos="fade-up">
                 <h2 class="section-title">Simple, Transparent Pricing</h2>
                 <p class="text-muted mt-3">Choose the plan that fits your school's size and needs.</p>
+            </div>
+
+            <!-- Monthly/Yearly Toggle -->
+            <div class="pricing-toggle" data-aos="fade-up" data-aos-delay="50">
+                <span class="fw-semibold text-muted">Monthly</span>
+                <div class="form-check form-switch p-0 m-0">
+                    <input class="form-check-input m-0 shadow-none" type="checkbox" id="pricingToggle">
+                </div>
+                <span class="fw-bold">Yearly <span class="save-badge">Save 20%</span></span>
             </div>
             
             <div class="row g-4 justify-content-center">
@@ -519,8 +312,9 @@
                     <div class="pricing-card h-100 p-4">
                         <h4 class="fw-bold mb-3">Standard</h4>
                         <div class="mb-3">
-                            <span class="price-tag">Rs. 5k</span>
-                            <span class="price-period">/month</span>
+                            <span class="price-tag monthly-price">Rs. 5k</span>
+                            <span class="price-tag yearly-price d-none">Rs. 48k</span>
+                            <span class="price-period text-muted">/<span class="billing-period">month</span></span>
                         </div>
                         <p class="text-muted small mb-4">Perfect for small schools just starting out.</p>
                         <ul class="list-unstyled mb-4">
@@ -537,21 +331,22 @@
                 <!-- Premium Plan -->
                 <div class="col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="200">
                     <div class="pricing-card popular h-100 p-4">
-                        <div class="popular-badge">Most Popular</div>
+                        <div class="popular-badge">Recommended</div>
                         <h4 class="fw-bold mb-3">Premium</h4>
                         <div class="mb-3">
-                            <span class="price-tag">Rs. 15k</span>
-                            <span class="price-period">/month</span>
+                            <span class="price-tag monthly-price">Rs. 15k</span>
+                            <span class="price-tag yearly-price d-none">Rs. 144k</span>
+                            <span class="price-period text-muted">/<span class="billing-period">month</span></span>
                         </div>
                         <p class="text-muted small mb-4">Ideal for growing institutions.</p>
                         <ul class="list-unstyled mb-4">
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 2000 Students</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 2,000 Students</li>
                             <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 200 Teachers</li>
                             <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 3 Campuses</li>
                             <li class="mb-2"><i class="fas fa-check text-success me-2"></i> All Modules</li>
                             <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Priority Support</li>
                         </ul>
-                        <a href="{{ route('register') }}" class="btn btn-primary-custom w-100">Get Started</a>
+                        <a href="{{ route('register') }}" class="btn btn-primary-custom w-100 shadow">Get Started</a>
                     </div>
                 </div>
                 
@@ -582,61 +377,161 @@
         <div class="container">
             <div class="text-center mb-5" data-aos="fade-up">
                 <h2 class="section-title">Trusted by Educators</h2>
+                <p class="text-muted mt-3">Hear from the principals and administrators who rely on us.</p>
             </div>
             
-            <div class="row g-4">
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="testimonial-card">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Principal" class="testimonial-img">
-                        <p class="text-muted fst-italic mb-3">"This ERP has completely transformed how we manage our school. The automated reports save us hours every week."</p>
-                        <h5 class="fw-bold">Mr. Ahmed Khan</h5>
-                        <small class="text-muted">Principal, City High School</small>
+            @php
+            $testimonials = [
+                [
+                    'quote' => "This ERP has completely transformed how we manage our school. The automated reports save us hours every week and parents love the transparency.",
+                    'name' => "Mr. Ahmed Khan",
+                    'role' => "Principal, City High School",
+                    'image' => asset('images/testimonial-1.jpg'),
+                    'rating' => 5
+                ],
+                [
+                    'quote' => "The fee management system is a lifesaver. We've seen a 40% reduction in late payments since switching to this platform. Highly recommended!",
+                    'name' => "Sarah Jenkins",
+                    'role' => "Admin Officer, St. Mary's",
+                    'image' => asset('images/testimonial-2.jpg'),
+                    'rating' => 4.5
+                ],
+                [
+                    'quote' => "Entering marks and attendance is so easy now. I can focus more on teaching and less on paperwork. The mobile interface is fantastic.",
+                    'name' => "Michael Chen",
+                    'role' => "Senior Coordinator, Greenfield Academy",
+                    'image' => asset('images/testimonial-3.jpg'),
+                    'rating' => 5
+                ]
+            ];
+            @endphp
+
+            <div class="testimonial-carousel" data-aos="zoom-in">
+                <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @foreach($testimonials as $index => $t)
+                            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}"></button>
+                        @endforeach
                     </div>
-                </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="testimonial-card">
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Admin" class="testimonial-img">
-                        <p class="text-muted fst-italic mb-3">"The fee management system is a lifesaver. Parents love the online payment options and instant receipts."</p>
-                        <h5 class="fw-bold">Sarah Jenkins</h5>
-                        <small class="text-muted">Admin Officer, St. Mary's</small>
+
+                    <div class="carousel-inner pb-5">
+                        @foreach($testimonials as $index => $testimonial)
+                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                            <div class="row">
+                                @for($i = 0; $i < 3; $i++)
+                                    @php 
+                                        $currentIndex = ($index + $i) % count($testimonials);
+                                        $item = $testimonials[$currentIndex];
+                                    @endphp
+                                    <div class="col-lg-4 {{ $i > 0 ? 'd-none d-lg-block' : '' }}">
+                                        <div class="testimonial-card mx-auto">
+                                            <i class="fas fa-quote-left quote-icon"></i>
+                                            <div class="rating">
+                                                @for($j = 1; $j <= 5; $j++)
+                                                    @if($j <= $item['rating'])
+                                                        <i class="fas fa-star"></i>
+                                                    @elseif($j - 0.5 == $item['rating'])
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    @else
+                                                        <!-- <i class="far fa-star"></i> -->
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <p class="lead text-muted fst-italic mb-4">"{{ $item['quote'] }}"</p>
+                                            <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" class="testimonial-img mb-3">
+                                            <h5 class="fw-bold mb-1">{{ $item['name'] }}</h5>
+                                            <small class="text-primary fw-semibold">{{ $item['role'] }}</small>
+                                        </div>
+                                    </div>
+                                @endfor
+                            </div>
+                        </div>
+                        @endforeach
                     </div>
-                </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                    <div class="testimonial-card">
-                        <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Teacher" class="testimonial-img">
-                        <p class="text-muted fst-italic mb-3">"Entering marks and attendance is so easy now. I can focus more on teaching and less on paperwork."</p>
-                        <h5 class="fw-bold">Michael Chen</h5>
-                        <small class="text-muted">Senior Teacher</small>
-                    </div>
+                    
+                    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </section>
 
 
-    <!-- Screenshots Section -->
+    <!-- Product Showcase / Screenshots -->
     <section id="screenshots" class="section-padding">
         <div class="container">
             <div class="text-center mb-5" data-aos="fade-up">
                 <h2 class="section-title">See It in Action</h2>
-                <p class="text-muted mt-3">A glimpse into our powerful and user-friendly interface.</p>
+                <p class="text-muted mt-3">Explore our intuitive and powerful dashboard interfaces.</p>
             </div>
             
-            <div class="row g-4">
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="screenshot-item">
-                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dashboard Overview" class="img-fluid">
+            @php
+            $screenshots = [
+                [
+                    'title' => 'Admin Dashboard',
+                    'desc' => 'Complete overview of school performance, stats, and quick actions.',
+                    'img' => asset('images/screenshot-admin.jpg')
+                ],
+                [
+                    'title' => 'Student Management',
+                    'desc' => 'Detailed student profiles, academic history, and personal info.',
+                    'img' => asset('images/screenshot-student.jpg')
+                ],
+                [
+                    'title' => 'Finance & Fees',
+                    'desc' => 'Track payments, generate invoices, and manage expenses effortlessly.',
+                    'img' => asset('images/screenshot-finance.jpg')
+                ],
+                [
+                    'title' => 'Attendance Tracking',
+                    'desc' => 'Monitor daily attendance for students and staff with detailed reports.',
+                    'img' => asset('images/screenshot-attendance.jpg')
+                ]
+            ];
+            @endphp
+
+            <div class="position-relative px-5" data-aos="fade-up" data-aos-delay="100">
+                <div id="screenshotCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @foreach($screenshots as $index => $s)
+                            <button type="button" data-bs-target="#screenshotCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}"></button>
+                        @endforeach
                     </div>
-                </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="screenshot-item">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Student Profile" class="img-fluid">
+                    
+                    <div class="carousel-inner">
+                        @foreach($screenshots as $index => $screenshot)
+                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                            <div class="row">
+                                @for($i = 0; $i < 3; $i++)
+                                    @php 
+                                        $currentIndex = ($index + $i) % count($screenshots);
+                                        $item = $screenshots[$currentIndex];
+                                    @endphp
+                                    <div class="col-lg-4 {{ $i > 0 ? 'd-none d-lg-block' : '' }}">
+                                        <div class="screenshot-item">
+                                            <img src="{{ $item['img'] }}" class="d-block w-100 rounded-4" alt="{{ $item['title'] }}">
+                                            <div class="screenshot-overlay rounded-bottom-4">
+                                                <h5 class="fw-bold">{{ $item['title'] }}</h5>
+                                                <p class="small mb-0">{{ $item['desc'] }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endfor
+                            </div>
+                        </div>
+                        @endforeach
                     </div>
-                </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                    <div class="screenshot-item">
-                        <img src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Reports & Analytics" class="img-fluid">
-                    </div>
+                    
+                    <button class="carousel-control-prev" type="button" data-bs-target="#screenshotCarousel" data-bs-slide="prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#screenshotCarousel" data-bs-slide="next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -645,9 +540,35 @@
     <!-- Call to Action -->
     <section class="cta-section text-center">
         <div class="container" data-aos="zoom-in">
-            <h2 class="fw-bold mb-3">Ready to Transform Your School?</h2>
-            <p class="lead mb-4">Join 500+ schools trusting our platform for their daily operations.</p>
-            <a href="{{ route('register') }}" class="btn btn-light text-primary fw-bold btn-lg px-5 py-3">Get Started Today</a>
+            <h2 class="fw-bold display-5 mb-4">Start Managing Your School Digitally Today</h2>
+            <p class="lead mb-5 opacity-75">Join over 500+ schools that have already modernized their administration.</p>
+            
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4">
+                    <div class="p-4 rounded-4 bg-white bg-opacity-10 border border-light border-opacity-25 h-100">
+                        <i class="fas fa-rocket fa-3x mb-3 opacity-75"></i>
+                        <h4 class="fw-bold">Ready to Launch?</h4>
+                        <p class="opacity-75 mb-4">Get full access to all features for 14 days. No credit card required.</p>
+                        <a href="{{ route('register') }}" class="btn btn-light text-primary fw-bold w-100 py-3">Start Free Trial</a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-4 rounded-4 bg-white bg-opacity-10 border border-light border-opacity-25 h-100">
+                        <i class="fas fa-laptop-code fa-3x mb-3 opacity-75"></i>
+                        <h4 class="fw-bold">Need a Tour?</h4>
+                        <p class="opacity-75 mb-4">Schedule a personalized demo with our product experts.</p>
+                        <a href="#" class="btn btn-outline-light fw-bold w-100 py-3">Book Demo</a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-4 rounded-4 bg-white bg-opacity-10 border border-light border-opacity-25 h-100">
+                        <i class="fas fa-headset fa-3x mb-3 opacity-75"></i>
+                        <h4 class="fw-bold">Have Questions?</h4>
+                        <p class="opacity-75 mb-4">Chat with our sales team to get a custom quote for your school.</p>
+                        <a href="#" class="btn btn-outline-light fw-bold w-100 py-3">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -694,12 +615,38 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/aos.js') }}"></script>
     <script>
         AOS.init({
             duration: 800,
             once: true
+        });
+
+        // Pricing Toggle Script
+        document.addEventListener('DOMContentLoaded', function() {
+            const pricingToggle = document.getElementById('pricingToggle');
+            const monthlyPrices = document.querySelectorAll('.monthly-price');
+            const yearlyPrices = document.querySelectorAll('.yearly-price');
+            const billingPeriods = document.querySelectorAll('.billing-period');
+
+            if(pricingToggle) {
+                pricingToggle.addEventListener('change', function() {
+                    const isYearly = this.checked;
+                    
+                    monthlyPrices.forEach(price => {
+                        price.classList.toggle('d-none', isYearly);
+                    });
+                    
+                    yearlyPrices.forEach(price => {
+                        price.classList.toggle('d-none', !isYearly);
+                    });
+                    
+                    billingPeriods.forEach(period => {
+                        period.textContent = isYearly ? 'year' : 'month';
+                    });
+                });
+            }
         });
         
         // Navbar scroll effect
