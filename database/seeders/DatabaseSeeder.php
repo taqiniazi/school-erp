@@ -29,15 +29,25 @@ class DatabaseSeeder extends Seeder
             FeeTypeSeeder::class,
         ]);
 
-        $admin = User::firstOrCreate(
-            ['email' => 'admin@school.com'],
+        $superAdmin = User::firstOrCreate(
+            ['email' => 'superadmin@school.com'],
             [
-                'name' => 'Admin User',
+                'name' => 'Super Admin',
                 'password' => bcrypt('password'),
                 'school_id' => $school->id,
             ]
         );
-        $admin->assignRole('Super Admin');
+        $superAdmin->syncRoles('Super Admin');
+
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@school.com'],
+            [
+                'name' => 'School Admin',
+                'password' => bcrypt('password'),
+                'school_id' => $school->id,
+            ]
+        );
+        $admin->syncRoles('School Admin');
 
         if (app()->isLocal()) {
             $this->seedDemoData($school);
