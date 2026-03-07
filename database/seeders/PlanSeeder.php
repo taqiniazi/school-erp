@@ -72,6 +72,69 @@ class PlanSeeder extends Seeder
                     'Custom Integrations'
                 ]
             ],
+            // Yearly Plans (10% discount approx)
+            [
+                'name' => 'Standard Yearly',
+                'code' => 'standard_yearly',
+                'price' => 540.00, // 50 * 12 * 0.9
+                'billing_cycle' => 'yearly',
+                'max_students' => 500,
+                'max_teachers' => 50,
+                'max_campuses' => 1,
+                'storage_limit_mb' => 10240,
+                'allowed_modules' => ['academic', 'attendance', 'communication', 'fees', 'reports'],
+                'features' => [
+                    'Up to 500 Students',
+                    'Up to 50 Teachers',
+                    '1 Campus',
+                    '10 GB Storage',
+                    'Core Modules (Academic, Attendance, Fees)',
+                    'Email Support',
+                    '2 Months Free'
+                ]
+            ],
+            [
+                'name' => 'Premium Yearly',
+                'code' => 'premium_yearly',
+                'price' => 1620.00, // 150 * 12 * 0.9
+                'billing_cycle' => 'yearly',
+                'max_students' => 2000,
+                'max_teachers' => 200,
+                'max_campuses' => 3,
+                'storage_limit_mb' => 51200,
+                'allowed_modules' => ['academic', 'attendance', 'communication', 'fees', 'reports', 'hr', 'payroll', 'library', 'transport'],
+                'features' => [
+                    'Up to 2000 Students',
+                    'Up to 200 Teachers',
+                    'Up to 3 Campuses',
+                    '50 GB Storage',
+                    'All Standard Modules + HR, Payroll, Library, Transport',
+                    'Priority Email Support',
+                    '2 Months Free'
+                ]
+            ],
+            [
+                'name' => 'Enterprise Yearly',
+                'code' => 'enterprise_yearly',
+                'price' => 4320.00, // 400 * 12 * 0.9
+                'billing_cycle' => 'yearly',
+                'max_students' => null,
+                'max_teachers' => null,
+                'max_campuses' => null,
+                'storage_limit_mb' => null,
+                'allowed_modules' => ['*'],
+                'features' => [
+                    'Unlimited Students',
+                    'Unlimited Teachers',
+                    'Unlimited Campuses',
+                    'Unlimited Storage',
+                    'All Modules Included',
+                    'Dedicated Account Manager',
+                    '24/7 Phone Support',
+                    'Custom Integrations',
+                    '2 Months Free'
+                ]
+            ],
         ];
 
         foreach ($plans as $plan) {

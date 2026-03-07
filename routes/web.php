@@ -36,6 +36,12 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         Route::post('choose-plan', [SubscriptionSelectionController::class, 'store'])->name('choose-plan.store');
     });
 
+    // School Admin Subscription Management
+    Route::middleware(['role:School Admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('subscription', [\App\Http\Controllers\SubscriptionController::class, 'index'])->name('subscription.index');
+        Route::get('subscription/upgrade', [\App\Http\Controllers\SubscriptionController::class, 'upgrade'])->name('subscription.upgrade');
+    });
+
     Route::middleware(['role:Super Admin|School Admin'])->group(function () {
         Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     });

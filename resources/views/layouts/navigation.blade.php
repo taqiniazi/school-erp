@@ -29,6 +29,9 @@
                     <x-nav-link :href="route('campuses.index')" :active="request()->routeIs('campuses.*')">
                         {{ __('Campuses') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.subscription.index')" :active="request()->routeIs('admin.subscription.*')">
+                        {{ __('Subscription') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('Super Admin|School Admin')
