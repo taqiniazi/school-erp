@@ -13,21 +13,22 @@ class SchoolController extends Controller
     {
         $schools = School::with(['subscriptions' => function ($q) {
             $q->latest();
-        }])->paginate(20);
+        }])
+        ->withCount(['students', 'teachers', 'campuses'])
+        ->paginate(20);
+        
         return view('super-admin.schools.index', compact('schools'));
     }
 
-    public function approve(School $school)
+    public function activate(School $school)
     {
-        $school->is_active = true;
-        $school->save();
-        return redirect()->back();
+        $school->update(['is_active' => true]);
+        return redirect()->back()->with('success', 'School activated successfully.');
     }
 
-    public function suspend(School $school)
+    public function deactivate(School $school)
     {
-        $school->is_active = false;
-        $school->save();
-        return redirect()->back();
+        $school->update(['is_active' => false]);
+        return redirect()->back()->with('success', 'School deactivated successfully.');
     }
 }

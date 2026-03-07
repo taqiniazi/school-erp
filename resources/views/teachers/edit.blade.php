@@ -49,6 +49,18 @@
                     @enderror
                 </div>
                 <div class="col-md-6 mb-3">
+                    <label for="campus_id" class="form-label">Campus</label>
+                    <select class="form-select @error('campus_id') is-invalid @enderror" id="campus_id" name="campus_id">
+                        <option value="">Select Campus</option>
+                        @foreach($campuses as $campus)
+                            <option value="{{ $campus->id }}" {{ old('campus_id', $teacher->campus_id) == $campus->id ? 'selected' : '' }}>{{ $campus->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('campus_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-6 mb-3">
                     <label for="salary_structure_id" class="form-label">Salary Structure</label>
                     <select class="form-select @error('salary_structure_id') is-invalid @enderror" id="salary_structure_id" name="salary_structure_id">
                         <option value="">Select Salary Structure</option>

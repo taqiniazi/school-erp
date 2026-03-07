@@ -11,10 +11,15 @@ class Section extends Model
 {
     use HasFactory, RecordsActivity, BelongsToSchool;
     
-    protected $fillable = ['name', 'school_class_id'];
+    protected $fillable = ['name', 'school_class_id', 'campus_id'];
     
     public function schoolClass()
     {
         return $this->belongsTo(SchoolClass::class);
+    }
+    
+    public function campus()
+    {
+        return $this->belongsTo(Campus::class);
     }
 }

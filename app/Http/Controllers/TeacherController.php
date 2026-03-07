@@ -9,6 +9,7 @@ use App\Models\Subject;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\TeacherAllocation;
+use App\Models\Campus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -38,7 +39,8 @@ class TeacherController extends Controller
         $salaryStructures = Cache::remember('all_salary_structures', 86400, function () {
             return SalaryStructure::all();
         });
-        return view('teachers.create', compact('salaryStructures'));
+        $campuses = Campus::where('is_active', true)->get();
+        return view('teachers.create', compact('salaryStructures', 'campuses'));
     }
 
     /**
@@ -56,6 +58,7 @@ class TeacherController extends Controller
             'phone' => 'nullable|string',
             'emergency_contact' => 'nullable|string',
             'salary_structure_id' => 'nullable|exists:salary_structures,id',
+            'campus_id' => 'nullable|exists:campuses,id',
             'photo' => 'nullable|image|max:2048',
         ]);
 
@@ -81,6 +84,7 @@ class TeacherController extends Controller
                 'phone' => $validated['phone'],
                 'emergency_contact' => $validated['emergency_contact'],
                 'salary_structure_id' => $validated['salary_structure_id'],
+                'campus_id' => $validated['campus_id'] ?? null,
                 'photo_path' => $path,
                 'status' => 'active',
             ]);
@@ -114,7 +118,8 @@ class TeacherController extends Controller
     {
         $teacher->load('user');
         $salaryStructures = SalaryStructure::all();
-        return view('teachers.edit', compact('teacher', 'salaryStructures'));
+        $campuses = Campus::where('is_active', true)->get();
+        return view('teachers.edit', compact('teacher', 'salaryStructures', 'campuses'));
     }
 
     /**
@@ -131,6 +136,7 @@ class TeacherController extends Controller
             'phone' => 'nullable|string',
             'emergency_contact' => 'nullable|string',
             'salary_structure_id' => 'nullable|exists:salary_structures,id',
+            'campus_id' => 'nullable|exists:campuses,id',
             'status' => 'required|in:active,inactive,resigned',
             'photo' => 'nullable|image|max:2048',
         ]);

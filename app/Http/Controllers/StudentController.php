@@ -6,6 +6,7 @@ use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\Student;
 use App\Models\User;
+use App\Models\Campus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -34,13 +35,15 @@ class StudentController extends Controller
             return SchoolClass::all();
         });
         
+        $campuses = Campus::where('is_active', true)->get();
+
         // Assuming 'Parent' role exists as per previous tasks
         // Caching parents list might be too heavy if there are thousands, but for now okay.
         $parents = Cache::remember('all_parents_role', 300, function () {
             return User::role('Parent')->get();
         });
         
-        return view('students.create', compact('classes', 'parents'));
+        return view('students.create', compact('classes', 'parents', 'campuses'));
     }
 
     /**
@@ -57,6 +60,7 @@ class StudentController extends Controller
             'gender' => 'required|in:male,female,other',
             'school_class_id' => 'required|exists:school_classes,id',
             'section_id' => 'required|exists:sections,id',
+            'campus_id' => 'nullable|exists:campuses,id',
             'admission_date' => 'required|date',
             'address' => 'required|string',
             'phone' => 'nullable|string',
@@ -81,6 +85,7 @@ class StudentController extends Controller
                 'gender' => $validated['gender'],
                 'school_class_id' => $validated['school_class_id'],
                 'section_id' => $validated['section_id'],
+                'campus_id' => $validated['campus_id'] ?? null,
                 'admission_date' => $validated['admission_date'],
                 'address' => $validated['address'],
                 'phone' => $validated['phone'],
@@ -116,7 +121,8 @@ class StudentController extends Controller
         $classes = SchoolClass::all();
         $sections = Section::where('school_class_id', $student->school_class_id)->get();
         $parents = User::role('Parent')->get();
-        return view('students.edit', compact('student', 'classes', 'sections', 'parents'));
+        $campuses = Campus::where('is_active', true)->get();
+        return view('students.edit', compact('student', 'classes', 'sections', 'parents', 'campuses'));
     }
 
     /**
@@ -132,6 +138,7 @@ class StudentController extends Controller
             'gender' => 'required|in:male,female,other',
             'school_class_id' => 'required|exists:school_classes,id',
             'section_id' => 'required|exists:sections,id',
+            'campus_id' => 'nullable|exists:campuses,id',
             'address' => 'required|string',
             'phone' => 'nullable|string',
             'email' => 'nullable|email|unique:students,email,' . $student->id,

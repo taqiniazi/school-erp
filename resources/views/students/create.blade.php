@@ -57,7 +57,16 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label for="campus_id" class="form-label">Campus</label>
+                            <select class="form-select" name="campus_id">
+                                <option value="">Select Campus</option>
+                                @foreach($campuses as $campus)
+                                    <option value="{{ $campus->id }}" {{ old('campus_id') == $campus->id ? 'selected' : '' }}>{{ $campus->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
                             <label for="school_class_id" class="form-label">Class *</label>
                             <select class="form-select" name="school_class_id" id="school_class_id" required>
                                 <option value="">Select Class</option>
@@ -66,7 +75,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="section_id" class="form-label">Section *</label>
                             <select class="form-select" name="section_id" id="section_id" required disabled>
                                 <option value="">Select Class First</option>

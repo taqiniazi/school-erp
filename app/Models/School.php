@@ -26,6 +26,40 @@ class School extends Model
         return $this->hasMany(User::class);
     }
 
+    public function campuses()
+    {
+        return $this->hasMany(Campus::class);
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    public function teachers()
+    {
+        return $this->hasMany(Teacher::class);
+    }
+
+    public function getStaffCountAttribute()
+    {
+        // For now, let's assume staff are users with 'Teacher' or 'Admin' roles.
+        // Or simply count teachers + other staff roles.
+        // Since we have a Teacher model, we can count teachers.
+        // Also users who are not students or parents.
+        // Let's rely on the 'users' relationship and filter by role if possible,
+        // or just return teacher count as a proxy if roles are complex.
+        // Better: count users who have roles other than 'Student' and 'Parent'.
+        // But role checks might be heavy.
+        // Let's return teacher count for now as a baseline for 'Staff'.
+        return $this->teachers()->count();
+    }
+
+    public function getStudentCountAttribute()
+    {
+        return $this->students()->count();
+    }
+
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);

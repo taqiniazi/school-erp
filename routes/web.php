@@ -72,6 +72,9 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
 
         // Subjects
         Route::resource('subjects', SubjectController::class);
+
+        // Campuses
+        Route::resource('campuses', \App\Http\Controllers\CampusController::class);
     });
 
     // Shared Resources (Accessible by Admin and Teacher)
@@ -202,6 +205,24 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
 
     // Fee Management (Admin)
     Route::middleware(['role:Super Admin|School Admin'])->group(function () {
+        Route::resource('financial-years', App\Http\Controllers\FinancialYearController::class);
+        
+        Route::prefix('accounting')->name('accounting.')->group(function () {
+            Route::resource('income', App\Http\Controllers\IncomeController::class);
+            Route::resource('expense', App\Http\Controllers\ExpenseController::class);
+            Route::get('reports/profit-loss', [App\Http\Controllers\AccountingReportController::class, 'profitLoss'])->name('reports.profit_loss');
+        });
+
+        Route::prefix('payroll')->name('payroll.')->group(function () {
+            Route::resource('salaries', App\Http\Controllers\PayrollController::class);
+        });
+
+        Route::prefix('transport')->name('transport.')->group(function () {
+            Route::resource('vehicles', App\Http\Controllers\VehicleController::class);
+            Route::resource('routes', App\Http\Controllers\TransportRouteController::class);
+            Route::resource('drivers', App\Http\Controllers\DriverController::class);
+        });
+
         Route::resource('fee-types', App\Http\Controllers\FeeTypeController::class);
         Route::resource('fee-structures', App\Http\Controllers\FeeStructureController::class);
 
@@ -265,8 +286,8 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth', 'verified', 'role:Super Admin'])->prefix('super-admin')->name('super-admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\SuperAdmin\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/schools', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'index'])->name('schools.index');
-    Route::post('/schools/{school}/approve', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'approve'])->name('schools.approve');
-    Route::post('/schools/{school}/suspend', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'suspend'])->name('schools.suspend');
+    Route::post('/schools/{school}/activate', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'activate'])->name('schools.activate');
+    Route::post('/schools/{school}/deactivate', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'deactivate'])->name('schools.deactivate');
     Route::get('/admin-users', [\App\Http\Controllers\SuperAdmin\AdminUserController::class, 'index'])->name('admin-users.index');
     Route::post('/admin-users', [\App\Http\Controllers\SuperAdmin\AdminUserController::class, 'store'])->name('admin-users.store');
     Route::resource('plans', \App\Http\Controllers\SuperAdmin\PlanController::class)->except(['show']);

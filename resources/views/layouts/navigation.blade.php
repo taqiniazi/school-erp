@@ -16,6 +16,21 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
+                    @role('Super Admin')
+                    <x-nav-link :href="route('super-admin.schools.index')" :active="request()->routeIs('super-admin.schools.*')">
+                        {{ __('Schools') }}
+                    </x-nav-link>
+                     <x-nav-link :href="route('super-admin.admin-users.index')" :active="request()->routeIs('super-admin.admin-users.*')">
+                        {{ __('Admins') }}
+                    </x-nav-link>
+                    @endrole
+
+                    @role('School Admin')
+                    <x-nav-link :href="route('campuses.index')" :active="request()->routeIs('campuses.*')">
+                        {{ __('Campuses') }}
+                    </x-nav-link>
+                    @endrole
+
                     @role('Super Admin|School Admin')
                     <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.*')">
                         {{ __('Student Attendance') }}
@@ -174,6 +189,21 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @role('Super Admin')
+            <x-responsive-nav-link :href="route('super-admin.schools.index')" :active="request()->routeIs('super-admin.schools.*')">
+                {{ __('Schools') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('super-admin.admin-users.index')" :active="request()->routeIs('super-admin.admin-users.*')">
+                {{ __('Admins') }}
+            </x-responsive-nav-link>
+            @endrole
+
+            @role('School Admin')
+            <x-responsive-nav-link :href="route('campuses.index')" :active="request()->routeIs('campuses.*')">
+                {{ __('Campuses') }}
+            </x-responsive-nav-link>
+            @endrole
 
             <!-- Communication -->
             <x-responsive-nav-link :href="route('communication.notices.index')" :active="request()->routeIs('communication.notices.*')">

@@ -19,6 +19,7 @@ class Teacher extends Model
         'address',
         'phone',
         'emergency_contact',
+        'campus_id',
         'photo_path',
         'status'
     ];
@@ -28,6 +29,11 @@ class Teacher extends Model
         return $this->belongsTo(User::class);
     }
     
+    public function campus()
+    {
+        return $this->belongsTo(Campus::class);
+    }
+
     public function salaryStructure()
     {
         return $this->belongsTo(SalaryStructure::class);

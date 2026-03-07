@@ -24,6 +24,7 @@ class Student extends Model
         'email',
         'school_class_id',
         'section_id',
+        'campus_id',
         'status',
         'admission_date',
         'photo_path'
@@ -42,6 +43,11 @@ class Student extends Model
     public function section()
     {
         return $this->belongsTo(Section::class);
+    }
+
+    public function campus()
+    {
+        return $this->belongsTo(Campus::class);
     }
     
     public function parents()
