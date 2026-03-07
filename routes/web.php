@@ -11,6 +11,8 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherDashboardController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\PageController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,7 +26,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
+
+Route::get('/features', [PageController::class, 'features'])->name('pages.features');
+Route::get('/pricing', [PageController::class, 'pricing'])->name('pages.pricing');
+Route::get('/about', [PageController::class, 'about'])->name('pages.about');
+Route::get('/contact', [PageController::class, 'contact'])->name('pages.contact');
+Route::get('/blog', [PageController::class, 'blog'])->name('pages.blog');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

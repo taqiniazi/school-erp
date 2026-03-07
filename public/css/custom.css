@@ -427,6 +427,9 @@ body {
     padding: 0 1rem;
     font-size: 0.875rem;
 }
+.bg-primary-subtle, .bg-primary-custom {
+    background: linear-gradient(135deg, var(--dark-color) 0%, var(--primary-color) 100%);
+}
 
 .brand-logo-auth {
     font-size: 1.5rem;

@@ -1,68 +1,8 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'School ERP') }} - Modern School Management System</title>
-    
-    <!-- Fonts -->
-    <link href="{{ asset('css/inter.css') }}" rel="stylesheet">
-    
-    <!-- Bootstrap 5 CSS -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    
-    <!-- FontAwesome -->
-    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
-    
-    <!-- AOS Animation -->
-    <link href="{{ asset('css/aos.css') }}" rel="stylesheet">
+@extends('layouts.marketing')
 
-    <!-- Custom CSS -->
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-</head>
-<body>
+@section('title', 'Modern School Management System')
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-graduation-cap me-2"></i>School ERP
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#home">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#features">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#modules">Modules</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#pricing">Pricing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#screenshots">Screenshots</a>
-                    </li>
-                </ul>
-                <div class="d-flex gap-2">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="btn btn-primary-custom">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-outline-custom">Log in</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-primary-custom">Get Started</a>
-                        @endif
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
-
+@section('content')
     <!-- Hero Section -->
     <section id="home" class="hero-section d-flex align-items-center">
         <div class="hero-bg-pattern"></div>
@@ -81,7 +21,7 @@
                         <a href="{{ route('register') }}" class="btn btn-primary-custom btn-lg shadow-lg">
                             <i class="fas fa-rocket me-2"></i> Start Free Trial
                         </a>
-                        <a href="#features" class="btn btn-outline-custom btn-lg">
+                        <a href="{{ route('pages.features') }}" class="btn btn-outline-custom btn-lg">
                             <i class="fas fa-play-circle me-2"></i> Watch Demo
                         </a>
                     </div>
@@ -185,50 +125,9 @@
                         <p class="text-muted small">Automated fee generation, online payments, receipt printing, and dues tracking.</p>
                     </div>
                 </div>
-
-                <!-- Payroll System -->
-                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-card h-100 text-center p-4">
-                        <div class="feature-icon mx-auto mb-4">
-                            <i class="fas fa-money-check-alt"></i>
-                        </div>
-                        <h5 class="fw-bold mb-3">Payroll System</h5>
-                        <p class="text-muted small">Manage staff salaries, deductions, bonuses, and generate payslips automatically.</p>
-                    </div>
-                </div>
-
-                <!-- Library Management -->
-                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="350">
-                    <div class="feature-card h-100 text-center p-4">
-                        <div class="feature-icon mx-auto mb-4">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <h5 class="fw-bold mb-3">Library Management</h5>
-                        <p class="text-muted small">Catalog books, manage issues/returns, track inventory, and calculate fines.</p>
-                    </div>
-                </div>
-
-                <!-- Transport Management -->
-                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
-                    <div class="feature-card h-100 text-center p-4">
-                        <div class="feature-icon mx-auto mb-4">
-                            <i class="fas fa-bus"></i>
-                        </div>
-                        <h5 class="fw-bold mb-3">Transport Management</h5>
-                        <p class="text-muted small">Manage routes, vehicles, drivers, and track student transport details.</p>
-                    </div>
-                </div>
-
-                <!-- Communication System -->
-                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="450">
-                    <div class="feature-card h-100 text-center p-4">
-                        <div class="feature-icon mx-auto mb-4">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <h5 class="fw-bold mb-3">Communication System</h5>
-                        <p class="text-muted small">SMS and Email alerts for parents, students, and staff. Notice board and event management.</p>
-                    </div>
-                </div>
+            </div>
+            <div class="text-center mt-5">
+                <a href="{{ route('pages.features') }}" class="btn btn-primary-custom">View All Features</a>
             </div>
         </div>
     </section>
@@ -283,7 +182,7 @@
                         </div>
                     </div>
                     
-                    <a href="#" class="btn btn-primary-custom mt-4">Explore All Modules</a>
+                    <a href="{{ route('pages.features') }}" class="btn btn-primary-custom mt-4">Explore All Modules</a>
                 </div>
             </div>
         </div>
@@ -365,7 +264,7 @@
                             <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Custom Features</li>
                             <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Dedicated Manager</li>
                         </ul>
-                        <a href="#" class="btn btn-outline-custom w-100">Contact Sales</a>
+                        <a href="{{ route('pages.contact') }}" class="btn btn-outline-custom w-100">Contact Sales</a>
                     </div>
                 </div>
             </div>
@@ -459,7 +358,6 @@
             </div>
         </div>
     </section>
-
 
     <!-- Product Showcase / Screenshots -->
     <section id="screenshots" class="section-padding">
@@ -557,7 +455,7 @@
                         <i class="fas fa-laptop-code fa-3x mb-3 opacity-75"></i>
                         <h4 class="fw-bold">Need a Tour?</h4>
                         <p class="opacity-75 mb-4">Schedule a personalized demo with our product experts.</p>
-                        <a href="#" class="btn btn-outline-light fw-bold w-100 py-3">Book Demo</a>
+                        <a href="{{ route('pages.contact') }}" class="btn btn-outline-light fw-bold w-100 py-3">Book Demo</a>
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -565,100 +463,40 @@
                         <i class="fas fa-headset fa-3x mb-3 opacity-75"></i>
                         <h4 class="fw-bold">Have Questions?</h4>
                         <p class="opacity-75 mb-4">Chat with our sales team to get a custom quote for your school.</p>
-                        <a href="#" class="btn btn-outline-light fw-bold w-100 py-3">Contact Sales</a>
+                        <a href="{{ route('pages.contact') }}" class="btn btn-outline-light fw-bold w-100 py-3">Contact Sales</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+@endsection
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-lg-4">
-                    <h4 class="footer-title">School ERP</h4>
-                    <p class="mb-4">A comprehensive solution for educational institutions to manage their day-to-day operations efficiently and effectively.</p>
-                    <div>
-                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-6">
-                    <h5 class="text-white mb-3">Quick Links</h5>
-                    <a href="#home" class="footer-link">Home</a>
-                    <a href="#features" class="footer-link">Features</a>
-                    <a href="#pricing" class="footer-link">Pricing</a>
-                    <a href="#screenshots" class="footer-link">Screenshots</a>
-                    <a href="#" class="footer-link">Contact</a>
-                </div>
-                <div class="col-lg-2 col-md-6">
-                    <h5 class="text-white mb-3">Modules</h5>
-                    <a href="#" class="footer-link">Student Info</a>
-                    <a href="#" class="footer-link">Fee Collection</a>
-                    <a href="#" class="footer-link">Attendance</a>
-                    <a href="#" class="footer-link">Examinations</a>
-                </div>
-                <div class="col-lg-4">
-                    <h5 class="text-white mb-3">Contact Us</h5>
-                    <p><i class="fas fa-map-marker-alt me-2"></i> 123 Tech Park, Innovation Street</p>
-                    <p><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</p>
-                    <p><i class="fas fa-envelope me-2"></i> support@schoolerp.com</p>
-                </div>
-            </div>
-            <div class="border-top border-secondary mt-5 pt-4 text-center text-muted small">
-                <p>&copy; {{ date('Y') }} School ERP. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+@push('scripts')
+<script>
+    // Pricing Toggle Script
+    document.addEventListener('DOMContentLoaded', function() {
+        const pricingToggle = document.getElementById('pricingToggle');
+        const monthlyPrices = document.querySelectorAll('.monthly-price');
+        const yearlyPrices = document.querySelectorAll('.yearly-price');
+        const billingPeriods = document.querySelectorAll('.billing-period');
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/aos.js') }}"></script>
-    <script>
-        AOS.init({
-            duration: 800,
-            once: true
-        });
-
-        // Pricing Toggle Script
-        document.addEventListener('DOMContentLoaded', function() {
-            const pricingToggle = document.getElementById('pricingToggle');
-            const monthlyPrices = document.querySelectorAll('.monthly-price');
-            const yearlyPrices = document.querySelectorAll('.yearly-price');
-            const billingPeriods = document.querySelectorAll('.billing-period');
-
-            if(pricingToggle) {
-                pricingToggle.addEventListener('change', function() {
-                    const isYearly = this.checked;
-                    
-                    monthlyPrices.forEach(price => {
-                        price.classList.toggle('d-none', isYearly);
-                    });
-                    
-                    yearlyPrices.forEach(price => {
-                        price.classList.toggle('d-none', !isYearly);
-                    });
-                    
-                    billingPeriods.forEach(period => {
-                        period.textContent = isYearly ? 'year' : 'month';
-                    });
+        if(pricingToggle) {
+            pricingToggle.addEventListener('change', function() {
+                const isYearly = this.checked;
+                
+                monthlyPrices.forEach(price => {
+                    price.classList.toggle('d-none', isYearly);
                 });
-            }
-        });
-        
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) {
-                document.querySelector('.navbar').classList.add('shadow-sm');
-                document.querySelector('.navbar').style.padding = '0.5rem 0';
-            } else {
-                document.querySelector('.navbar').classList.remove('shadow-sm');
-                document.querySelector('.navbar').style.padding = '1rem 0';
-            }
-        });
-    </script>
-</body>
-</html>
+                
+                yearlyPrices.forEach(price => {
+                    price.classList.toggle('d-none', !isYearly);
+                });
+                
+                billingPeriods.forEach(period => {
+                    period.textContent = isYearly ? 'year' : 'month';
+                });
+            });
+        }
+    });
+</script>
+@endpush
