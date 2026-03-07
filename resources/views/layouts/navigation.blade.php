@@ -23,6 +23,9 @@
                      <x-nav-link :href="route('super-admin.admin-users.index')" :active="request()->routeIs('super-admin.admin-users.*')">
                         {{ __('Admins') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('super-admin.payments.index')" :active="request()->routeIs('super-admin.payments.*')">
+                        {{ __('Payments') }}
+                    </x-nav-link>
                     @endrole
 
                     @role('School Admin')

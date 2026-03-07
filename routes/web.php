@@ -34,6 +34,15 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
     Route::middleware(['role:School Admin'])->prefix('billing')->name('billing.')->group(function () {
         Route::get('choose-plan', [SubscriptionSelectionController::class, 'create'])->name('choose-plan');
         Route::post('choose-plan', [SubscriptionSelectionController::class, 'store'])->name('choose-plan.store');
+
+        // Payment Routes
+        Route::get('payment/pending', [\App\Http\Controllers\Billing\PaymentController::class, 'pending'])->name('payment.pending');
+        Route::get('payment/history', [\App\Http\Controllers\Billing\PaymentController::class, 'history'])->name('payment.history');
+        Route::get('payment/{plan}', [\App\Http\Controllers\Billing\PaymentController::class, 'create'])->name('payment.create');
+        Route::post('payment/{plan}', [\App\Http\Controllers\Billing\PaymentController::class, 'store'])->name('payment.store');
+        
+        // Invoice Download
+        Route::get('invoice/{payment}/download', [\App\Http\Controllers\Billing\InvoiceController::class, 'download'])->name('invoice.download');
     });
 
     // School Admin Subscription Management
@@ -291,6 +300,7 @@ require __DIR__.'/auth.php';
 
 Route::middleware(['auth', 'verified', 'role:Super Admin'])->prefix('super-admin')->name('super-admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\SuperAdmin\DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('payments', \App\Http\Controllers\SuperAdmin\PaymentVerificationController::class)->only(['index', 'update']);
     Route::get('/schools', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'index'])->name('schools.index');
     Route::post('/schools/{school}/activate', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'activate'])->name('schools.activate');
     Route::post('/schools/{school}/deactivate', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'deactivate'])->name('schools.deactivate');

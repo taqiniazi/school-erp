@@ -35,28 +35,7 @@ class SubscriptionSelectionController extends Controller
             ->where('is_active', true)
             ->findOrFail($data['plan_id']);
 
-        Subscription::query()
-            ->where('school_id', $school->id)
-            ->whereIn('status', ['active', 'trialing'])
-            ->update([
-                'status' => 'canceled',
-                'canceled_at' => now(),
-            ]);
-
-        $start = now();
-        $end = match ($plan->billing_cycle) {
-            'yearly' => $start->copy()->addYear(),
-            default => $start->copy()->addMonth(),
-        };
-
-        Subscription::create([
-            'school_id' => $school->id,
-            'plan_id' => $plan->id,
-            'status' => 'active',
-            'current_period_start' => $start,
-            'current_period_end' => $end,
-        ]);
-
-        return redirect()->route('admin.dashboard');
+        // Redirect to payment page instead of activating immediately
+        return redirect()->route('billing.payment.create', ['plan' => $plan->id]);
     }
 }

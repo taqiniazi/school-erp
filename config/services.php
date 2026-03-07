@@ -31,4 +31,27 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    ],
+
+    'paypal' => [
+        'client_id' => env('PAYPAL_CLIENT_ID'),
+        'secret' => env('PAYPAL_SECRET'),
+        'mode' => env('PAYPAL_MODE', 'sandbox'),
+    ],
+
+    'wise' => [
+        'api_token' => env('WISE_API_TOKEN'),
+        'profile_id' => env('WISE_PROFILE_ID'),
+    ],
+
+    'payoneer' => [
+        'client_id' => env('PAYONEER_CLIENT_ID'),
+        'client_secret' => env('PAYONEER_CLIENT_SECRET'),
+        'program_id' => env('PAYONEER_PROGRAM_ID'),
+    ],
+
 ];
