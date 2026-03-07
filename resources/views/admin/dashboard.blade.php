@@ -1,132 +1,109 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Admin Dashboard') }}
-        </h2>
+        {{ __('Admin Dashboard') }}
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            
-            <!-- KPIs -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                <!-- Total Students -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-blue-500">
-                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">Total Students</div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">{{ $totalStudents }}</div>
-                </div>
-
-                <!-- Total Teachers -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-green-500">
-                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">Total Teachers</div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">{{ $totalTeachers }}</div>
-                </div>
-
-                <!-- Total Classes -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-yellow-500">
-                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">Total Classes</div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">{{ $totalClasses }}</div>
-                </div>
-
-                <!-- Monthly Fees -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-purple-500">
-                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">Monthly Fees</div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">${{ number_format($monthlyFeeCollection, 2) }}</div>
+    <!-- KPIs -->
+    <div class="row g-4 mb-4">
+        <!-- Total Students -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-4 border-primary h-100">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-bold mb-1">Total Students</div>
+                    <div class="h3 mb-0 fw-bold text-dark">{{ $totalStudents }}</div>
                 </div>
             </div>
+        </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Alerts & Notifications -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Alerts & Notifications</h3>
-                            
-                            @if(isset($lowStockItems) && $lowStockItems > 0)
-                                <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 mb-4">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0">
-                                            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm text-red-700 dark:text-red-300">
-                                                <span class="font-bold">{{ $lowStockItems }}</span> inventory items are running low on stock.
-                                                @if (Route::has('inventory.alerts.low_stock'))
-                                                <a href="{{ route('inventory.alerts.low_stock') }}" class="font-bold underline hover:text-red-600 dark:hover:text-red-400">View Items</a>
-                                                @endif
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-
-                            @if(isset($pendingLeaveRequests) && $pendingLeaveRequests > 0)
-                                <div class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4 mb-4">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0">
-                                            <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm text-yellow-700 dark:text-yellow-300">
-                                                <span class="font-bold">{{ $pendingLeaveRequests }}</span> pending leave requests need approval.
-                                                @if (Route::has('hr.leave.index'))
-                                                <a href="{{ route('hr.leave.index') }}" class="font-bold underline hover:text-yellow-600 dark:hover:text-yellow-400">Review Requests</a>
-                                                @endif
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-
-                            @if((isset($lowStockItems) ? $lowStockItems : 0) == 0 && (isset($pendingLeaveRequests) ? $pendingLeaveRequests : 0) == 0)
-                                <p class="text-gray-500 dark:text-gray-400 italic">No active alerts at this time.</p>
-                            @endif
-                        </div>
-                    </div>
+        <!-- Total Teachers -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-4 border-success h-100">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-bold mb-1">Total Teachers</div>
+                    <div class="h3 mb-0 fw-bold text-dark">{{ $totalTeachers }}</div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Quick Actions -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Quick Actions</h3>
-                            <div class="grid grid-cols-1 gap-3">
-                                @if (Route::has('students.create'))
-                                <a href="{{ route('students.create') }}" class="block px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-100 dark:hover:bg-blue-900/50 transition">+ Add New Student</a>
-                                @endif
-                                @if (Route::has('teachers.create'))
-                                <a href="{{ route('teachers.create') }}" class="block px-4 py-2 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded hover:bg-green-100 dark:hover:bg-green-900/50 transition">+ Add New Teacher</a>
-                                @endif
-                                @if (Route::has('communication.notices.create'))
-                                <a href="{{ route('communication.notices.create') }}" class="block px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition">+ Create Notice</a>
-                                @endif
-                                @if (Route::has('fee-invoices.create'))
-                                <a href="{{ route('fee-invoices.create') }}" class="block px-4 py-2 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded hover:bg-purple-100 dark:hover:bg-purple-900/50 transition">+ Generate Invoice</a>
-                                @endif
+        <!-- Total Classes -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-4 border-warning h-100">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-bold mb-1">Total Classes</div>
+                    <div class="h3 mb-0 fw-bold text-dark">{{ $totalClasses }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Fees -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-start border-4 border-info h-100">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-bold mb-1">Monthly Fees</div>
+                    <div class="h3 mb-0 fw-bold text-dark">${{ number_format($monthlyFeeCollection, 2) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Alerts & Notifications -->
+        <div class="col-lg-8">
+            <div class="card h-100">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 card-title">Alerts & Notifications</h5>
+                </div>
+                <div class="card-body">
+                    @if(isset($lowStockItems) && $lowStockItems > 0)
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <div>
+                                <strong>Low Stock Alert:</strong> {{ $lowStockItems }} items are below reorder level.
+                                <a href="{{ route('inventory.alerts.low_stock') }}" class="alert-link">View Details</a>
                             </div>
                         </div>
-                    </div>
+                    @endif
 
-                    <!-- Reports Links -->
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-6">
-                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Reports</h3>
-                            <ul class="list-disc pl-5 space-y-2 text-gray-600 dark:text-gray-400">
-                                @if (Route::has('attendance.report'))
-                                <li><a href="{{ route('attendance.report') }}" class="hover:text-blue-600 dark:hover:text-blue-400 hover:underline">Attendance Report</a></li>
-                                @endif
-                                @if (Route::has('fee-payments.history'))
-                                <li><a href="{{ route('fee-payments.history') }}" class="hover:text-blue-600 dark:hover:text-blue-400 hover:underline">Fee Collection Report</a></li>
-                                @endif
-                                @if (Route::has('inventory.items.index'))
-                                <li><a href="{{ route('inventory.items.index') }}" class="hover:text-blue-600 dark:hover:text-blue-400 hover:underline">Inventory Report</a></li>
-                                @endif
-                            </ul>
+                    @if(isset($pendingLeaveRequests) && $pendingLeaveRequests > 0)
+                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                            <i class="fas fa-clock me-2"></i>
+                            <div>
+                                <strong>Pending Leave Requests:</strong> {{ $pendingLeaveRequests }} requests need approval.
+                                <a href="{{ route('hr.leave.index') }}" class="alert-link">View Requests</a>
+                            </div>
                         </div>
+                    @endif
+
+                    @if((!isset($lowStockItems) || $lowStockItems == 0) && (!isset($pendingLeaveRequests) || $pendingLeaveRequests == 0))
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-check-circle fa-3x mb-3 text-success"></i>
+                            <p>No new alerts or notifications.</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 card-title">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('students.create') }}" class="btn btn-outline-primary text-start">
+                            <i class="fas fa-user-plus me-2"></i> Add New Student
+                        </a>
+                        <a href="{{ route('fee-invoices.create') }}" class="btn btn-outline-success text-start">
+                            <i class="fas fa-file-invoice-dollar me-2"></i> Create Fee Invoice
+                        </a>
+                        <a href="{{ route('attendance.create') }}" class="btn btn-outline-info text-start">
+                            <i class="fas fa-calendar-check me-2"></i> Take Attendance
+                        </a>
+                        <a href="{{ route('communication.notices.create') }}" class="btn btn-outline-secondary text-start">
+                            <i class="fas fa-bullhorn me-2"></i> Post Notice
+                        </a>
                     </div>
                 </div>
             </div>

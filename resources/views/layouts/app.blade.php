@@ -1,74 +1,89 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-      x-data="{ 
-          darkMode: localStorage.getItem('darkMode') === 'true',
-          sidebarOpen: false,
-          toggleDarkMode() {
-              this.darkMode = !this.darkMode;
-              localStorage.setItem('darkMode', this.darkMode);
-              if (this.darkMode) {
-                  document.documentElement.classList.add('dark');
-              } else {
-                  document.documentElement.classList.remove('dark');
-              }
-          }
-      }"
-      x-init="$watch('darkMode', val => toggleDarkMode()); if(darkMode) document.documentElement.classList.add('dark');"
-      :class="{ 'dark': darkMode }">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="{{ asset('css/inter.css') }}">
-        <!-- FontAwesome -->
-        <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="{{ asset('css/inter.css') }}">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    
+    <!-- Custom CSS for Admin Panel -->
+    <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        <div class="flex h-screen overflow-hidden">
-            <!-- Sidebar -->
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
             @include('layouts.sidebar')
+        </nav>
 
-            <!-- Main Content Wrapper -->
-            <div class="flex flex-col flex-1 w-0 overflow-hidden">
-                <!-- Topbar -->
-                @include('layouts.topbar')
+        <!-- Main Content Wrapper -->
+        <div id="content">
+            <!-- Topbar -->
+            @include('layouts.topbar')
 
-                <!-- Main Content -->
-                <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900">
-                    <div class="container px-6 py-8 mx-auto">
-                        @if (isset($header))
-                            <h3 class="text-3xl font-medium text-gray-700 dark:text-gray-200 mb-6">
-                                {{ $header }}
-                            </h3>
-                        @endif
+            <!-- Main Content -->
+            <main class="flex-grow-1 p-4">
+                <div class="container-fluid">
+                    @if (isset($header))
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom">
+                            <h1 class="h3 fw-bold text-gray-800">{{ $header }}</h1>
+                        </div>
+                    @endif
 
-                        @if(session('success'))
-                            <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                                <span class="block sm:inline">{{ session('success') }}</span>
-                            </div>
-                        @endif
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
 
-                        @if($errors->any())
-                            <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                                <ul class="list-disc list-inside">
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                <ul class="mb-0 list-unstyled">
                                     @foreach($errors->all() as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
                             </div>
-                        @endif
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
 
-                        {{ $slot }}
-                    </div>
-                </main>
-            </div>
+                    {{ $slot }}
+                </div>
+            </main>
         </div>
-    </body>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Sidebar Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarCollapse = document.getElementById('sidebarCollapse');
+            
+            if (sidebarCollapse) {
+                sidebarCollapse.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+</body>
 </html>

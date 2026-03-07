@@ -1,111 +1,148 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Super Admin Dashboard
-        </h2>
+        {{ __('Super Admin Dashboard') }}
     </x-slot>
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6 border-l-4 border-blue-500">
-                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">Schools</div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">{{ $totalSchools }}</div>
-                    <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Active {{ $activeSchools }} • Suspended {{ $suspendedSchools }}</div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6 border-l-4 border-green-500">
-                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">Admin Users</div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">{{ $adminUsers }}</div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6 border-l-4 border-purple-500">
-                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">Active Subscriptions</div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">{{ $activeSubs }}</div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6 border-l-4 border-yellow-500">
-                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">MRR</div>
-                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">${{ number_format($mrr, 2) }}</div>
+    
+    <div class="row g-4 mb-4">
+        <!-- Schools -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-start border-4 border-primary">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-bold mb-1">Schools</div>
+                    <div class="h3 mb-0 fw-bold text-dark">{{ $totalSchools }}</div>
+                    <div class="small text-muted mt-1">Active {{ $activeSchools }} • Suspended {{ $suspendedSchools }}</div>
                 </div>
             </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
-                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Recent Schools</h3>
-                            <a href="{{ route('super-admin.schools.index') }}" class="text-blue-600 dark:text-blue-400 hover:underline text-sm">Manage</a>
-                        </div>
-                        <div class="mt-4 overflow-x-auto">
-                            <table class="min-w-full text-sm">
-                                <thead>
-                                    <tr class="text-left text-gray-500 dark:text-gray-400">
-                                        <th class="py-2 pr-4">Name</th>
-                                        <th class="py-2 pr-4">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-gray-700 dark:text-gray-300">
-                                    @forelse ($recentSchools as $s)
-                                        <tr class="border-t border-gray-200 dark:border-gray-700">
-                                            <td class="py-2 pr-4">{{ $s->name }}</td>
-                                            <td class="py-2 pr-4">
-                                                <span class="px-2 py-1 rounded text-xs {{ $s->is_active ? 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300' : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' }}">
-                                                    {{ $s->is_active ? 'Active' : 'Suspended' }}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr><td class="py-3" colspan="2">No schools</td></tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        </div>
+        
+        <!-- Admin Users -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-start border-4 border-success">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-bold mb-1">Admin Users</div>
+                    <div class="h3 mb-0 fw-bold text-dark">{{ $adminUsers }}</div>
                 </div>
-                <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
-                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Recent Subscriptions</h3>
-                            <a href="{{ route('super-admin.plans.index') }}" class="text-blue-600 dark:text-blue-400 hover:underline text-sm">Plans</a>
-                        </div>
-                        <div class="mt-4 overflow-x-auto">
-                            <table class="min-w-full text-sm">
-                                <thead>
-                                    <tr class="text-left text-gray-500 dark:text-gray-400">
-                                        <th class="py-2 pr-4">School</th>
-                                        <th class="py-2 pr-4">Plan</th>
-                                        <th class="py-2 pr-4">Status</th>
+            </div>
+        </div>
+        
+        <!-- Active Subscriptions -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-start border-4 border-info">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-bold mb-1">Active Subscriptions</div>
+                    <div class="h3 mb-0 fw-bold text-dark">{{ $activeSubs }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MRR -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-start border-4 border-warning">
+                <div class="card-body">
+                    <div class="text-uppercase text-muted small fw-bold mb-1">MRR</div>
+                    <div class="h3 mb-0 fw-bold text-dark">${{ number_format($mrr, 2) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Recent Schools -->
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 card-title">Recent Schools</h5>
+                    <a href="{{ route('super-admin.schools.index') }}" class="btn btn-sm btn-link text-decoration-none">Manage</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($recentSchools as $s)
+                                    <tr>
+                                        <td class="ps-4">{{ $s->name }}</td>
+                                        <td>
+                                            <span class="badge {{ $s->is_active ? 'bg-success' : 'bg-secondary' }}">
+                                                {{ $s->is_active ? 'Active' : 'Suspended' }}
+                                            </span>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody class="text-gray-700 dark:text-gray-300">
-                                    @forelse ($subscriptions as $sub)
-                                        <tr class="border-t border-gray-200 dark:border-gray-700">
-                                            <td class="py-2 pr-4">{{ optional($sub->school)->name }}</td>
-                                            <td class="py-2 pr-4">{{ optional($sub->plan)->name }}</td>
-                                            <td class="py-2 pr-4">{{ $sub->status }}</td>
-                                        </tr>
-                                    @empty
-                                        <tr><td class="py-3" colspan="3">No subscriptions</td></tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                @empty
+                                    <tr><td colspan="2" class="text-center py-3 text-muted">No schools found</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg mt-6">
-                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Active Plans</h3>
-                    <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                        @forelse ($plans as $plan)
-                            <div class="border border-gray-200 dark:border-gray-700 rounded p-4 dark:text-gray-300">
-                                <div class="text-lg font-semibold">{{ $plan->name }}</div>
-                                <div class="text-gray-600 dark:text-gray-400 text-sm mt-1 uppercase">{{ $plan->billing_cycle }}</div>
-                                <div class="text-2xl font-bold mt-2">${{ number_format($plan->price, 2) }}</div>
+        <!-- Recent Subscriptions -->
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 card-title">Recent Subscriptions</h5>
+                    <a href="{{ route('super-admin.plans.index') }}" class="btn btn-sm btn-link text-decoration-none">Plans</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">School</th>
+                                    <th>Plan</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($subscriptions as $sub)
+                                    <tr>
+                                        <td class="ps-4">{{ optional($sub->school)->name }}</td>
+                                        <td>{{ optional($sub->plan)->name }}</td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ $sub->status }}</span>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr><td colspan="3" class="text-center py-3 text-muted">No subscriptions found</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0 card-title">Active Plans</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-4">
+                @forelse ($plans as $plan)
+                    <div class="col-md-4">
+                        <div class="card h-100 border">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">{{ $plan->name }}</h5>
+                                <p class="card-text text-muted mb-2">
+                                    Limit: {{ $plan->max_students === -1 ? 'Unlimited' : $plan->max_students }} Students
+                                </p>
+                                <h6 class="text-primary mb-0">
+                                    ${{ number_format($plan->price_monthly, 2) }} / mo
+                                </h6>
                             </div>
-                        @empty
-                            <div class="text-gray-600 dark:text-gray-400">No active plans</div>
-                        @endforelse
+                        </div>
                     </div>
-                </div>
+                @empty
+                    <div class="col-12 text-center text-muted">No plans available</div>
+                @endforelse
             </div>
         </div>
     </div>
