@@ -98,7 +98,7 @@
                 <div class="card border-0 shadow-sm text-center h-100">
                     <div class="card-body p-4">
                         <div class="mb-4">
-                            <img src="https://ui-avatars.com/api/?name=Alex+Morgan&background=random&size=128" alt="Alex Morgan" class="rounded-circle shadow-sm" width="128" height="128">
+                            <img src="{{ asset('images/marketing/alex-morgan.png') }}" alt="Alex Morgan" class="rounded-circle shadow-sm" width="128" height="128">
                         </div>
                         <h5 class="fw-bold mb-1">Alex Morgan</h5>
                         <p class="text-muted small mb-3">CEO & Founder</p>
@@ -115,7 +115,7 @@
                 <div class="card border-0 shadow-sm text-center h-100">
                     <div class="card-body p-4">
                         <div class="mb-4">
-                            <img src="https://ui-avatars.com/api/?name=Sarah+Chen&background=random&size=128" alt="Sarah Chen" class="rounded-circle shadow-sm" width="128" height="128">
+                            <img src="{{ asset('images/marketing/sarah-chen.png') }}" alt="Sarah Chen" class="rounded-circle shadow-sm" width="128" height="128">
                         </div>
                         <h5 class="fw-bold mb-1">Sarah Chen</h5>
                         <p class="text-muted small mb-3">CTO</p>
@@ -132,7 +132,7 @@
                 <div class="card border-0 shadow-sm text-center h-100">
                     <div class="card-body p-4">
                          <div class="mb-4">
-                            <img src="https://ui-avatars.com/api/?name=David+Kim&background=random&size=128" alt="David Kim" class="rounded-circle shadow-sm" width="128" height="128">
+                            <img src="{{ asset('images/marketing/david-kim.png') }}" alt="David Kim" class="rounded-circle shadow-sm" width="128" height="128">
                         </div>
                         <h5 class="fw-bold mb-1">David Kim</h5>
                         <p class="text-muted small mb-3">Head of Product</p>
@@ -149,7 +149,7 @@
                 <div class="card border-0 shadow-sm text-center h-100">
                     <div class="card-body p-4">
                          <div class="mb-4">
-                            <img src="https://ui-avatars.com/api/?name=Emily+Davis&background=random&size=128" alt="Emily Davis" class="rounded-circle shadow-sm" width="128" height="128">
+                            <img src="{{ asset('images/marketing/emily-davis.png') }}" alt="Emily Davis" class="rounded-circle shadow-sm" width="128" height="128">
                         </div>
                         <h5 class="fw-bold mb-1">Emily Davis</h5>
                         <p class="text-muted small mb-3">Customer Success</p>

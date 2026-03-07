@@ -32,7 +32,7 @@
             <div class="col-lg-8">
                 <!-- Blog Post 1 -->
                 <article class="card border-0 shadow-sm mb-5" data-aos="fade-up">
-                    <img src="https://images.unsplash.com/photo-1427504746696-ea3093e26d2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" class="card-img-top" alt="Digital Classroom" style="height: 400px; object-fit: cover;">
+                    <img src="{{ asset('images/marketing/digital-classroom.jpg') }}" class="card-img-top" alt="Digital Classroom" style="height: 400px; object-fit: cover;">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center text-muted small mb-3">
                             <span class="me-3"><i class="far fa-calendar-alt me-2"></i> Oct 15, 2023</span>
@@ -62,7 +62,7 @@
 
                 <!-- Blog Post 3 -->
                 <article class="card border-0 shadow-sm mb-5" data-aos="fade-up" data-aos-delay="200">
-                    <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" class="card-img-top" alt="Parent Communication" style="height: 400px; object-fit: cover;">
+                    <img src="{{ asset('images/marketing/parent-communication.jpg') }}" class="card-img-top" alt="Parent Communication" style="height: 400px; object-fit: cover;">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center text-muted small mb-3">
                             <span class="me-3"><i class="far fa-calendar-alt me-2"></i> Sep 10, 2023</span>

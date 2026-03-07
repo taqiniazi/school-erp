@@ -64,7 +64,7 @@
             <!-- Premium Plan -->
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
                 <div class="card h-100 border-primary-custom border-2 shadow pricing-card transform-scale">
-                    <div class="position-absolute top-0 start-50 translate-middle">
+                    <div class="position-absolute start-50 translate-middle" style="top:25px">
                         <span class="badge bg-primary-custom px-3 py-2 rounded-pill shadow-sm">Most Popular</span>
                     </div>
                     <div class="card-header bg-white border-0 pt-5 pb-0 text-center">
