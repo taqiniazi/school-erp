@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Admin Dashboard') }}
         </h2>
     </x-slot>
@@ -11,39 +11,39 @@
             <!-- KPIs -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                 <!-- Total Students -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-blue-500">
-                    <div class="text-gray-500 text-sm uppercase font-semibold">Total Students</div>
-                    <div class="text-3xl font-bold text-gray-800">{{ $totalStudents }}</div>
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-blue-500">
+                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">Total Students</div>
+                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">{{ $totalStudents }}</div>
                 </div>
 
                 <!-- Total Teachers -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-green-500">
-                    <div class="text-gray-500 text-sm uppercase font-semibold">Total Teachers</div>
-                    <div class="text-3xl font-bold text-gray-800">{{ $totalTeachers }}</div>
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-green-500">
+                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">Total Teachers</div>
+                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">{{ $totalTeachers }}</div>
                 </div>
 
                 <!-- Total Classes -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-yellow-500">
-                    <div class="text-gray-500 text-sm uppercase font-semibold">Total Classes</div>
-                    <div class="text-3xl font-bold text-gray-800">{{ $totalClasses }}</div>
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-yellow-500">
+                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">Total Classes</div>
+                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">{{ $totalClasses }}</div>
                 </div>
 
                 <!-- Monthly Fees -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-purple-500">
-                    <div class="text-gray-500 text-sm uppercase font-semibold">Monthly Fees</div>
-                    <div class="text-3xl font-bold text-gray-800">${{ number_format($monthlyFeeCollection, 2) }}</div>
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-purple-500">
+                    <div class="text-gray-500 dark:text-gray-400 text-sm uppercase font-semibold">Monthly Fees</div>
+                    <div class="text-3xl font-bold text-gray-800 dark:text-gray-100">${{ number_format($monthlyFeeCollection, 2) }}</div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Alerts & Notifications -->
                 <div class="lg:col-span-2">
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                        <div class="p-6 border-b border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Alerts & Notifications</h3>
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Alerts & Notifications</h3>
                             
                             @if(isset($lowStockItems) && $lowStockItems > 0)
-                                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                                <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 mb-4">
                                     <div class="flex">
                                         <div class="flex-shrink-0">
                                             <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -51,10 +51,10 @@
                                             </svg>
                                         </div>
                                         <div class="ml-3">
-                                            <p class="text-sm text-red-700">
+                                            <p class="text-sm text-red-700 dark:text-red-300">
                                                 <span class="font-bold">{{ $lowStockItems }}</span> inventory items are running low on stock.
                                                 @if (Route::has('inventory.alerts.low_stock'))
-                                                <a href="{{ route('inventory.alerts.low_stock') }}" class="font-bold underline hover:text-red-600">View Items</a>
+                                                <a href="{{ route('inventory.alerts.low_stock') }}" class="font-bold underline hover:text-red-600 dark:hover:text-red-400">View Items</a>
                                                 @endif
                                             </p>
                                         </div>
@@ -63,7 +63,7 @@
                             @endif
 
                             @if(isset($pendingLeaveRequests) && $pendingLeaveRequests > 0)
-                                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
+                                <div class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4 mb-4">
                                     <div class="flex">
                                         <div class="flex-shrink-0">
                                             <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
@@ -71,10 +71,10 @@
                                             </svg>
                                         </div>
                                         <div class="ml-3">
-                                            <p class="text-sm text-yellow-700">
+                                            <p class="text-sm text-yellow-700 dark:text-yellow-300">
                                                 <span class="font-bold">{{ $pendingLeaveRequests }}</span> pending leave requests need approval.
                                                 @if (Route::has('hr.leave.index'))
-                                                <a href="{{ route('hr.leave.index') }}" class="font-bold underline hover:text-yellow-600">Review Requests</a>
+                                                <a href="{{ route('hr.leave.index') }}" class="font-bold underline hover:text-yellow-600 dark:hover:text-yellow-400">Review Requests</a>
                                                 @endif
                                             </p>
                                         </div>
@@ -83,7 +83,7 @@
                             @endif
 
                             @if((isset($lowStockItems) ? $lowStockItems : 0) == 0 && (isset($pendingLeaveRequests) ? $pendingLeaveRequests : 0) == 0)
-                                <p class="text-gray-500 italic">No active alerts at this time.</p>
+                                <p class="text-gray-500 dark:text-gray-400 italic">No active alerts at this time.</p>
                             @endif
                         </div>
                     </div>
@@ -91,39 +91,39 @@
 
                 <!-- Quick Actions -->
                 <div class="lg:col-span-1">
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 border-b border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Quick Actions</h3>
                             <div class="grid grid-cols-1 gap-3">
                                 @if (Route::has('students.create'))
-                                <a href="{{ route('students.create') }}" class="block px-4 py-2 bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition">+ Add New Student</a>
+                                <a href="{{ route('students.create') }}" class="block px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-100 dark:hover:bg-blue-900/50 transition">+ Add New Student</a>
                                 @endif
                                 @if (Route::has('teachers.create'))
-                                <a href="{{ route('teachers.create') }}" class="block px-4 py-2 bg-green-50 text-green-700 rounded hover:bg-green-100 transition">+ Add New Teacher</a>
+                                <a href="{{ route('teachers.create') }}" class="block px-4 py-2 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded hover:bg-green-100 dark:hover:bg-green-900/50 transition">+ Add New Teacher</a>
                                 @endif
                                 @if (Route::has('communication.notices.create'))
-                                <a href="{{ route('communication.notices.create') }}" class="block px-4 py-2 bg-indigo-50 text-indigo-700 rounded hover:bg-indigo-100 transition">+ Create Notice</a>
+                                <a href="{{ route('communication.notices.create') }}" class="block px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition">+ Create Notice</a>
                                 @endif
                                 @if (Route::has('fee-invoices.create'))
-                                <a href="{{ route('fee-invoices.create') }}" class="block px-4 py-2 bg-purple-50 text-purple-700 rounded hover:bg-purple-100 transition">+ Generate Invoice</a>
+                                <a href="{{ route('fee-invoices.create') }}" class="block px-4 py-2 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded hover:bg-purple-100 dark:hover:bg-purple-900/50 transition">+ Generate Invoice</a>
                                 @endif
                             </div>
                         </div>
                     </div>
 
                     <!-- Reports Links -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-6">
-                        <div class="p-6 border-b border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Reports</h3>
-                            <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-6">
+                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Reports</h3>
+                            <ul class="list-disc pl-5 space-y-2 text-gray-600 dark:text-gray-400">
                                 @if (Route::has('attendance.report'))
-                                <li><a href="{{ route('attendance.report') }}" class="hover:text-blue-600 hover:underline">Attendance Report</a></li>
+                                <li><a href="{{ route('attendance.report') }}" class="hover:text-blue-600 dark:hover:text-blue-400 hover:underline">Attendance Report</a></li>
                                 @endif
                                 @if (Route::has('fee-payments.history'))
-                                <li><a href="{{ route('fee-payments.history') }}" class="hover:text-blue-600 hover:underline">Fee Collection Report</a></li>
+                                <li><a href="{{ route('fee-payments.history') }}" class="hover:text-blue-600 dark:hover:text-blue-400 hover:underline">Fee Collection Report</a></li>
                                 @endif
                                 @if (Route::has('inventory.items.index'))
-                                <li><a href="{{ route('inventory.items.index') }}" class="hover:text-blue-600 hover:underline">Inventory Report</a></li>
+                                <li><a href="{{ route('inventory.items.index') }}" class="hover:text-blue-600 dark:hover:text-blue-400 hover:underline">Inventory Report</a></li>
                                 @endif
                             </ul>
                         </div>
