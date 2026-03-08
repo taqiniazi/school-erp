@@ -1,74 +1,76 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+    <div class="container-fluid py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h3 mb-0 text-dark">
                 {{ __('Sent Messages') }}
             </h2>
-            <div class="flex space-x-4">
-                <a href="{{ route('communication.messages.create') }}" class="px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    {{ __('Compose') }}
+            <div class="btn-group">
+                <a href="{{ route('communication.messages.create') }}" class="btn btn-primary">
+                    <i class="fas fa-pen me-1"></i> {{ __('Compose') }}
                 </a>
-                <a href="{{ route('communication.messages.index') }}" class="px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    {{ __('Back to Inbox') }}
+                <a href="{{ route('communication.messages.index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-inbox me-1"></i> {{ __('Back to Inbox') }}
                 </a>
             </div>
         </div>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @if(session('success'))
-                        <div class="mb-4 text-green-600">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+        <div class="card shadow-sm">
+            <div class="card-body">
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
 
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead class="bg-gray-50 dark:bg-gray-700">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">To</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Subject</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                                <th scope="col">{{ __('To') }}</th>
+                                <th scope="col">{{ __('Subject') }}</th>
+                                <th scope="col">{{ __('Date') }}</th>
+                                <th scope="col" class="text-end">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        <tbody>
                             @forelse($messages as $message)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                                <td class="fw-bold">
                                     {{ $message->recipient->name ?? 'Unknown' }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    <a href="{{ route('communication.messages.show', $message) }}" class="hover:underline">
+                                <td>
+                                    <a href="{{ route('communication.messages.show', $message) }}" class="text-decoration-none text-dark">
                                         {{ Str::limit($message->subject, 50) }}
                                     </a>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                <td class="text-muted small">
                                     {{ $message->created_at->format('M d, Y h:i A') }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <form action="{{ route('communication.messages.destroy', $message) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="inline">
+                                <td class="text-end">
+                                    <form action="{{ route('communication.messages.destroy', $message) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900 ml-4">Delete</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                                    No sent messages.
+                                <td colspan="4" class="text-center text-muted py-5">
+                                    <i class="fas fa-paper-plane fa-3x mb-3 text-secondary"></i>
+                                    <p class="mb-0">No sent messages.</p>
                                 </td>
                             </tr>
                             @endforelse
                         </tbody>
                     </table>
-                    
-                    <div class="mt-4">
-                        {{ $messages->links() }}
-                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    {{ $messages->links() }}
                 </div>
             </div>
         </div>

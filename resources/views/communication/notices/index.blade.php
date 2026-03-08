@@ -1,74 +1,73 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Notices Board') }}
-            </h2>
+    <div class="container-fluid py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h3 mb-0 text-dark">Notices Board</h2>
             @role('Super Admin|School Admin|Teacher')
-            <a href="{{ route('communication.notices.create') }}" class="px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                {{ __('Post New Notice') }}
+            <a href="{{ route('communication.notices.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Post New Notice
             </a>
             @endrole
         </div>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            
-            @if(session('success'))
-            <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                <span class="block sm:inline">{{ session('success') }}</span>
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            @endif
+        @endif
 
-            <div class="grid grid-cols-1 gap-4">
-                @forelse($notices as $notice)
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div class="flex justify-between items-start">
+        <div class="row g-4">
+            @forelse($notices as $notice)
+            <div class="col-12">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
-                                <h3 class="text-lg font-bold">
+                                <h3 class="h5 card-title fw-bold mb-1">
                                     @if($notice->type == 'urgent')
-                                    <span class="text-red-600">[URGENT]</span>
+                                    <span class="badge bg-danger me-2">URGENT</span>
                                     @elseif($notice->type == 'event')
-                                    <span class="text-blue-600">[EVENT]</span>
+                                    <span class="badge bg-info text-dark me-2">EVENT</span>
                                     @endif
                                     {{ $notice->title }}
                                 </h3>
-                                <p class="text-sm text-gray-500">
+                                <p class="card-subtitle text-muted small">
                                     Posted by {{ $notice->creator->name ?? 'Unknown' }} 
                                     to {{ ucfirst($notice->audience_role) }} 
                                     on {{ $notice->published_at->format('M d, Y h:i A') }}
                                 </p>
                             </div>
                             @role('Super Admin|School Admin')
-                            <div class="flex space-x-2">
-                                <a href="{{ route('communication.notices.edit', $notice) }}" class="text-blue-600 hover:text-blue-900 text-sm">Edit</a>
+                            <div class="btn-group">
+                                <a href="{{ route('communication.notices.edit', $notice) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                                 <form action="{{ route('communication.notices.destroy', $notice) }}" method="POST" onsubmit="return confirm('Are you sure?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 text-sm">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                 </form>
                             </div>
                             @endrole
                         </div>
-                        <div class="mt-4 prose dark:prose-invert max-w-none">
+                        <div class="card-text">
                             {!! nl2br(e($notice->content)) !!}
                         </div>
                     </div>
                 </div>
-                @empty
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-center text-gray-500">
-                        No notices found.
+            </div>
+            @empty
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center text-muted py-5">
+                        <i class="fas fa-inbox fa-3x mb-3 text-secondary"></i>
+                        <p class="mb-0">No notices found.</p>
                     </div>
                 </div>
-                @endforelse
             </div>
-            
-            <div class="mt-4">
-                {{ $notices->links() }}
-            </div>
+            @endforelse
+        </div>
+        
+        <div class="mt-4">
+            {{ $notices->links() }}
         </div>
     </div>
 </x-app-layout>

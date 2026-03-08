@@ -60,7 +60,7 @@
         </button>
 
         <div class="text-center">
-            <p class="text-secondary mb-0">Already have an account? <a href="{{ route('login') }}" class="text-primary text-decoration-none fw-semibold">Sign In</a></p>
+            <p class="text-secondary mb-0">Already have an account? <a href="{{ route('login') }}" class="text-primary text-decoration-none fw-semibold">Log In</a></p>
         </div>
     </form>
 @endsection

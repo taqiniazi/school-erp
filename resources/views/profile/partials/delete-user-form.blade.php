@@ -11,8 +11,8 @@
 
     <div class="mt-3">
         <x-danger-button
-            x-data=""
-            x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
+            data-bs-toggle="modal"
+            data-bs-target="#confirm-user-deletion"
         >{{ __('Delete Account') }}</x-danger-button>
     </div>
 
@@ -44,7 +44,7 @@
             </div>
 
             <div class="mt-4 d-flex justify-content-end gap-2">
-                <x-secondary-button x-on:click="$dispatch('close')">
+                <x-secondary-button data-bs-dismiss="modal">
                     {{ __('Cancel') }}
                 </x-secondary-button>
 

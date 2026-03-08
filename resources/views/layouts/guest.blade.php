@@ -23,7 +23,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="text-center mb-4">
                         <a href="/">
-                            <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                            <x-application-logo class="text-secondary" style="width: 5rem; height: 5rem;" />
                         </a>
                     </div>
                     <div class="card shadow-sm border-0">

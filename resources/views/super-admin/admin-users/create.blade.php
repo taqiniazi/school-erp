@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Create School Admin</h1>
+        <h1 class="h3 mb-0 text-dark">Create School Admin</h1>
         <a href="{{ route('super-admin.admin-users.index') }}" class="btn btn-sm btn-secondary shadow-sm">
             <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to List
         </a>
@@ -13,7 +13,7 @@
         <div class="col-lg-8">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">New School Admin Details</h6>
+                    <h6 class="m-0 fw-bold text-primary">New School Admin Details</h6>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
@@ -31,7 +31,7 @@
                         
                         <div class="row">
                             <div class="col-md-6">
-                                <h5 class="mb-3 text-gray-800">School Information</h5>
+                                <h5 class="mb-3 text-dark">School Information</h5>
                                 <div class="mb-3">
                                     <label for="school_name" class="form-label">School Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="school_name" name="school_name" value="{{ old('school_name') }}" required>
@@ -49,7 +49,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <h5 class="mb-3 text-gray-800">Admin User Information</h5>
+                                <h5 class="mb-3 text-dark">Admin User Information</h5>
                                 <div class="mb-3">
                                     <label for="admin_name" class="form-label">Admin Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="admin_name" name="admin_name" value="{{ old('admin_name') }}" required>

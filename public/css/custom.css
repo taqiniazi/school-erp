@@ -1,7 +1,7 @@
 :root {
     --primary-color: #4f46e5;
     --secondary-color: #818cf8;
-    --accent-color: #c7d2fe;
+    --accent-color: #2700b5;
     --dark-color: #1e1b4b;
     --light-color: #f8fafc;
 }
@@ -39,7 +39,7 @@ body {
 }
 
 .btn-primary-custom {
-    background-color: var(--primary-color);
+    background: linear-gradient(135deg, var(--dark-color) 0%, var(--primary-color) 100%);
     border-color: var(--primary-color);
     color: white;
     padding: 0.6rem 1.5rem;
@@ -65,7 +65,7 @@ body {
 }
 
 .btn-outline-custom:hover {
-    background-color: var(--primary-color);
+    background: linear-gradient(135deg, var(--dark-color) 0%, var(--primary-color) 100%);
     color: white;
     transform: translateY(-2px);
 }

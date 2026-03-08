@@ -51,13 +51,13 @@
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-muted small mb-0"
-                >{{ __('Saved.') }}</p>
+                <p class="text-success small mb-0" id="profile-status">{{ __('Saved.') }}</p>
+                <script>
+                    setTimeout(() => {
+                        const el = document.getElementById('profile-status');
+                        if(el) el.style.display = 'none';
+                    }, 2000);
+                </script>
             @endif
         </div>
     </form>

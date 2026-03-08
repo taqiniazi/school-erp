@@ -1,125 +1,124 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Invoice Details') }} - {{ $feeInvoice->invoice_no }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="flex justify-between mb-4">
-                        <h3 class="text-lg font-medium">Invoice #{{ $feeInvoice->invoice_no }}</h3>
-                        <div>
-                            <a href="{{ route('fee-invoices.print', $feeInvoice->id) }}" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 mr-2">
-                                Download PDF
+    <div class="container-fluid py-4">
+        <div class="card shadow">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 fw-bold text-primary">{{ __('Invoice Details') }} - {{ $feeInvoice->invoice_no }}</h6>
+                <div>
+                     <a href="{{ route('fee-invoices.print', $feeInvoice->id) }}" class="btn btn-secondary btn-sm me-2">
+                        <i class="fas fa-file-pdf me-1"></i> Download PDF
+                    </a>
+                    @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('School Admin'))
+                        <a href="{{ route('fee-invoices.edit', $feeInvoice->id) }}" class="btn btn-warning btn-sm text-white me-2">
+                            <i class="fas fa-edit me-1"></i> Edit
+                        </a>
+                    @endif
+                    @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('School Admin') || Auth::user()->hasRole('Teacher'))
+                        @if($feeInvoice->balance > 0)
+                            <a href="{{ route('fee-invoices.collect', $feeInvoice->id) }}" class="btn btn-success btn-sm">
+                                <i class="fas fa-money-bill-wave me-1"></i> Collect Payment
                             </a>
-                            @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('School Admin'))
-                                <a href="{{ route('fee-invoices.edit', $feeInvoice->id) }}" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 mr-2">
-                                    Edit
-                                </a>
-                            @endif
-                            @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('School Admin') || Auth::user()->hasRole('Teacher'))
-                                @if($feeInvoice->balance > 0)
-                                    <a href="{{ route('fee-invoices.collect', $feeInvoice->id) }}" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-                                        Collect Payment
-                                    </a>
-                                @endif
-                            @endif
-                        </div>
+                        @endif
+                    @endif
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5 class="fw-bold">Student Details:</h5>
+                        <p class="mb-1"><strong>Name:</strong> {{ $feeInvoice->student->first_name }} {{ $feeInvoice->student->last_name }}</p>
+                        <p class="mb-1"><strong>Class:</strong> {{ $feeInvoice->student->schoolClass->name }}</p>
+                        <p class="mb-1"><strong>Admission No:</strong> {{ $feeInvoice->student->admission_number }}</p>
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <h4 class="font-bold">Student Details:</h4>
-                            <p>Name: {{ $feeInvoice->student->first_name }} {{ $feeInvoice->student->last_name }}</p>
-                            <p>Class: {{ $feeInvoice->student->schoolClass->name }}</p>
-                            <p>Admission No: {{ $feeInvoice->student->admission_number }}</p>
-                        </div>
-                        <div class="text-right">
-                            <h4 class="font-bold">Invoice Details:</h4>
-                            <p>Issue Date: {{ $feeInvoice->issue_date }}</p>
-                            <p>Due Date: {{ $feeInvoice->due_date }}</p>
-                            <p>Status: <span class="font-bold uppercase {{ $feeInvoice->status == 'paid' ? 'text-green-600' : 'text-red-600' }}">{{ $feeInvoice->status }}</span></p>
-                        </div>
+                    <div class="col-md-6 text-md-end">
+                        <h5 class="fw-bold">Invoice Details:</h5>
+                        <p class="mb-1"><strong>Issue Date:</strong> {{ $feeInvoice->issue_date }}</p>
+                        <p class="mb-1"><strong>Due Date:</strong> {{ $feeInvoice->due_date }}</p>
+                        <p class="mb-1"><strong>Status:</strong> 
+                            <span class="badge {{ $feeInvoice->status == 'paid' ? 'bg-success' : ($feeInvoice->status == 'partial' ? 'bg-warning text-dark' : 'bg-danger') }}">
+                                {{ ucfirst($feeInvoice->status) }}
+                            </span>
+                        </p>
                     </div>
+                </div>
 
-                    <h4 class="font-bold mb-2">Fee Items:</h4>
-                    <table class="min-w-full divide-y divide-gray-200 mb-6">
-                        <thead class="bg-gray-50">
+                <h5 class="fw-bold mb-3">Fee Items:</h5>
+                <div class="table-responsive mb-4">
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-light">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                <th>Description</th>
+                                <th class="text-end">Amount</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody>
                             @foreach($feeInvoice->items as $item)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $item->name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right">{{ number_format($item->amount, 2) }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td class="text-end">{{ number_format($item->amount, 2) }}</td>
                                 </tr>
                             @endforeach
                             <!-- Summary -->
-                            <tr class="bg-gray-50 font-bold">
-                                <td class="px-6 py-4 text-right">Subtotal</td>
-                                <td class="px-6 py-4 text-right">{{ number_format($feeInvoice->total_amount, 2) }}</td>
+                            <tr class="fw-bold">
+                                <td class="text-end">Subtotal</td>
+                                <td class="text-end">{{ number_format($feeInvoice->total_amount, 2) }}</td>
                             </tr>
                             @if($feeInvoice->fine_amount > 0)
-                                <tr class="bg-gray-50">
-                                    <td class="px-6 py-4 text-right text-red-600">Fine</td>
-                                    <td class="px-6 py-4 text-right text-red-600">{{ number_format($feeInvoice->fine_amount, 2) }}</td>
+                                <tr>
+                                    <td class="text-end text-danger">Fine</td>
+                                    <td class="text-end text-danger">{{ number_format($feeInvoice->fine_amount, 2) }}</td>
                                 </tr>
                             @endif
                             @if($feeInvoice->discount_amount > 0)
-                                <tr class="bg-gray-50">
-                                    <td class="px-6 py-4 text-right text-green-600">Discount</td>
-                                    <td class="px-6 py-4 text-right text-green-600">-{{ number_format($feeInvoice->discount_amount, 2) }}</td>
+                                <tr>
+                                    <td class="text-end text-success">Discount</td>
+                                    <td class="text-end text-success">-{{ number_format($feeInvoice->discount_amount, 2) }}</td>
                                 </tr>
                             @endif
-                            <tr class="bg-gray-100 font-bold text-lg">
-                                <td class="px-6 py-4 text-right">Total Payable</td>
-                                <td class="px-6 py-4 text-right">{{ number_format($feeInvoice->total_amount + $feeInvoice->fine_amount - $feeInvoice->discount_amount, 2) }}</td>
+                            <tr class="fw-bold fs-5 table-secondary">
+                                <td class="text-end">Total Payable</td>
+                                <td class="text-end">{{ number_format($feeInvoice->total_amount + $feeInvoice->fine_amount - $feeInvoice->discount_amount, 2) }}</td>
                             </tr>
-                            <tr class="bg-gray-100 font-bold">
-                                <td class="px-6 py-4 text-right">Paid Amount</td>
-                                <td class="px-6 py-4 text-right text-green-600">{{ number_format($feeInvoice->paid_amount, 2) }}</td>
+                            <tr class="fw-bold">
+                                <td class="text-end">Paid Amount</td>
+                                <td class="text-end text-success">{{ number_format($feeInvoice->paid_amount, 2) }}</td>
                             </tr>
-                            <tr class="bg-gray-200 font-bold text-lg">
-                                <td class="px-6 py-4 text-right">Balance Due</td>
-                                <td class="px-6 py-4 text-right text-red-600">{{ number_format($feeInvoice->balance, 2) }}</td>
+                            <tr class="fw-bold fs-5 table-light">
+                                <td class="text-end">Balance Due</td>
+                                <td class="text-end text-danger">{{ number_format($feeInvoice->balance, 2) }}</td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
 
-                    <h4 class="font-bold mb-2">Payment History:</h4>
-                    @if($feeInvoice->payments->count() > 0)
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                <h5 class="fw-bold mb-3">Payment History:</h5>
+                @if($feeInvoice->payments->count() > 0)
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-light">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reference</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Collected By</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Method</th>
+                                    <th>Reference</th>
+                                    <th>Collected By</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody>
                                 @foreach($feeInvoice->payments as $payment)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $payment->payment_date }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ number_format($payment->amount, 2) }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $payment->payment_method }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $payment->transaction_reference }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $payment->collectedBy->name ?? 'N/A' }}</td>
+                                        <td>{{ $payment->payment_date }}</td>
+                                        <td>{{ number_format($payment->amount, 2) }}</td>
+                                        <td>{{ $payment->payment_method }}</td>
+                                        <td>{{ $payment->transaction_reference }}</td>
+                                        <td>{{ $payment->collectedBy->name ?? 'N/A' }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                    @else
-                        <p class="text-gray-500 italic">No payments recorded yet.</p>
-                    @endif
-                </div>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic">No payments recorded yet.</p>
+                @endif
             </div>
         </div>
     </div>

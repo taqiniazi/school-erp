@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Plans Management</h1>
+        <h1 class="h3 mb-0 text-dark">Plans Management</h1>
         <a href="{{ route('super-admin.plans.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Create New Plan
         </a>
@@ -18,11 +18,11 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">All Subscription Plans</h6>
+            <h6 class="m-0 fw-bold text-primary">All Subscription Plans</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover" id="plansTable" width="100%" cellspacing="0">
+                <table class="table table-bordered table-hover w-100" id="plansTable">
                     <thead class="table-light">
                         <tr>
                             <th>Name</th>

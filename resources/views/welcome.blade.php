@@ -12,7 +12,7 @@
         <div class="container position-relative z-1">
             <div class="row align-items-center">
                 <div class="col-lg-6" data-aos="fade-right">
-                    <div class="d-inline-block px-3 py-1 mb-3 text-sm font-semibold text-primary bg-light rounded-pill border border-primary-subtle">
+                    <div class="d-inline-block px-3 py-1 mb-3 small fw-semibold text-primary bg-light rounded-pill border border-primary-subtle">
                         <i class="fas fa-star me-1 text-warning"></i> #1 School Management System
                     </div>
                     <h1 class="hero-title">Manage Your School <br>With <span class="text-primary" style="background: linear-gradient(135deg, #4f46e5 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Confidence</span></h1>

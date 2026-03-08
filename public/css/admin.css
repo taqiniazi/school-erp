@@ -8,6 +8,7 @@
     --sidebar-active-border: #818cf8; /* Indigo 400 */
     --body-bg: #f1f5f9; /* Slate 100 */
     --card-bg: #ffffff;
+    --dark-color: #1e1b4b;
     --text-main: #0f172a; /* Slate 900 */
     --text-muted: #64748b; /* Slate 500 */
     --border-color: #e2e8f0; /* Slate 200 */
@@ -35,7 +36,7 @@ body {
 #sidebar {
     min-width: 260px;
     max-width: 260px;
-    background: var(--sidebar-bg);
+    background: linear-gradient(135deg, var(--dark-color) 0%, var(--primary-color) 100%);
     color: var(--sidebar-text);
     transition: all 0.3s;
     min-height: 100vh;

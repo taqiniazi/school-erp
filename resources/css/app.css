@@ -1,3 +1,5 @@
+/* Bootstrap 5 is used via CDN/Asset files in layouts */
+/* Remove Tailwind directives */
 /* @tailwind base; */
 /* @tailwind components; */
 /* @tailwind utilities; */

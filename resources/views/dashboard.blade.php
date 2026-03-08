@@ -12,7 +12,7 @@
                         @role('Super Admin|School Admin')
                         <div class="col-md-6 col-lg-4">
                             <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">
-                                <div class="card h-100 border-primary bg-light hover-shadow transition">
+                                <div class="card h-100 border-primary bg-light shadow-sm">
                                     <div class="card-body d-flex align-items-center">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-circle">
@@ -32,7 +32,7 @@
                         @role('Teacher')
                         <div class="col-md-6 col-lg-4">
                             <a href="{{ route('teacher.dashboard') }}" class="text-decoration-none">
-                                <div class="card h-100 border-success bg-light hover-shadow transition">
+                                <div class="card h-100 border-success bg-light shadow-sm">
                                     <div class="card-body d-flex align-items-center">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="bg-success bg-opacity-10 text-success p-3 rounded-circle">
@@ -52,7 +52,7 @@
                         @role('Student')
                         <div class="col-md-6 col-lg-4">
                             <a href="{{ route('student.dashboard') }}" class="text-decoration-none">
-                                <div class="card h-100 border-primary bg-light hover-shadow transition">
+                                <div class="card h-100 border-primary bg-light shadow-sm">
                                     <div class="card-body d-flex align-items-center">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-circle">
@@ -72,7 +72,7 @@
                         @role('Parent')
                         <div class="col-md-6 col-lg-4">
                             <a href="{{ route('parent.dashboard') }}" class="text-decoration-none">
-                                <div class="card h-100 border-info bg-light hover-shadow transition">
+                                <div class="card h-100 border-info bg-light shadow-sm">
                                     <div class="card-body d-flex align-items-center">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="bg-info bg-opacity-10 text-info p-3 rounded-circle">
@@ -91,7 +91,7 @@
                         
                         <div class="col-md-6 col-lg-4">
                             <a href="{{ route('profile.edit') }}" class="text-decoration-none">
-                                <div class="card h-100 border-secondary bg-light hover-shadow transition">
+                                <div class="card h-100 border-secondary bg-light shadow-sm">
                                     <div class="card-body d-flex align-items-center">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="bg-secondary bg-opacity-10 text-secondary p-3 rounded-circle">

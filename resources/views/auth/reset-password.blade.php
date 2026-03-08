@@ -1,4 +1,13 @@
-<x-guest-layout>
+@extends('layouts.auth-modern')
+
+@section('title', 'Reset Password')
+
+@section('content')
+    <div class="mb-4">
+        <h3 class="auth-title">Reset Password</h3>
+        <p class="auth-subtitle">Create a new password for your account.</p>
+    </div>
+
     <form method="POST" action="{{ route('password.store') }}">
         @csrf
 
@@ -20,20 +29,16 @@
         </div>
 
         <!-- Confirm Password -->
-        <div class="mb-3">
+        <div class="mb-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
             <x-text-input id="password_confirmation" class="form-control"
                                 type="password"
                                 name="password_confirmation" required autocomplete="new-password" />
-
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1" />
         </div>
 
-        <div class="d-flex justify-content-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
+        <button type="submit" class="btn btn-primary-custom w-100 mb-4">
+            {{ __('Reset Password') }}
+        </button>
     </form>
-</x-guest-layout>
+@endsection

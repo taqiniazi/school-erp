@@ -1,51 +1,58 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Compose Message') }}
-        </h2>
-    </x-slot>
+    <div class="container-fluid py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white py-3">
+                        <h2 class="h5 mb-0 fw-bold text-dark">
+                            {{ __('Compose Message') }}
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ route('communication.messages.store') }}">
+                            @csrf
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('communication.messages.store') }}">
-                        @csrf
+                            <!-- Recipient -->
+                            <div class="mb-3">
+                                <label for="recipient_id" class="form-label">{{ __('To') }}</label>
+                                <select id="recipient_id" name="recipient_id" class="form-select @error('recipient_id') is-invalid @enderror" required>
+                                    <option value="">Select Recipient</option>
+                                    @foreach($recipients as $recipient)
+                                        <option value="{{ $recipient->id }}" {{ (old('recipient_id') == $recipient->id || request('recipient_id') == $recipient->id) ? 'selected' : '' }}>
+                                            {{ $recipient->name }} ({{ $recipient->roles->pluck('name')->implode(', ') }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('recipient_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                        <!-- Recipient -->
-                        <div>
-                            <x-input-label for="recipient_id" :value="__('To')" />
-                            <select id="recipient_id" name="recipient_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required>
-                                <option value="">Select Recipient</option>
-                                @foreach($recipients as $recipient)
-                                    <option value="{{ $recipient->id }}" {{ (old('recipient_id') == $recipient->id || request('recipient_id') == $recipient->id) ? 'selected' : '' }}>
-                                        {{ $recipient->name }} ({{ $recipient->roles->pluck('name')->implode(', ') }})
-                                    </option>
-                                @endforeach
-                            </select>
-                            <x-input-error :messages="$errors->get('recipient_id')" class="mt-2" />
-                        </div>
+                            <!-- Subject -->
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">{{ __('Subject') }}</label>
+                                <input id="subject" class="form-control @error('subject') is-invalid @enderror" type="text" name="subject" value="{{ old('subject', request('subject')) }}" required autofocus />
+                                @error('subject')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                        <!-- Subject -->
-                        <div class="mt-4">
-                            <x-input-label for="subject" :value="__('Subject')" />
-                            <x-text-input id="subject" class="block mt-1 w-full" type="text" name="subject" :value="old('subject', request('subject'))" required autofocus />
-                            <x-input-error :messages="$errors->get('subject')" class="mt-2" />
-                        </div>
+                            <!-- Content -->
+                            <div class="mb-3">
+                                <label for="content" class="form-label">{{ __('Message') }}</label>
+                                <textarea id="content" name="content" class="form-control @error('content') is-invalid @enderror" rows="6" required>{{ old('content') }}</textarea>
+                                @error('content')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                        <!-- Content -->
-                        <div class="mt-4">
-                            <x-input-label for="content" :value="__('Message')" />
-                            <textarea id="content" name="content" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" rows="6" required>{{ old('content') }}</textarea>
-                            <x-input-error :messages="$errors->get('content')" class="mt-2" />
-                        </div>
-
-                        <div class="flex items-center justify-end mt-4">
-                            <x-primary-button class="ms-4">
-                                {{ __('Send Message') }}
-                            </x-primary-button>
-                        </div>
-                    </form>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-1"></i> {{ __('Send Message') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,12 +3,12 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Subscriptions</h1>
+        <h1 class="h3 mb-0 text-dark">Subscriptions</h1>
     </div>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Manage Subscriptions</h6>
+            <h6 class="m-0 fw-bold text-primary">Manage Subscriptions</h6>
         </div>
         <div class="card-body">
             @if (session('success'))
@@ -39,7 +39,7 @@
             </form>
 
             <div class="table-responsive">
-                <table class="table table-bordered table-striped" width="100%" cellspacing="0">
+                <table class="table table-bordered table-striped w-100">
                     <thead>
                         <tr>
                             <th>School</th>

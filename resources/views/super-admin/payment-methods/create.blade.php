@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Add Payment Method</h1>
+        <h1 class="h3 mb-0 text-dark">Add Payment Method</h1>
         <a href="{{ route('super-admin.payment-methods.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back
         </a>
@@ -13,7 +13,7 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">New Payment Method</h6>
+            <h6 class="m-0 fw-bold text-primary">New Payment Method</h6>
         </div>
         <div class="card-body">
             <form action="{{ route('super-admin.payment-methods.store') }}" method="POST">

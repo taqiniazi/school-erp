@@ -35,13 +35,13 @@
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'password-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-muted small mb-0"
-                >{{ __('Saved.') }}</p>
+                <p class="text-success small mb-0" id="password-status">{{ __('Saved.') }}</p>
+                <script>
+                    setTimeout(() => {
+                        const el = document.getElementById('password-status');
+                        if(el) el.style.display = 'none';
+                    }, 2000);
+                </script>
             @endif
         </div>
     </form>

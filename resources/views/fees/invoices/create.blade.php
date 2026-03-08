@@ -1,9 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">
-        {{ __('Generate Invoices (Bulk)') }}
-    </x-slot>
-
-    <div class="container-fluid">
+    <div class="container-fluid py-4">
         <div class="card shadow">
             <div class="card-body">
                 <form action="{{ route('fee-invoices.store') }}" method="POST">

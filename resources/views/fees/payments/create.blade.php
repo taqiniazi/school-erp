@@ -1,10 +1,9 @@
 <x-app-layout>
-    <x-slot name="header">
-        {{ __('Collect Payment') }}
-    </x-slot>
-
-    <div class="container-fluid">
+    <div class="container-fluid py-4">
         <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 fw-bold text-primary">{{ __('Collect Payment') }}</h6>
+            </div>
             <div class="card-body">
                 <form action="{{ route('fee-invoices.pay', $feeInvoice->id) }}" method="POST">
                     @csrf

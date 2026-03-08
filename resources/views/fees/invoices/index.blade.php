@@ -1,9 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">
-        {{ __('Fee Invoices') }}
-    </x-slot>
-
-    <div class="container-fluid">
+    <div class="container-fluid py-4">
         <div class="card shadow">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
