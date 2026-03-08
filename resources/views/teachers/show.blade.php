@@ -1,4 +1,4 @@
-@extends('layouts.bootstrap')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -66,31 +66,34 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>Subject & Class Allocations</span>
             </div>
-            <div class="card-body">
-                <form action="{{ route('teachers.allocations.store', $teacher) }}" method="POST" class="row g-3 mb-4">
-                    @csrf
-                    <div class="col-md-4">
-                        <select name="subject_id" class="form-select" required disabled>
-                            <option value="">Select Class First</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select name="school_class_id" id="school_class_id" class="form-select" required>
-                            <option value="">Select Class</option>
-                            @foreach($classes as $class)
-                                <option value="{{ $class->id }}">{{ $class->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select name="section_id" id="section_id" class="form-select" required disabled>
-                            <option value="">Select Class First</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100">Assign</button>
-                    </div>
-                </form>
+                <div class="card-body">
+                    <form action="{{ route('teachers.allocations.store', $teacher) }}" method="POST" class="row g-3 mb-4">
+                        @csrf
+                        <div class="col-md-3">
+                            <label class="form-label small fw-medium">Class</label>
+                            <select name="school_class_id" id="school_class_id" class="form-select" required>
+                                <option value="">Select Class</option>
+                                @foreach($classes as $class)
+                                    <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small fw-medium">Section</label>
+                            <select name="section_id" id="section_id" class="form-select" required disabled>
+                                <option value="">Select Class First</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-medium">Subject</label>
+                            <select name="subject_id" class="form-select" required disabled>
+                                <option value="">Select Class First</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Assign</button>
+                        </div>
+                    </form>
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped align-middle">
@@ -179,3 +182,5 @@
 </script>
 @endpush
 @endsection
+
+

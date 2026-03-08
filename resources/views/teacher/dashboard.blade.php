@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         {{ __('Teacher Dashboard') }}
     </x-slot>
@@ -41,7 +41,7 @@
         <div class="col-lg-8">
             <!-- Upcoming Events -->
             <div class="card mb-4">
-                <div class="card-header bg-white border-bottom">
+                <div class="card-header bg-body border-bottom">
                     <h5 class="mb-0 card-title">Upcoming Events</h5>
                 </div>
                 <div class="card-body">
@@ -67,7 +67,7 @@
 
             <!-- Recent Notices -->
             <div class="card">
-                <div class="card-header bg-white border-bottom">
+                <div class="card-header bg-body border-bottom">
                     <h5 class="mb-0 card-title">Recent Notices</h5>
                 </div>
                 <div class="card-body">
@@ -93,11 +93,11 @@
         <!-- Quick Actions -->
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header bg-white border-bottom">
+                <div class="card-header bg-body border-bottom">
                     <h5 class="mb-0 card-title">Quick Actions</h5>
                 </div>
                 <div class="card-body">
-                    <div class="d-grid gap-2">
+                    <div class="d-row g-2">
                         <a href="{{ route('attendance.create') }}" class="btn btn-outline-primary text-start">
                             <i class="fas fa-calendar-check me-2"></i> Take Attendance
                         </a>
@@ -113,3 +113,6 @@
         </div>
     </div>
 </x-app-layout>
+
+
+

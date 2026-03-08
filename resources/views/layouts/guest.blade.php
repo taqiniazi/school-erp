@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -13,6 +13,7 @@
         <!-- Fonts -->
          <link rel="stylesheet" href="{{ asset('font-awesome/css/all.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/inter.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -39,3 +40,5 @@
         <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     </body>
 </html>
+
+

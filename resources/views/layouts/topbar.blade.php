@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg topbar">
     <div class="container-fluid">
         <!-- Sidebar Toggle (Mobile) -->
-        <button type="button" id="sidebarCollapse" class="btn btn-link d-md-none rounded-circle mr-3">
+        <button type="button" id="sidebarCollapse" class="btn btn-link d-md-none rounded-circle me-3">
             <i class="fa fa-bars"></i>
         </button>
 
@@ -12,7 +12,7 @@
                 <a class="nav-link position-relative" href="#">
                     <i class="fas fa-bell fa-lg"></i>
                     <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                        <span class="visually-hidden">New alerts</span>
+                        <span class="visually-d-none">New alerts</span>
                     </span>
                 </a>
             </li>
@@ -49,3 +49,5 @@
         </ul>
     </div>
 </nav>
+
+

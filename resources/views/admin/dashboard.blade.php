@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <h1 class="h3 mb-0 text-dark">Dashboard</h1>
         <a href="{{ route('reports.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
         </a>
@@ -14,14 +14,14 @@
     <!-- Subscription Status Card -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="card shadow border-left-primary">
+            <div class="card shadow border-start border-primary border-3">
                 <div class="card-body">
                     <div class="row align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        <div class="col me-2">
+                            <div class="small fw-bold text-primary text-uppercase mb-1">
                                 Current Subscription
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <div class="h5 mb-0 fw-bold text-dark">
                                 {{ $subscription['planName'] }} 
                                 <span class="badge bg-{{ $subscription['status'] === 'active' ? 'success' : 'warning' }}">
                                     {{ ucfirst($subscription['status']) }}
@@ -34,9 +34,9 @@
                         <div class="col-auto">
                             <div class="row text-center">
                                 <div class="col-6">
-                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Students</div>
-                                    <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                        {{ $subscription['studentUsage'] }} / {{ $subscription['studentLimit'] > 0 ? $subscription['studentLimit'] : '∞' }}
+                                    <div class="small fw-bold text-info text-uppercase mb-1">Students</div>
+                                    <div class="h6 mb-0 fw-bold text-dark">
+                                        {{ $subscription['studentUsage'] }} / {{ $subscription['studentLimit'] > 0 ? $subscription['studentLimit'] : 'âˆž' }}
                                     </div>
                                     <div class="progress progress-sm mt-1">
                                         <div class="progress-bar bg-info" role="progressbar" 
@@ -45,9 +45,9 @@
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Teachers</div>
-                                    <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                        {{ $subscription['teacherUsage'] }} / {{ $subscription['teacherLimit'] > 0 ? $subscription['teacherLimit'] : '∞' }}
+                                    <div class="small fw-bold text-warning text-uppercase mb-1">Teachers</div>
+                                    <div class="h6 mb-0 fw-bold text-dark">
+                                        {{ $subscription['teacherUsage'] }} / {{ $subscription['teacherLimit'] > 0 ? $subscription['teacherLimit'] : 'âˆž' }}
                                     </div>
                                     <div class="progress progress-sm mt-1">
                                         <div class="progress-bar bg-warning" role="progressbar" 
@@ -70,15 +70,15 @@
     <div class="row">
         <!-- Total Students -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card border-start border-primary border-3 shadow h-100 py-2">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Students</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalStudents }}</div>
+                    <div class="row g-0 align-items-center">
+                        <div class="col me-2">
+                            <div class="small fw-bold text-primary text-uppercase mb-1">Total Students</div>
+                            <div class="h5 mb-0 fw-bold text-dark">{{ $totalStudents }}</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+                            <i class="fas fa-user-graduate fa-2x text-secondary"></i>
                         </div>
                     </div>
                 </div>
@@ -87,15 +87,15 @@
 
         <!-- Total Teachers -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
+            <div class="card border-start border-success border-3 shadow h-100 py-2">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Teachers</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalTeachers }}</div>
+                    <div class="row g-0 align-items-center">
+                        <div class="col me-2">
+                            <div class="small fw-bold text-success text-uppercase mb-1">Total Teachers</div>
+                            <div class="h5 mb-0 fw-bold text-dark">{{ $totalTeachers }}</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
+                            <i class="fas fa-chalkboard-teacher fa-2x text-secondary"></i>
                         </div>
                     </div>
                 </div>
@@ -104,15 +104,15 @@
 
         <!-- Total Classes -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card border-start border-warning border-3 shadow h-100 py-2">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Classes</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalClasses }}</div>
+                    <div class="row g-0 align-items-center">
+                        <div class="col me-2">
+                            <div class="small fw-bold text-warning text-uppercase mb-1">Total Classes</div>
+                            <div class="h5 mb-0 fw-bold text-dark">{{ $totalClasses }}</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-chalkboard fa-2x text-gray-300"></i>
+                            <i class="fas fa-chalkboard fa-2x text-secondary"></i>
                         </div>
                     </div>
                 </div>
@@ -121,15 +121,15 @@
 
         <!-- Monthly Fees -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
+            <div class="card border-start border-info border-3 shadow h-100 py-2">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Monthly Fees</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rs. {{ number_format($monthlyFeeCollection, 2) }}</div>
+                    <div class="row g-0 align-items-center">
+                        <div class="col me-2">
+                            <div class="small fw-bold text-info text-uppercase mb-1">Monthly Fees</div>
+                            <div class="h5 mb-0 fw-bold text-dark">Rs. {{ number_format($monthlyFeeCollection, 2) }}</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            <i class="fas fa-dollar-sign fa-2x text-secondary"></i>
                         </div>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
         <div class="col-lg-8 mb-4">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Alerts & Notifications</h6>
+                    <h6 class="m-0 fw-bold text-primary">Alerts & Notifications</h6>
                 </div>
                 <div class="card-body">
                     @if(isset($lowStockItems) && $lowStockItems > 0)
@@ -179,10 +179,10 @@
         <div class="col-lg-4 mb-4">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
+                    <h6 class="m-0 fw-bold text-primary">Quick Actions</h6>
                 </div>
                 <div class="card-body">
-                    <div class="d-grid gap-2">
+                    <div class="row g-2">
                         <a href="{{ route('students.create') }}" class="btn btn-outline-primary text-start">
                             <i class="fas fa-user-plus me-2"></i> Add New Student
                         </a>
@@ -202,3 +202,6 @@
     </div>
 </div>
 @endsection
+
+
+

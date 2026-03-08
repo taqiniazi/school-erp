@@ -1,11 +1,11 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>Payslip {{ $payslip->payslip_no }}</title>
     <style>
         body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
-        .header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .header { display: d-flex; justify-content: space-between; margin-bottom: 10px; }
         .box { border: 1px solid #000; padding: 8px; margin-bottom: 10px; }
         table { width: 100%; border-collapse: collapse; }
         th, td { border: 1px solid #000; padding: 6px; text-align: left; }
@@ -63,3 +63,4 @@
     </table>
 </body>
 </html>
+

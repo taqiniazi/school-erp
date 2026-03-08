@@ -17,7 +17,7 @@
                     </div>
                     <h1 class="hero-title">Manage Your School <br>With <span class="text-primary" style="background: linear-gradient(135deg, #4f46e5 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Confidence</span></h1>
                     <p class="hero-subtitle">The most comprehensive ERP solution for modern educational institutions. Streamline administration, enhance learning, and simplify communication.</p>
-                    <div class="d-flex gap-3 flex-wrap">
+                    <div class="d-flex gap-2 flex-wrap">
                         <a href="{{ route('register') }}" class="btn btn-primary-custom btn-lg shadow-lg">
                             <i class="fas fa-rocket me-2"></i> Start Free Trial
                         </a>
@@ -25,7 +25,7 @@
                             <i class="fas fa-play-circle me-2"></i> Watch Demo
                         </a>
                     </div>
-                    <div class="mt-4 pt-2 d-flex align-items-center gap-4 text-muted small">
+                    <div class="mt-4 pt-2 d-flex align-items-center gap-3 text-muted small">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-check-circle text-success me-2"></i> No credit card required
                         </div>
@@ -409,7 +409,7 @@
                                         $currentIndex = ($index + $i) % count($screenshots);
                                         $item = $screenshots[$currentIndex];
                                     @endphp
-                                    <div class="col-lg-4 {{ $i > 0 ? 'd-none d-lg-block' : '' }}">
+                                    <div class="col-lg-4 {{ $i > 0 ? 'd-none d-lg-d-block' : '' }}">
                                         <div class="screenshot-item">
                                             <img src="{{ $item['img'] }}" class="d-block w-100 rounded-4" alt="{{ $item['title'] }}">
                                             <div class="screenshot-overlay rounded-bottom-4">
@@ -443,7 +443,7 @@
             
             <div class="row g-4 justify-content-center">
                 <div class="col-lg-4">
-                    <div class="p-4 rounded-4 bg-white bg-opacity-10 border border-light border-opacity-25 h-100">
+                    <div class="p-4 rounded-4 bg-body bg-opacity-10 border border-light border-opacity-25 h-100">
                         <i class="fas fa-rocket fa-3x mb-3 opacity-75"></i>
                         <h4 class="fw-bold">Ready to Launch?</h4>
                         <p class="opacity-75 mb-4">Get full access to all features for 14 days. No credit card required.</p>
@@ -451,7 +451,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="p-4 rounded-4 bg-white bg-opacity-10 border border-light border-opacity-25 h-100">
+                    <div class="p-4 rounded-4 bg-body bg-opacity-10 border border-light border-opacity-25 h-100">
                         <i class="fas fa-laptop-code fa-3x mb-3 opacity-75"></i>
                         <h4 class="fw-bold">Need a Tour?</h4>
                         <p class="opacity-75 mb-4">Schedule a personalized demo with our product experts.</p>
@@ -459,7 +459,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="p-4 rounded-4 bg-white bg-opacity-10 border border-light border-opacity-25 h-100">
+                    <div class="p-4 rounded-4 bg-body bg-opacity-10 border border-light border-opacity-25 h-100">
                         <i class="fas fa-headset fa-3x mb-3 opacity-75"></i>
                         <h4 class="fw-bold">Have Questions?</h4>
                         <p class="opacity-75 mb-4">Chat with our sales team to get a custom quote for your school.</p>
@@ -500,3 +500,6 @@
     });
 </script>
 @endpush
+
+
+

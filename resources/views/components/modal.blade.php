@@ -14,7 +14,7 @@ $maxWidthClass = [
 ][$maxWidth] ?? '';
 @endphp
 
-<div class="modal fade" id="{{ $name }}" tabindex="-1" aria-labelledby="{{ $name }}Label" aria-hidden="true">
+<div class="modal fade" id="{{ $name }}" tabindex="-1" aria-labelledby="{{ $name }}Label" aria-d-none="true">
     <div class="modal-dialog {{ $maxWidthClass }} modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">

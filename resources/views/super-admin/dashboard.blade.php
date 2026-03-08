@@ -255,7 +255,7 @@
                 },
                 scales: {
                     x: {
-                        grid: {
+                        row: {
                             display: false,
                             drawBorder: false
                         },
@@ -271,7 +271,7 @@
                                 return 'Rs. ' + value;
                             }
                         },
-                        grid: {
+                        row: {
                             color: "rgb(234, 236, 244)",
                             zeroLineColor: "rgb(234, 236, 244)",
                             drawBorder: false,
@@ -341,7 +341,7 @@
                 },
                 scales: {
                     x: {
-                        grid: {
+                        row: {
                             display: false,
                             drawBorder: false
                         },
@@ -356,7 +356,7 @@
                             maxTicksLimit: 5,
                             padding: 10,
                         },
-                        grid: {
+                        row: {
                             color: "rgb(234, 236, 244)",
                             zeroLineColor: "rgb(234, 236, 244)",
                             drawBorder: false,
@@ -388,3 +388,5 @@
     });
 </script>
 @endpush
+
+

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="container-fluid">
@@ -43,9 +43,9 @@
                                 <td>${{ number_format($plan->price, 2) }}</td>
                                 <td><span class="badge bg-info">{{ ucfirst($plan->billing_cycle) }}</span></td>
                                 <td>
-                                    {{ $plan->max_students ?? '∞' }} / 
-                                    {{ $plan->max_teachers ?? '∞' }} / 
-                                    {{ $plan->max_campuses ?? '∞' }}
+                                    {{ $plan->max_students ?? 'âˆž' }} / 
+                                    {{ $plan->max_teachers ?? 'âˆž' }} / 
+                                    {{ $plan->max_campuses ?? 'âˆž' }}
                                 </td>
                                 <td>{{ $plan->storage_limit_mb ? $plan->storage_limit_mb . ' MB' : 'Unlimited' }}</td>
                                 <td>
@@ -60,7 +60,7 @@
                                         <a href="{{ route('super-admin.plans.edit', $plan) }}" class="btn btn-sm btn-info text-white" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('super-admin.plans.destroy', $plan) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this plan?');" style="display: inline-block;">
+                                        <form action="{{ route('super-admin.plans.destroy', $plan) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this plan?');" style="display: d-inline-block;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger" title="Delete">
@@ -85,3 +85,6 @@
     </div>
 </div>
 @endsection
+
+
+

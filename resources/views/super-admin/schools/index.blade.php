@@ -1,8 +1,8 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div class="d-sm-d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-dark">Schools</h1>
     </div>
 
@@ -44,7 +44,7 @@
                                 <td>{{ $s->teachers_count }}</td>
                                 <td>{{ $s->campuses_count }}</td>
                                 <td>
-                                    {{ optional(optional($sub)->plan)->name ?: '—' }}
+                                    {{ optional(optional($sub)->plan)->name ?: 'â€”' }}
                                     {{ $sub ? '(' . ucfirst($sub->status) . ')' : '' }}
                                 </td>
                                 <td>
@@ -79,3 +79,5 @@
     </div>
 </div>
 @endsection
+
+

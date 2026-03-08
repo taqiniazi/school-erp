@@ -1,32 +1,32 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="fw-semibold h4 text-dark  lh-sm">
             {{ __('Student Details') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="py-5">
+        <div class="container px-4">
+            <div class="row g-4">
                 <!-- Profile Card -->
-                <div class="md:col-span-1">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 text-gray-900 dark:text-gray-100 flex flex-col items-center text-center">
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body p-4 text-dark d-flex flex-column align-items-center text-center">
                             @if($student->photo_path)
-                                <img src="{{ asset('storage/' . $student->photo_path) }}" alt="Student Photo" class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-gray-200 dark:border-gray-700">
+                                <img src="{{ asset('storage/' . $student->photo_path) }}" alt="Student Photo" class="rounded-circle mb-4 border border-4 border-secondary object-fit-cover" style="width: 8rem; height: 8rem;">
                             @else
-                                <div class="w-32 h-32 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center mb-4 text-4xl text-white font-bold">
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-4 text-white fw-bold display-4" style="width: 8rem; height: 8rem;">
                                     {{ substr($student->first_name, 0, 1) }}
                                 </div>
                             @endif
                             
-                            <h3 class="text-xl font-bold mb-1">{{ $student->first_name }} {{ $student->last_name }}</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{{ $student->admission_number }}</p>
+                            <h3 class="h4 fw-bold mb-1">{{ $student->first_name }} {{ $student->last_name }}</h3>
+                            <p class="small text-secondary mb-4">{{ $student->admission_number }}</p>
                             
-                            <span class="px-3 py-1 text-sm font-semibold rounded-full 
-                                {{ $student->status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
-                                  ($student->status === 'graduated' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 
-                                  'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200') }}">
+                            <span class="badge rounded-pill px-3 py-2 
+                                {{ $student->status === 'active' ? 'bg-success-subtle text-success' : 
+                                  ($student->status === 'graduated' ? 'bg-primary-subtle text-primary' : 
+                                  'bg-danger-subtle text-danger') }}">
                                 {{ ucfirst($student->status) }}
                             </span>
                         </div>
@@ -34,52 +34,52 @@
                 </div>
 
                 <!-- Details Card -->
-                <div class="md:col-span-2">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 text-gray-900 dark:text-gray-100">
-                            <div class="flex justify-between items-center mb-6 border-b pb-4 dark:border-gray-700">
-                                <h3 class="text-lg font-medium">Student Information</h3>
-                                <a href="{{ route('students.edit', $student) }}" class="inline-flex items-center px-4 py-2 bg-yellow-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-600 focus:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                <div class="col-md-8">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body p-4 text-dark">
+                            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                                <h3 class="lead fw-medium m-0">Student Information</h3>
+                                <a href="{{ route('students.edit', $student) }}" class="btn btn-warning text-white btn-sm fw-semibold">
                                     Edit
                                 </a>
                             </div>
 
-                            <div class="space-y-4">
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                    <div class="font-medium text-gray-500 dark:text-gray-400">Date of Birth:</div>
-                                    <div class="sm:col-span-2">{{ $student->dob }}</div>
+                            <div class="vstack gap-3">
+                                <div class="row mb-2">
+                                    <div class="col-md-4 fw-medium text-secondary">Date of Birth:</div>
+                                    <div class="col-md-8">{{ $student->dob }}</div>
                                 </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                    <div class="font-medium text-gray-500 dark:text-gray-400">Gender:</div>
-                                    <div class="sm:col-span-2">{{ ucfirst($student->gender) }}</div>
+                                <div class="row mb-2">
+                                    <div class="col-md-4 fw-medium text-secondary">Gender:</div>
+                                    <div class="col-md-8">{{ ucfirst($student->gender) }}</div>
                                 </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                    <div class="font-medium text-gray-500 dark:text-gray-400">Class & Section:</div>
-                                    <div class="sm:col-span-2">
+                                <div class="row mb-2">
+                                    <div class="col-md-4 fw-medium text-secondary">Class & Section:</div>
+                                    <div class="col-md-8">
                                         {{ $student->schoolClass->name ?? 'N/A' }} - {{ $student->section->name ?? 'N/A' }}
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                    <div class="font-medium text-gray-500 dark:text-gray-400">Admission Date:</div>
-                                    <div class="sm:col-span-2">{{ $student->admission_date }}</div>
+                                <div class="row mb-2">
+                                    <div class="col-md-4 fw-medium text-secondary">Admission Date:</div>
+                                    <div class="col-md-8">{{ $student->admission_date }}</div>
                                 </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                    <div class="font-medium text-gray-500 dark:text-gray-400">Address:</div>
-                                    <div class="sm:col-span-2">{{ $student->address }}</div>
+                                <div class="row mb-2">
+                                    <div class="col-md-4 fw-medium text-secondary">Address:</div>
+                                    <div class="col-md-8">{{ $student->address }}</div>
                                 </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t pt-4 dark:border-gray-700">
-                                    <div class="font-medium text-gray-500 dark:text-gray-400">Parents/Guardians:</div>
-                                    <div class="sm:col-span-2">
+                                <div class="row mb-2 border-top pt-3 mt-2">
+                                    <div class="col-md-4 fw-medium text-secondary">Parents/Guardians:</div>
+                                    <div class="col-md-8">
                                         @if($student->parents && $student->parents->count() > 0)
                                             @foreach($student->parents as $parent)
-                                                <div class="mb-2 last:mb-0">
-                                                    <span class="font-semibold">{{ $parent->user->name }}</span> 
-                                                    <span class="text-sm text-gray-500 dark:text-gray-400">({{ $parent->pivot->relation }})</span>
-                                                    <div class="text-sm text-gray-500 dark:text-gray-400">{{ $parent->user->email }}</div>
+                                                <div class="mb-2">
+                                                    <span class="fw-semibold">{{ $parent->user->name }}</span> 
+                                                    <span class="small text-secondary">({{ $parent->pivot->relation }})</span>
+                                                    <div class="small text-secondary">{{ $parent->user->email }}</div>
                                                 </div>
                                             @endforeach
                                         @else
-                                            <span class="text-gray-400 italic">No parents linked</span>
+                                            <span class="text-secondary fst-italic">No parents linked</span>
                                         @endif
                                     </div>
                                 </div>
@@ -91,3 +91,6 @@
         </div>
     </div>
 </x-app-layout>
+
+
+

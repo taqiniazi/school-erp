@@ -56,7 +56,7 @@
                                 </div>
                             @endif
 
-                            <div class="d-flex justify-content-end gap-2 mt-4">
+                            <div class="d-flex justify-content-end g-2 mt-4">
                                 <a href="{{ route('fee-structures.index') }}" class="btn btn-secondary">
                                     Cancel
                                 </a>

@@ -1,4 +1,4 @@
-<section>
+﻿<section>
     <header>
         <h2 class="h5 text-dark">
             {{ __('Profile Information') }}
@@ -47,7 +47,7 @@
             @endif
         </div>
 
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center g-2">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')
@@ -62,3 +62,5 @@
         </div>
     </form>
 </section>
+
+

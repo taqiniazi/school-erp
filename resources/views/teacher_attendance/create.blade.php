@@ -1,4 +1,4 @@
-@extends('layouts.bootstrap')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="card">
@@ -16,9 +16,9 @@
 
         <form action="{{ route('teacher-attendance.store') }}" method="POST">
             @csrf
-            <input type="hidden" name="date" value="{{ $date }}">
+            <input type="d-none" name="date" value="{{ $date }}">
             
-            <div class="mb-3 d-flex gap-2">
+            <div class="mb-3 d-flex g-2">
                 <button type="button" class="btn btn-sm btn-outline-success" onclick="markAll('present')">Mark All Present</button>
                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="markAll('absent')">Mark All Absent</button>
                 <button type="button" class="btn btn-sm btn-outline-warning" onclick="markAll('holiday')">Mark All Holiday</button>
@@ -42,7 +42,7 @@
                             <tr>
                                 <td>
                                     {{ $teacher->name }}
-                                    <input type="hidden" name="attendances[{{ $teacher->id }}][teacher_id]" value="{{ $teacher->id }}">
+                                    <input type="d-none" name="attendances[{{ $teacher->id }}][teacher_id]" value="{{ $teacher->id }}">
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group" role="group">
@@ -89,3 +89,5 @@
 </script>
 @endpush
 @endsection
+
+

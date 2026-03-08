@@ -1,4 +1,4 @@
-@extends('layouts.bootstrap')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -49,7 +49,7 @@
 </div>
 
 <!-- Create Modal -->
-<div class="modal fade" id="createAllocationModal" tabindex="-1" aria-labelledby="createAllocationModalLabel" aria-hidden="true">
+<div class="modal fade" id="createAllocationModal" tabindex="-1" aria-labelledby="createAllocationModalLabel" aria-d-none="true">
     <div class="modal-dialog">
         <form action="{{ route('allocations.store') }}" method="POST">
             @csrf
@@ -105,3 +105,5 @@
     </div>
 </div>
 @endsection
+
+

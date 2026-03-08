@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="card">
@@ -38,9 +38,9 @@
         @if(count($students) > 0)
         <form action="{{ route('attendance.store') }}" method="POST">
             @csrf
-            <input type="hidden" name="school_class_id" value="{{ $selectedClass }}">
-            <input type="hidden" name="section_id" value="{{ $selectedSection }}">
-            <input type="hidden" name="date" value="{{ $date }}">
+            <input type="d-none" name="school_class_id" value="{{ $selectedClass }}">
+            <input type="d-none" name="section_id" value="{{ $selectedSection }}">
+            <input type="d-none" name="date" value="{{ $date }}">
 
             <div class="d-flex justify-content-between mb-3">
                 <h5>Students ({{ count($students) }})</h5>
@@ -67,7 +67,7 @@
                             <td>{{ $student->roll_number }}</td>
                             <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                             <td class="text-center">
-                                <input type="hidden" name="attendances[{{ $student->id }}][student_id]" value="{{ $student->id }}">
+                                <input type="d-none" name="attendances[{{ $student->id }}][student_id]" value="{{ $student->id }}">
                                 <div class="btn-group" role="group">
                                     <input type="radio" class="btn-check" name="attendances[{{ $student->id }}][status]" id="status_p_{{ $student->id }}" value="present" {{ $status == 'present' ? 'checked' : '' }} required>
                                     <label class="btn btn-outline-success" for="status_p_{{ $student->id }}">P</label>
@@ -91,7 +91,7 @@
                 </table>
             </div>
             
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+            <div class="d-row g-2 d-md-flex justify-content-md-end mt-3">
                 <button type="submit" class="btn btn-success btn-lg">Save Attendance</button>
             </div>
         </form>
@@ -111,3 +111,4 @@
 </script>
 @endpush
 @endsection
+

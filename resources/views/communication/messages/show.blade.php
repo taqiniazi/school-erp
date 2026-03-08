@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <div class="card-header bg-body py-3 d-flex justify-content-between align-items-center">
                         <h2 class="h5 mb-0 fw-bold text-dark">
                             {{ $message->subject }}
                         </h2>
@@ -48,3 +48,6 @@
         </div>
     </div>
 </x-app-layout>
+
+
+

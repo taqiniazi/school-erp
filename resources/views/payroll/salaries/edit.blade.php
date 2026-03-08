@@ -1,48 +1,50 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Edit Salary Structure') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
+    <div class="py-5">
+        <div class="container-fluid px-4">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
                     <form action="{{ route('payroll.salaries.update', $salary) }}" method="POST">
                         @csrf
                         @method('PUT')
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="row row-cols-1 row-cols-md-2 g-3">
                             <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Staff</label>
-                                <select name="teacher_id" class="shadow appearance-none border rounded w-full py-2 px-3" required>
+                                <label class="form-label small fw-bold mb-2">Staff</label>
+                                <select name="teacher_id" class="form-select" required>
                                     @foreach($teachers as $t)
                                         <option value="{{ $t->id }}" {{ $salary->teacher_id == $t->id ? 'selected' : '' }}>{{ $t->first_name }} {{ $t->last_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Basic Salary</label>
-                                <input type="number" step="0.01" name="basic_salary" value="{{ $salary->basic_salary }}" class="shadow appearance-none border rounded w-full py-2 px-3" required>
+                                <label class="form-label small fw-bold mb-2">Basic Salary</label>
+                                <input type="number" step="0.01" name="basic_salary" value="{{ $salary->basic_salary }}" class="form-control" required>
                             </div>
                             <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Effective From</label>
-                                <input type="date" name="effective_from" value="{{ $salary->effective_from }}" class="shadow appearance-none border rounded w-full py-2 px-3">
+                                <label class="form-label small fw-bold mb-2">Effective From</label>
+                                <input type="date" name="effective_from" value="{{ $salary->effective_from }}" class="form-control">
                             </div>
                             <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Effective To</label>
-                                <input type="date" name="effective_to" value="{{ $salary->effective_to }}" class="shadow appearance-none border rounded w-full py-2 px-3">
+                                <label class="form-label small fw-bold mb-2">Effective To</label>
+                                <input type="date" name="effective_to" value="{{ $salary->effective_to }}" class="form-control">
                             </div>
-                            <div class="mb-4 flex items-center">
-                                <input type="checkbox" name="is_active" id="is_active" {{ $salary->is_active ? 'checked' : '' }} class="mr-2">
-                                <label for="is_active" class="text-gray-700 text-sm font-bold">Active</label>
+                            <div class="mb-4 d-flex align-items-center">
+                                <div class="form-check">
+                                    <input type="checkbox" name="is_active" id="is_active" {{ $salary->is_active ? 'checked' : '' }} class="form-check-input me-2">
+                                    <label for="is_active" class="form-check-label small fw-bold">Active</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-center justify-between mt-4">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <div class="d-flex align-items-center justify-content-between mt-4">
+                            <button type="submit" class="btn btn-primary fw-bold px-4 rounded">
                                 Update
                             </button>
-                            <a href="{{ route('payroll.salaries.index') }}" class="text-blue-600 hover:text-blue-800">Cancel</a>
+                            <a href="{{ route('payroll.salaries.index') }}" class="btn btn-link text-decoration-none">Cancel</a>
                         </div>
                     </form>
                 </div>
@@ -50,4 +52,8 @@
         </div>
     </div>
 </x-app-layout>
+
+
+
+
 

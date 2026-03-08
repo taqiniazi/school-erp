@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
+﻿<nav class="navbar navbar-expand-lg navbar-light bg-body border-bottom shadow-sm sticky-top">
     <div class="container-fluid">
         <!-- Logo -->
         <a class="navbar-brand" href="{{ route('dashboard') }}">
@@ -169,3 +169,4 @@
         </div>
     </div>
 </nav>
+

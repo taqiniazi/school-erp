@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Teacher Attendance Report</title>
@@ -7,7 +7,7 @@
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #000; padding: 4px; text-align: center; }
         th { background-color: #f2f2f2; }
-        .text-left { text-align: left; }
+        .text-start { text-align: left; }
         .legend { margin-top: 10px; font-size: 9px; }
     </style>
 </head>
@@ -17,7 +17,7 @@
     <table>
         <thead>
             <tr>
-                <th class="text-left" style="width: 100px;">Teacher Name</th>
+                <th class="text-start" style="width: 100px;">Teacher Name</th>
                 @for($i = 1; $i <= $daysInMonth; $i++)
                     <th style="width: 15px;">{{ $i }}</th>
                 @endfor
@@ -35,7 +35,7 @@
                     $leaveCount = $teacherAttendances->where('status', 'leave')->count();
                 @endphp
                 <tr>
-                    <td class="text-left">{{ $teacher->name }}</td>
+                    <td class="text-start">{{ $teacher->name }}</td>
                     @for($i = 1; $i <= $daysInMonth; $i++)
                         @php
                             $date = sprintf('%04d-%02d-%02d', $year, $month, $i);
@@ -65,3 +65,4 @@
     </div>
 </body>
 </html>
+

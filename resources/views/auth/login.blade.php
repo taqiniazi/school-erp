@@ -1,4 +1,4 @@
-@extends('layouts.auth-modern')
+﻿@extends('layouts.auth-modern')
 
 @section('title', 'Login')
 
@@ -67,3 +67,5 @@
         </div>
     </form>
 @endsection
+
+

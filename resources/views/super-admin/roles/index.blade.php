@@ -1,10 +1,10 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div class="d-sm-d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-dark">Role Management</h1>
-        <a href="{{ route('super-admin.roles.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <a href="{{ route('super-admin.roles.create') }}" class="d-none d-sm-d-inline-block btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-plus fa-sm text-white-50"></i> Create Role
         </a>
     </div>
@@ -45,7 +45,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <div class="d-flex gap-2">
+                                    <div class="d-flex g-2">
                                         <a href="{{ route('super-admin.roles.edit', $role->id) }}" class="btn btn-sm btn-info text-white">Edit</a>
                                         @if(!in_array($role->name, ['Super Admin', 'School Admin', 'Teacher', 'Student', 'Parent']))
                                             <form action="{{ route('super-admin.roles.destroy', $role->id) }}" method="POST" data-confirm-message="Are you sure you want to delete this role?" data-confirm-style="danger">
@@ -72,3 +72,6 @@
     </div>
 </div>
 @endsection
+
+
+

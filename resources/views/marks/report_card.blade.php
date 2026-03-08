@@ -1,4 +1,4 @@
-@extends('layouts.bootstrap')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="card">
@@ -72,3 +72,5 @@
     </div>
 </div>
 @endsection
+
+

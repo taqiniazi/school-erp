@@ -1,8 +1,8 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div class="d-sm-d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-dark">Edit School Admin</h1>
         <a href="{{ route('super-admin.admin-users.index') }}" class="btn btn-sm btn-secondary shadow-sm">
             <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to List
@@ -79,7 +79,7 @@
                             </div>
                         </div>
 
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <div class="d-row g-2 d-md-flex justify-content-md-end mt-4">
                             <button type="submit" class="btn btn-primary px-4">
                                 <i class="fas fa-save fa-sm text-white-50 me-2"></i>Update School Admin
                             </button>
@@ -109,3 +109,5 @@
 </script>
 @endpush
 @endsection
+
+

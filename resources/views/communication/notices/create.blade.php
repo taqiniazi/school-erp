@@ -1,9 +1,9 @@
-<x-app-layout>
+﻿<x-app-layout>
     <div class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-white py-3">
+                    <div class="card-header bg-body py-3">
                         <h2 class="h5 mb-0 fw-bold text-dark">
                             {{ __('Post New Notice') }}
                         </h2>
@@ -77,3 +77,4 @@
         </div>
     </div>
 </x-app-layout>
+

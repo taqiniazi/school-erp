@@ -1,10 +1,10 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div class="d-sm-d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-dark">Admin Users</h1>
-        <a href="{{ route('super-admin.admin-users.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <a href="{{ route('super-admin.admin-users.create') }}" class="d-none d-sm-d-inline-block btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-plus fa-sm text-white-50"></i> Create New School Admin
         </a>
     </div>
@@ -52,7 +52,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <div class="d-flex gap-2">
+                                    <div class="d-flex g-2">
                                         <a href="{{ route('super-admin.admin-users.edit', $u->id) }}" class="btn btn-sm btn-info text-white" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
@@ -83,3 +83,6 @@
     </div>
 </div>
 @endsection
+
+
+

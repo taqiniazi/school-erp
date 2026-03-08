@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <div class="container-fluid py-4">
         <div class="card shadow">
             <div class="card-header py-3">
@@ -49,3 +49,5 @@
         </div>
     </div>
 </x-app-layout>
+
+

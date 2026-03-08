@@ -1,11 +1,11 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Complete Payment')
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Complete Your Subscription</h1>
+    <div class="d-sm-d-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-dark">Complete Your Subscription</h1>
     </div>
 
     <div class="row">
@@ -75,7 +75,7 @@
                                 <div class="col-md-6 mb-3">
                                     <form action="{{ route('billing.payment.stripe', $plan->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                        <button type="submit" class="btn btn-primary btn-lg btn-d-block">
                                             <i class="fab fa-stripe fa-2x align-middle me-2"></i> Pay with Stripe
                                         </button>
                                     </form>
@@ -83,7 +83,7 @@
                                 <div class="col-md-6 mb-3">
                                     <form action="{{ route('billing.payment.paypal', $plan->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-info btn-lg btn-block text-white">
+                                        <button type="submit" class="btn btn-info btn-lg btn-d-block text-white">
                                             <i class="fab fa-paypal fa-2x align-middle me-2"></i> Pay with PayPal
                                         </button>
                                     </form>
@@ -134,7 +134,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="d-grid gap-2">
+                                <div class="d-row g-2">
                                     <button type="submit" class="btn btn-success btn-lg">Submit Payment Proof</button>
                                 </div>
                             </form>
@@ -167,3 +167,6 @@
 </script>
 @endpush
 @endsection
+
+
+

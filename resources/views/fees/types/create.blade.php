@@ -17,7 +17,7 @@
                                 <label for="description" class="form-label">Description:</label>
                                 <textarea name="description" id="description" class="form-control" rows="3"></textarea>
                             </div>
-                            <div class="d-flex justify-content-end gap-2">
+                            <div class="d-flex justify-content-end g-2">
                                 <a href="{{ route('fee-types.index') }}" class="btn btn-secondary">Cancel</a>
                                 <button type="submit" class="btn btn-primary">Create Fee Type</button>
                             </div>

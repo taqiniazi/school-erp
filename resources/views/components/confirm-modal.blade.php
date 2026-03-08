@@ -1,5 +1,5 @@
-<!-- Confirmation Modal -->
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+﻿<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-d-none="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header border-0 pb-0">
@@ -8,10 +8,10 @@
             </div>
             <div class="modal-body py-4">
                 <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0 text-warning me-3">
+                    <div class="d-flex-shrink-0 text-warning me-3">
                         <i class="fas fa-exclamation-triangle fa-2x"></i>
                     </div>
-                    <div class="flex-grow-1">
+                    <div class="d-flex-grow-1">
                         <p class="mb-0" id="confirmationMessage">Are you sure you want to proceed?</p>
                     </div>
                 </div>
@@ -23,3 +23,6 @@
         </div>
     </div>
 </div>
+
+
+

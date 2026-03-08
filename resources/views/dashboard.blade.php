@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         {{ __('Welcome, ') . Auth::user()->name }}
     </x-slot>
@@ -14,7 +14,7 @@
                             <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">
                                 <div class="card h-100 border-primary bg-light shadow-sm">
                                     <div class="card-body d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-3">
+                                        <div class="d-flex-shrink-0 me-3">
                                             <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-circle">
                                                 <i class="fas fa-tachometer-alt fa-lg"></i>
                                             </div>
@@ -34,7 +34,7 @@
                             <a href="{{ route('teacher.dashboard') }}" class="text-decoration-none">
                                 <div class="card h-100 border-success bg-light shadow-sm">
                                     <div class="card-body d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-3">
+                                        <div class="d-flex-shrink-0 me-3">
                                             <div class="bg-success bg-opacity-10 text-success p-3 rounded-circle">
                                                 <i class="fas fa-chalkboard-teacher fa-lg"></i>
                                             </div>
@@ -54,7 +54,7 @@
                             <a href="{{ route('student.dashboard') }}" class="text-decoration-none">
                                 <div class="card h-100 border-primary bg-light shadow-sm">
                                     <div class="card-body d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-3">
+                                        <div class="d-flex-shrink-0 me-3">
                                             <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-circle">
                                                 <i class="fas fa-user-graduate fa-lg"></i>
                                             </div>
@@ -74,7 +74,7 @@
                             <a href="{{ route('parent.dashboard') }}" class="text-decoration-none">
                                 <div class="card h-100 border-info bg-light shadow-sm">
                                     <div class="card-body d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-3">
+                                        <div class="d-flex-shrink-0 me-3">
                                             <div class="bg-info bg-opacity-10 text-info p-3 rounded-circle">
                                                 <i class="fas fa-user-friends fa-lg"></i>
                                             </div>
@@ -93,7 +93,7 @@
                             <a href="{{ route('profile.edit') }}" class="text-decoration-none">
                                 <div class="card h-100 border-secondary bg-light shadow-sm">
                                     <div class="card-body d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-3">
+                                        <div class="d-flex-shrink-0 me-3">
                                             <div class="bg-secondary bg-opacity-10 text-secondary p-3 rounded-circle">
                                                 <i class="fas fa-user-cog fa-lg"></i>
                                             </div>
@@ -112,3 +112,6 @@
         </div>
     </div>
 </x-app-layout>
+
+
+

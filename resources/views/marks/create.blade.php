@@ -1,4 +1,4 @@
-@extends('layouts.bootstrap')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="card">
@@ -15,7 +15,7 @@
     <div class="card-body">
         <form action="{{ route('marks.store') }}" method="POST">
             @csrf
-            <input type="hidden" name="exam_schedule_id" value="{{ $schedule->id }}">
+            <input type="d-none" name="exam_schedule_id" value="{{ $schedule->id }}">
             
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
@@ -79,3 +79,5 @@
     });
 </script>
 @endsection
+
+

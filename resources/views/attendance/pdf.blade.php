@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Attendance Report</title>
@@ -7,7 +7,7 @@
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #000; padding: 4px; text-align: center; }
         th { background-color: #f2f2f2; }
-        .text-left { text-align: left; }
+        .text-start { text-align: left; }
         .header { margin-bottom: 20px; }
         .legend { margin-top: 10px; font-size: 9px; }
     </style>
@@ -24,8 +24,8 @@
     <table>
         <thead>
             <tr>
-                <th class="text-left" style="width: 50px;">Roll No</th>
-                <th class="text-left" style="width: 100px;">Student Name</th>
+                <th class="text-start" style="width: 50px;">Roll No</th>
+                <th class="text-start" style="width: 100px;">Student Name</th>
                 @for($i = 1; $i <= $daysInMonth; $i++)
                     <th style="width: 15px;">{{ $i }}</th>
                 @endfor
@@ -43,8 +43,8 @@
                     $lateCount = $studentAttendances->where('status', 'late')->count();
                 @endphp
                 <tr>
-                    <td class="text-left">{{ $student->roll_number }}</td>
-                    <td class="text-left">{{ $student->first_name }} {{ $student->last_name }}</td>
+                    <td class="text-start">{{ $student->roll_number }}</td>
+                    <td class="text-start">{{ $student->first_name }} {{ $student->last_name }}</td>
                     @for($i = 1; $i <= $daysInMonth; $i++)
                         @php
                             $date = sprintf('%04d-%02d-%02d', $year, $month, $i);
@@ -73,3 +73,4 @@
     </div>
 </body>
 </html>
+

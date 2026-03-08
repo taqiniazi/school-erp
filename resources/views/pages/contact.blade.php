@@ -62,7 +62,7 @@
 
             <!-- Contact Info -->
             <div class="col-lg-5" data-aos="fade-left">
-                <div class="h-100 d-flex flex-column gap-4">
+                <div class="h-100 d-flex flex-column gap-3">
                     <!-- Info Card 1 -->
                     <div class="card border-0 shadow-sm p-4">
                         <div class="card-body d-flex align-items-start">
@@ -112,3 +112,7 @@
     </div>
 </section>
 @endsection
+
+
+
+

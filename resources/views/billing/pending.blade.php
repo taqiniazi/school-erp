@@ -10,9 +10,9 @@
                         <i class="fas fa-clock fa-4x text-warning"></i>
                     </div>
                     
-                    <h2 class="h3 mb-2 text-gray-800 font-weight-bold">Payment Verification Pending</h2>
+                    <h2 class="h3 mb-2 text-dark font-weight-bold">Payment Verification Pending</h2>
                     
-                    <p class="text-gray-600 mb-4 lead">
+                    <p class="text-secondary mb-4 lead">
                         Thank you for your payment! We have received your subscription request and payment proof.
                     </p>
                     

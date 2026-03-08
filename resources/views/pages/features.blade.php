@@ -26,7 +26,7 @@
     </div>
 </section>
 
-<!-- Core Features Grid -->
+<!-- Core Features row -->
 <section class="py-5 bg-light">
     <div class="container py-5">
         <div class="text-center mb-5" data-aos="fade-up">
@@ -203,7 +203,7 @@
 @push('styles')
 <style>
     .hover-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        : transform 0.3s ease, box-shadow 0.3s ease;
     }
     .hover-card:hover {
         transform: translateY(-5px);
@@ -217,3 +217,7 @@
     }
 </style>
 @endpush
+
+
+
+

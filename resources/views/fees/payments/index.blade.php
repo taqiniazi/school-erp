@@ -17,7 +17,7 @@
                             <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="form-control">
                         </div>
                         <!-- Could add student search here, but for now simple date range is good -->
-                        <div class="col-md-3 d-flex gap-2">
+                        <div class="col-md-3 d-flex g-2">
                             <button type="submit" class="btn btn-primary">Filter</button>
                             <a href="{{ route('fee-payments.index') }}" class="btn btn-secondary">Reset</a>
                         </div>

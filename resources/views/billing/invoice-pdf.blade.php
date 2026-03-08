@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -33,7 +33,7 @@
         .heading td { background: #eee; border-bottom: 1px solid #ddd; font-weight: bold; }
         .item td { border-bottom: 1px solid #eee; }
         .total td:nth-child(2) { border-top: 2px solid #eee; font-weight: bold; }
-        .status-paid { color: green; font-weight: bold; border: 2px solid green; padding: 5px 10px; display: inline-block; transform: rotate(-15deg); }
+        .status-paid { color: green; font-weight: bold; border: 2px solid green; padding: 5px 10px; display: d-inline-block; transform: rotate(-15deg); }
     </style>
 </head>
 <body>
@@ -112,3 +112,5 @@
     </div>
 </body>
 </html>
+
+

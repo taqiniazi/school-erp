@@ -16,7 +16,7 @@
         </div>
     @endif
 
-    <div class="d-flex flex-column gap-3">
+    <div class="d-flex flex-column gap-2">
         <form method="POST" action="{{ route('verification.send') }}">
             @csrf
             <button type="submit" class="btn btn-primary-custom w-100">
@@ -32,3 +32,5 @@
         </form>
     </div>
 @endsection
+
+

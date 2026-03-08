@@ -24,7 +24,7 @@
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top {{ request()->routeIs('home') ? '' : 'bg-white shadow-sm' }}">
+    <nav class="navbar navbar-expand-lg fixed-top {{ request()->routeIs('home') ? '' : 'bg-body shadow-sm' }}">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
                 <i class="fas fa-graduation-cap me-2"></i>School ERP
@@ -128,7 +128,7 @@
                 document.querySelector('.navbar').classList.add('shadow-sm');
                 document.querySelector('.navbar').style.padding = '0.5rem 0';
             } else {
-                if (!document.querySelector('.navbar').classList.contains('bg-white')) {
+                if (!document.querySelector('.navbar').classList.contains('bg-body')) {
                     document.querySelector('.navbar').classList.remove('shadow-sm');
                     document.querySelector('.navbar').style.padding = '1rem 0';
                 }
@@ -138,3 +138,4 @@
     @stack('scripts')
 </body>
 </html>
+

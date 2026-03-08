@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="card">
@@ -19,7 +19,7 @@
                     </select>
                 </div>
             @elseif(isset($children) && $children->count() == 1)
-                 <input type="hidden" name="student_id" value="{{ $children->first()->id }}">
+                 <input type="d-none" name="student_id" value="{{ $children->first()->id }}">
             @endif
 
             <div class="col-md-3">
@@ -107,3 +107,5 @@
     </div>
 </div>
 @endsection
+
+

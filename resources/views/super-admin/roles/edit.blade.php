@@ -1,8 +1,8 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div class="d-sm-d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-dark">Edit Role</h1>
         <a href="{{ route('super-admin.roles.index') }}" class="btn btn-sm btn-secondary shadow-sm">
             <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to Roles
@@ -131,3 +131,5 @@
 </script>
 @endpush
 @endsection
+
+

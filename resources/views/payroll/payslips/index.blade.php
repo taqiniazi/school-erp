@@ -1,19 +1,19 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Payslips') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="flex justify-between mb-4">
-                        <form method="GET" class="flex items-end space-x-2">
+    <div class="py-5">
+        <div class="container-fluid px-4">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between mb-4">
+                        <form method="GET" class="d-flex align-items-end gap-2">
                             <div>
-                                <label class="block text-sm text-gray-700">Staff</label>
-                                <select name="teacher_id" class="border rounded px-2 py-1">
+                                <label class="d-block small text-dark">Staff</label>
+                                <select name="teacher_id" class="form-select form-select-sm">
                                     <option value="">All</option>
                                     @foreach($teachers as $t)
                                         <option value="{{ $t->id }}" {{ request('teacher_id') == $t->id ? 'selected' : '' }}>{{ $t->first_name }} {{ $t->last_name }}</option>
@@ -21,41 +21,41 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm text-gray-700">Month</label>
-                                <input type="month" name="month" value="{{ request('month') }}" class="border rounded px-2 py-1">
+                                <label class="d-block small text-dark">Month</label>
+                                <input type="month" name="month" value="{{ request('month') }}" class="form-control form-control-sm">
                             </div>
-                            <button class="px-3 py-2 bg-gray-200 rounded">Filter</button>
+                            <button class="btn btn-sm btn-light border">Filter</button>
                         </form>
-                        <a href="{{ route('payroll.payslips.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Generate</a>
+                        <a href="{{ route('payroll.payslips.create') }}" class="btn btn-primary">Generate</a>
                     </div>
 
                     @if(session('success'))
-                        <div class="mb-4 px-4 py-2 bg-green-100 border border-green-400 text-green-700 rounded">
+                        <div class="alert alert-success">
                             {{ session('success') }}
                         </div>
                     @endif
 
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                    <div class="table-responsive">
+                        <table class="table table-hover w-100 mb-0">
+                            <thead class="table-light">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Payslip #</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Staff</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Month</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Net Salary</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Payslip #</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Staff</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Month</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Net Salary</th>
+                                    <th class="p-3 text-end small fw-medium text-secondary text-uppercase">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody>
                                 @foreach($payslips as $p)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $p->payslip_no }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $p->teacher->first_name }} {{ $p->teacher->last_name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ date('Y-m', strtotime($p->pay_month)) }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ number_format($p->net_salary, 2) }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right">
-                                            <a href="{{ route('payroll.payslips.show', $p) }}" class="text-blue-600 hover:text-blue-800 mr-3">View</a>
-                                            <a href="{{ route('payroll.payslips.print', $p) }}" class="text-green-600 hover:text-green-800">PDF</a>
+                                        <td class="p-3 align-middle text-nowrap">{{ $p->payslip_no }}</td>
+                                        <td class="p-3 align-middle text-nowrap">{{ $p->teacher->first_name }} {{ $p->teacher->last_name }}</td>
+                                        <td class="p-3 align-middle text-nowrap">{{ date('Y-m', strtotime($p->pay_month)) }}</td>
+                                        <td class="p-3 align-middle text-nowrap">{{ number_format($p->net_salary, 2) }}</td>
+                                        <td class="p-3 align-middle text-nowrap text-end">
+                                            <a href="{{ route('payroll.payslips.show', $p) }}" class="btn btn-sm btn-outline-info me-2">View</a>
+                                            <a href="{{ route('payroll.payslips.print', $p) }}" class="btn btn-sm btn-outline-success">PDF</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -70,4 +70,8 @@
         </div>
     </div>
 </x-app-layout>
+
+
+
+
 

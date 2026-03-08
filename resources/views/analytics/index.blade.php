@@ -1,44 +1,52 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="fw-semibold h4 text-dark  lh-sm">
             {{ __('Analytics Dashboard') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="py-5">
+        <div class="container-fluid px-4">
+            <div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
                 <!-- Student Growth Chart -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Student Growth</h3>
-                    <div class="relative h-64">
-                        <canvas id="studentGrowthChart"></canvas>
+                <div class="col">
+                    <div class="card shadow-sm border-0 rounded-3 p-4 h-100">
+                        <h3 class="h5 fw-medium text-dark mb-4">Student Growth</h3>
+                        <div class="position-relative" style="height: 256px;">
+                            <canvas id="studentGrowthChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Fee Collection Chart -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Fee Collection</h3>
-                    <div class="relative h-64">
-                        <canvas id="feeCollectionChart"></canvas>
+                <div class="col">
+                    <div class="card shadow-sm border-0 rounded-3 p-4 h-100">
+                        <h3 class="h5 fw-medium text-dark mb-4">Fee Collection</h3>
+                        <div class="position-relative" style="height: 256px;">
+                            <canvas id="feeCollectionChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
                 <!-- Attendance Rate Chart -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Attendance Rate (Last 30 Days)</h3>
-                    <div class="relative h-64">
-                        <canvas id="attendanceRateChart"></canvas>
+                <div class="col">
+                    <div class="card shadow-sm border-0 rounded-3 p-4 h-100">
+                        <h3 class="h5 fw-medium text-dark mb-4">Attendance Rate (Last 30 Days)</h3>
+                        <div class="position-relative" style="height: 256px;">
+                            <canvas id="attendanceRateChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Teacher Workload Chart -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Teacher Workload (Top 10)</h3>
-                    <div class="relative h-64">
-                        <canvas id="teacherWorkloadChart"></canvas>
+                <div class="col">
+                    <div class="card shadow-sm border-0 rounded-3 p-4 h-100">
+                        <h3 class="h5 fw-medium text-dark mb-4">Teacher Workload (Top 10)</h3>
+                        <div class="position-relative" style="height: 256px;">
+                            <canvas id="teacherWorkloadChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -63,11 +71,11 @@
                 scales: {
                     x: {
                         ticks: { color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#4b5563' },
-                        grid: { color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb' }
+                        row: { color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb' }
                     },
                     y: {
                         ticks: { color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#4b5563' },
-                        grid: { color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb' }
+                        row: { color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb' }
                     }
                 }
             };
@@ -174,3 +182,5 @@
     </script>
     @endpush
 </x-app-layout>
+
+

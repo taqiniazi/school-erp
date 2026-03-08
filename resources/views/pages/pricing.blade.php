@@ -40,7 +40,7 @@
             <!-- Standard Plan -->
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
                 <div class="card h-100 border-0 shadow-sm pricing-card">
-                    <div class="card-header bg-white border-0 pt-4 pb-0 text-center">
+                    <div class="card-header bg-body border-0 pt-4 pb-0 text-center">
                         <h4 class="fw-bold text-muted">Standard</h4>
                     </div>
                     <div class="card-body p-4 text-center d-flex flex-column">
@@ -55,7 +55,7 @@
                             <li class="mb-3"><i class="fas fa-check text-success me-2"></i> Email Support</li>
                         </ul>
                         <div class="mt-auto">
-                            <a href="{{ route('register') }}" class="btn btn-outline-primary-custom w-100 py-2 fw-bold">Get Started</a>
+                            <a href="{{ route('register') }}" class="btn btn-outline-custom w-100 py-2 fw-bold">Get Started</a>
                         </div>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                     <div class="position-absolute start-50 translate-middle" style="top:25px">
                         <span class="badge bg-primary-custom px-3 py-2 rounded-pill shadow-sm">Most Popular</span>
                     </div>
-                    <div class="card-header bg-white border-0 pt-5 pb-0 text-center">
+                    <div class="card-header bg-body border-0 pt-5 pb-0 text-center">
                         <h4 class="fw-bold text-primary-custom">Premium</h4>
                     </div>
                     <div class="card-body p-4 text-center d-flex flex-column">
@@ -92,7 +92,7 @@
             <!-- Enterprise Plan -->
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
                 <div class="card h-100 border-0 shadow-sm pricing-card">
-                    <div class="card-header bg-white border-0 pt-4 pb-0 text-center">
+                    <div class="card-header bg-body border-0 pt-4 pb-0 text-center">
                         <h4 class="fw-bold text-muted">Enterprise</h4>
                     </div>
                     <div class="card-body p-4 text-center d-flex flex-column">
@@ -263,3 +263,7 @@
     });
 </script>
 @endpush
+
+
+
+

@@ -1,4 +1,4 @@
-@extends('layouts.marketing')
+﻿@extends('layouts.marketing')
 
 @section('title', 'Blog - School ERP')
 
@@ -136,3 +136,7 @@
     </div>
 </section>
 @endsection
+
+
+
+

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Edit Payment Method')
 
@@ -109,8 +109,8 @@
                 instructionsGroup.style.display = 'none';
                 accountDetailsGroup.style.display = 'none';
             } else {
-                instructionsGroup.style.display = 'block';
-                accountDetailsGroup.style.display = 'block';
+                instructionsGroup.style.display = 'd-block';
+                accountDetailsGroup.style.display = 'd-block';
             }
         }
 
@@ -145,7 +145,7 @@
             const keys = document.querySelectorAll('input[name="account_details_keys[]"]');
             const values = document.querySelectorAll('input[name="account_details_values[]"]');
             
-            // Remove existing hidden inputs if any
+            // Remove existing d-none inputs if any
             document.querySelectorAll('input[name^="account_details["]').forEach(el => el.remove());
 
             keys.forEach((keyInput, index) => {
@@ -154,7 +154,7 @@
                 
                 if (key && value) {
                     const hiddenInput = document.createElement('input');
-                    hiddenInput.type = 'hidden';
+                    hiddenInput.type = 'd-none';
                     hiddenInput.name = `account_details[${key}]`;
                     hiddenInput.value = value;
                     this.appendChild(hiddenInput);
@@ -165,3 +165,6 @@
 </script>
 @endpush
 @endsection
+
+
+

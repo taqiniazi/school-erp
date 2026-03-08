@@ -30,7 +30,7 @@
             </p>
 
             <div class="mt-3">
-                <x-input-label for="password" value="{{ __('Password') }}" class="visually-hidden" />
+                <x-input-label for="password" value="{{ __('Password') }}" class="visually-d-none" />
 
                 <x-text-input
                     id="password"
@@ -43,7 +43,7 @@
                 <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-1" />
             </div>
 
-            <div class="mt-4 d-flex justify-content-end gap-2">
+            <div class="mt-4 d-flex justify-content-end g-2">
                 <x-secondary-button data-bs-dismiss="modal">
                     {{ __('Cancel') }}
                 </x-secondary-button>

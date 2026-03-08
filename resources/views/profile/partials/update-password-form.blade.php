@@ -1,4 +1,4 @@
-<section>
+﻿<section>
     <header>
         <h2 class="h5 text-dark">
             {{ __('Update Password') }}
@@ -31,7 +31,7 @@
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-1" />
         </div>
 
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center g-2">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'password-updated')
@@ -46,3 +46,5 @@
         </div>
     </form>
 </section>
+
+

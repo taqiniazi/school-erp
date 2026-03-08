@@ -1,39 +1,41 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('New Financial Year') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
+    <div class="py-5">
+        <div class="container-fluid px-4">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
                     <form action="{{ route('financial-years.store') }}" method="POST">
                         @csrf
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="row row-cols-1 row-cols-md-2 g-3">
                             <div class="mb-4">
-                                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
-                                <input type="text" name="name" id="name" class="shadow appearance-none border rounded w-full py-2 px-3" required>
+                                <label for="name" class="form-label small fw-bold mb-2">Name</label>
+                                <input type="text" name="name" id="name" class="form-control" required>
                             </div>
                             <div class="mb-4">
-                                <label for="start_date" class="block text-gray-700 text-sm font-bold mb-2">Start Date</label>
-                                <input type="date" name="start_date" id="start_date" class="shadow appearance-none border rounded w-full py-2 px-3" required>
+                                <label for="start_date" class="form-label small fw-bold mb-2">Start Date</label>
+                                <input type="date" name="start_date" id="start_date" class="form-control" required>
                             </div>
                             <div class="mb-4">
-                                <label for="end_date" class="block text-gray-700 text-sm font-bold mb-2">End Date</label>
-                                <input type="date" name="end_date" id="end_date" class="shadow appearance-none border rounded w-full py-2 px-3" required>
+                                <label for="end_date" class="form-label small fw-bold mb-2">End Date</label>
+                                <input type="date" name="end_date" id="end_date" class="form-control" required>
                             </div>
-                            <div class="mb-4 flex items-center">
-                                <input type="checkbox" name="is_current" id="is_current" class="mr-2">
-                                <label for="is_current" class="text-gray-700 text-sm font-bold">Set as current</label>
+                            <div class="mb-4 d-flex align-items-center">
+                                <div class="form-check">
+                                    <input type="checkbox" name="is_current" id="is_current" class="form-check-input me-2">
+                                    <label for="is_current" class="form-check-label small fw-bold">Set as current</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-center justify-between mt-4">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <div class="d-flex align-items-center justify-content-between mt-4">
+                            <button type="submit" class="btn btn-primary fw-bold px-4 rounded">
                                 Save
                             </button>
-                            <a href="{{ route('financial-years.index') }}" class="text-blue-600 hover:text-blue-800">Cancel</a>
+                            <a href="{{ route('financial-years.index') }}" class="btn btn-link text-decoration-none">Cancel</a>
                         </div>
                     </form>
                 </div>
@@ -41,4 +43,8 @@
         </div>
     </div>
 </x-app-layout>
+
+
+
+
 

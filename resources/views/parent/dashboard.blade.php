@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         {{ __('Parent Dashboard') }}
     </x-slot>
@@ -28,11 +28,11 @@
 
     <!-- Quick Actions -->
     <div class="card mb-4">
-        <div class="card-header bg-white border-bottom">
+        <div class="card-header bg-body border-bottom">
             <h5 class="mb-0 card-title">Quick Actions</h5>
         </div>
         <div class="card-body">
-            <div class="d-flex flex-wrap gap-2">
+            <div class="d-flex flex-wrap g-2">
                 <a href="{{ route('student.invoices') }}" class="btn btn-primary">
                     Pay Fees
                 </a>
@@ -47,7 +47,7 @@
         <!-- My Children List -->
         <div class="col-lg-6">
             <div class="card h-100">
-                <div class="card-header bg-white border-bottom">
+                <div class="card-header bg-body border-bottom">
                     <h5 class="mb-0 card-title">My Children</h5>
                 </div>
                 <div class="card-body">
@@ -78,7 +78,7 @@
         <!-- Recent Notices -->
         <div class="col-lg-6">
             <div class="card h-100">
-                <div class="card-header bg-white border-bottom">
+                <div class="card-header bg-body border-bottom">
                     <h5 class="mb-0 card-title">Recent Notices</h5>
                 </div>
                 <div class="card-body">
@@ -104,3 +104,6 @@
         </div>
     </div>
 </x-app-layout>
+
+
+

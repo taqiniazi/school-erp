@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <div class="container-fluid py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="h3 mb-0 text-dark">Notices Board</h2>
@@ -71,3 +71,4 @@
         </div>
     </div>
 </x-app-layout>
+

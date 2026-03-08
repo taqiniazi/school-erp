@@ -1,8 +1,8 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Teachers</h1>
+    <h1 class="h3 mb-0 text-dark">Teachers</h1>
     <a href="{{ route('teachers.create') }}" class="btn btn-primary">Add Teacher</a>
 </div>
 
@@ -68,3 +68,5 @@
     </div>
 </div>
 @endsection
+
+

@@ -102,7 +102,7 @@
                         </div>
                         <h5 class="fw-bold mb-1">Alex Morgan</h5>
                         <p class="text-muted small mb-3">CEO & Founder</p>
-                        <div class="d-flex justify-content-center gap-3">
+                        <div class="d-flex justify-content-center gap-2">
                             <a href="#" class="text-muted hover-primary"><i class="fab fa-linkedin fa-lg"></i></a>
                             <a href="#" class="text-muted hover-primary"><i class="fab fa-twitter fa-lg"></i></a>
                         </div>
@@ -119,7 +119,7 @@
                         </div>
                         <h5 class="fw-bold mb-1">Sarah Chen</h5>
                         <p class="text-muted small mb-3">CTO</p>
-                        <div class="d-flex justify-content-center gap-3">
+                        <div class="d-flex justify-content-center gap-2">
                             <a href="#" class="text-muted hover-primary"><i class="fab fa-linkedin fa-lg"></i></a>
                             <a href="#" class="text-muted hover-primary"><i class="fab fa-github fa-lg"></i></a>
                         </div>
@@ -136,7 +136,7 @@
                         </div>
                         <h5 class="fw-bold mb-1">David Kim</h5>
                         <p class="text-muted small mb-3">Head of Product</p>
-                        <div class="d-flex justify-content-center gap-3">
+                        <div class="d-flex justify-content-center gap-2">
                             <a href="#" class="text-muted hover-primary"><i class="fab fa-linkedin fa-lg"></i></a>
                             <a href="#" class="text-muted hover-primary"><i class="fab fa-twitter fa-lg"></i></a>
                         </div>
@@ -153,7 +153,7 @@
                         </div>
                         <h5 class="fw-bold mb-1">Emily Davis</h5>
                         <p class="text-muted small mb-3">Customer Success</p>
-                        <div class="d-flex justify-content-center gap-3">
+                        <div class="d-flex justify-content-center gap-2">
                             <a href="#" class="text-muted hover-primary"><i class="fab fa-linkedin fa-lg"></i></a>
                             <a href="#" class="text-muted hover-primary"><i class="fas fa-envelope fa-lg"></i></a>
                         </div>
@@ -164,3 +164,7 @@
     </div>
 </section>
 @endsection
+
+
+
+

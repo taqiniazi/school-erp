@@ -1,8 +1,8 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div class="d-sm-d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-dark">Create New Plan</h1>
         <a href="{{ route('super-admin.plans.index') }}" class="btn btn-secondary shadow-sm">
             <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to List
@@ -110,7 +110,7 @@
                             <label class="form-check-label" for="is_active">Active (Visible for subscription)</label>
                         </div>
 
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <div class="d-row g-2 d-md-flex justify-content-md-end">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save me-1"></i> Create Plan
                             </button>
@@ -122,3 +122,5 @@
     </div>
 </div>
 @endsection
+
+

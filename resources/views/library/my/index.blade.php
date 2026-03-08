@@ -1,7 +1,7 @@
-<x-app-layout>
+﻿<x-app-layout>
     <div class="container-fluid py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="h3 mb-0 text-gray-800">My Library</h2>
+            <h2 class="h3 mb-0 text-dark">My Library</h2>
         </div>
 
         <div class="card shadow mb-4">
@@ -49,4 +49,6 @@
         </div>
     </div>
 </x-app-layout>
+
+
 
