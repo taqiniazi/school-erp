@@ -132,11 +132,12 @@ body {
 }
 
 #sidebar ul ul a {
-    padding-left: 3.5rem !important;
+    padding-left: 3rem !important;
     font-size: 0.9rem;
     opacity: 0.85;
     background: transparent !important;
     box-shadow: none !important;
+    padding: 0.3rem;
 }
 
 #sidebar ul ul a:hover {
@@ -163,11 +164,11 @@ body {
     right: 1rem;
     transition: transform 0.3s;
     font-size: 0.8rem;
+    transform: rotate(0);
     opacity: 0.7;
-    transform: rotate(180deg);
 }
 #sidebar a[data-bs-toggle="collapse"].collapsed::after {
-    transform: rotate(0);
+    transform: rotate(180deg);
 }
 #sidebar .dropdown-toggle::after {
     border: none !important;
