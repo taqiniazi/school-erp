@@ -3,114 +3,133 @@
 @section('title', 'Contact Us - School ERP')
 
 @section('content')
-<style>
-    .hero-section {
-            background: linear-gradient(135deg, var(--dark-color) 0%, var(--primary-color) 100%);
-    }
-</style>
+
 <!-- Hero Section -->
-<section class="hero-section d-flex align-items-center bg-primary-custom text-white position-relative overflow-hidden" style="padding-top: 120px; padding-bottom: 80px;">
+<section class="hero-section position-relative overflow-hidden" style="padding-top: 160px; padding-bottom: 100px; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+    <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden">
+        <div class="position-absolute top-0 end-0 bg-primary opacity-20 rounded-circle blur-3xl" style="width: 600px; height: 600px; transform: translate(30%, -30%); filter: blur(100px);"></div>
+        <div class="position-absolute bottom-0 start-0 bg-secondary opacity-20 rounded-circle blur-3xl" style="width: 500px; height: 500px; transform: translate(-30%, 30%); filter: blur(80px);"></div>
+    </div>
+
     <div class="container position-relative z-1">
-        <div class="row align-items-center">
-            <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-                <h1 class="display-4 fw-bold mb-4">We'd Love to Hear From You</h1>
-                <p class="lead mb-4 opacity-90">Have questions about our features, pricing, or need a custom solution? Reach out to us.</p>
+        <div class="row align-items-center justify-content-center text-center">
+            <div class="col-lg-8" data-aos="fade-up">
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 rounded-pill px-3 py-2 mb-4">
+                    <i class="fas fa-envelope me-2"></i> Get in Touch
+                </span>
+                <h1 class="display-3 fw-bold text-white mb-4">Let's Start a Conversation</h1>
+                <p class="lead text-light opacity-75 mb-0 fs-4">Have questions about our features, pricing, or need a custom solution? We're here to help you transform your school management.</p>
             </div>
         </div>
     </div>
-    <!-- Background Abstract Shapes -->
-    <div class="position-absolute top-0 end-0 p-5 opacity-10">
-        <i class="fas fa-paper-plane fa-10x"></i>
-    </div>
 </section>
 
-<!-- Contact Form & Info -->
-<section class="py-5 bg-light">
-    <div class="container py-5">
-        <div class="row g-5">
+<!-- Contact Section -->
+<section class="py-6 bg-light position-relative">
+    <div class="container position-relative" style="margin-top: -80px;">
+        <div class="row g-4">
+            <!-- Contact Info Cards -->
+            <div class="col-lg-4">
+                <div class="row g-4">
+                    <!-- Visit Us -->
+                    <div class="col-12" data-aos="fade-up" data-aos-delay="100">
+                        <div class="bg-white rounded-4 shadow-sm p-4 h-100 hover-lift transition-all border border-light">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-3 text-primary me-3">
+                                    <i class="fas fa-map-marker-alt fa-lg"></i>
+                                </div>
+                                <h5 class="fw-bold mb-0">Visit Us</h5>
+                            </div>
+                            <p class="text-muted mb-0 ps-5 ms-2">123 Education Lane, Tech Park<br>Silicon Valley, CA 94025</p>
+                        </div>
+                    </div>
+
+                    <!-- Email Us -->
+                    <div class="col-12" data-aos="fade-up" data-aos-delay="200">
+                        <div class="bg-white rounded-4 shadow-sm p-4 h-100 hover-lift transition-all border border-light">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-success bg-opacity-10 p-3 text-success me-3">
+                                    <i class="fas fa-envelope fa-lg"></i>
+                                </div>
+                                <h5 class="fw-bold mb-0">Email Us</h5>
+                            </div>
+                            <p class="text-muted mb-0 ps-5 ms-2">
+                                <a href="mailto:support@schoolerp.com" class="text-decoration-none text-muted hover-primary">support@schoolerp.com</a><br>
+                                <a href="mailto:sales@schoolerp.com" class="text-decoration-none text-muted hover-primary">sales@schoolerp.com</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Call Us -->
+                    <div class="col-12" data-aos="fade-up" data-aos-delay="300">
+                        <div class="bg-white rounded-4 shadow-sm p-4 h-100 hover-lift transition-all border border-light">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-info bg-opacity-10 p-3 text-info me-3">
+                                    <i class="fas fa-phone-alt fa-lg"></i>
+                                </div>
+                                <h5 class="fw-bold mb-0">Call Us</h5>
+                            </div>
+                            <p class="text-muted mb-0 ps-5 ms-2">
+                                <a href="tel:+15551234567" class="text-decoration-none text-muted hover-primary">+1 (555) 123-4567</a><br>
+                                <span class="small text-muted">Mon-Fri, 9am-6pm EST</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Contact Form -->
-            <div class="col-lg-7" data-aos="fade-right">
-                <div class="card border-0 shadow-sm p-4 h-100">
-                    <div class="card-body">
-                        <h3 class="fw-bold mb-4">Send us a message</h3>
-                        <form>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="name" class="form-label fw-bold">Your Name</label>
-                                    <input type="text" class="form-control bg-light border-0 py-3" id="name" placeholder="John Doe" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label fw-bold">Email Address</label>
-                                    <input type="email" class="form-control bg-light border-0 py-3" id="email" placeholder="john@example.com" required>
-                                </div>
-                                <div class="col-12">
-                                    <label for="subject" class="form-label fw-bold">Subject</label>
-                                    <input type="text" class="form-control bg-light border-0 py-3" id="subject" placeholder="How can we help?" required>
-                                </div>
-                                <div class="col-12">
-                                    <label for="message" class="form-label fw-bold">Message</label>
-                                    <textarea class="form-control bg-light border-0 py-3" id="message" rows="6" placeholder="Tell us more about your inquiry..." required></textarea>
-                                </div>
-                                <div class="col-12 mt-4">
-                                    <button type="submit" class="btn btn-primary-custom btn-lg w-100 py-3 fw-bold">Send Message</button>
+            <div class="col-lg-8" data-aos="fade-left">
+                <div class="bg-white rounded-4 shadow-lg p-4 p-md-5 h-100 border border-light">
+                    <h3 class="fw-bold mb-2">Send us a message</h3>
+                    <p class="text-muted mb-4">Fill out the form below and we'll get back to you within 24 hours.</p>
+                    
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control bg-light border-0" id="name" placeholder="John Doe" required>
+                                    <label for="name">Your Name</label>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contact Info -->
-            <div class="col-lg-5" data-aos="fade-left">
-                <div class="h-100 d-flex flex-column gap-3">
-                    <!-- Info Card 1 -->
-                    <div class="card border-0 shadow-sm p-4">
-                        <div class="card-body d-flex align-items-start">
-                            <div class="icon-square bg-primary-custom text-white rounded-3 me-3 p-3 flex-shrink-0">
-                                <i class="fas fa-map-marker-alt fa-lg"></i>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" class="form-control bg-light border-0" id="email" placeholder="name@example.com" required>
+                                    <label for="email">Email Address</label>
+                                </div>
                             </div>
-                            <div>
-                                <h5 class="fw-bold mb-2">Visit Us</h5>
-                                <p class="text-muted mb-0">123 Education Lane, Tech Park<br>Silicon Valley, CA 94025</p>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control bg-light border-0" id="subject" placeholder="Subject" required>
+                                    <label for="subject">Subject</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <textarea class="form-control bg-light border-0" id="message" placeholder="Leave a comment here" style="height: 150px" required></textarea>
+                                    <label for="message">Message</label>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-primary-custom btn-lg w-100 py-3 fw-bold shadow-sm hover-scale">
+                                    <i class="fas fa-paper-plane me-2"></i> Send Message
+                                </button>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Info Card 2 -->
-                    <div class="card border-0 shadow-sm p-4">
-                        <div class="card-body d-flex align-items-start">
-                            <div class="icon-square bg-success text-white rounded-3 me-3 p-3 flex-shrink-0">
-                                <i class="fas fa-envelope fa-lg"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold mb-2">Email Us</h5>
-                                <p class="text-muted mb-0">support@schoolerp.com<br>sales@schoolerp.com</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Info Card 3 -->
-                    <div class="card border-0 shadow-sm p-4">
-                        <div class="card-body d-flex align-items-start">
-                            <div class="icon-square bg-info text-white rounded-3 me-3 p-3 flex-shrink-0">
-                                <i class="fas fa-phone-alt fa-lg"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold mb-2">Call Us</h5>
-                                <p class="text-muted mb-0">+1 (555) 123-4567<br>Mon-Fri, 9am-6pm EST</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Map Embed -->
-                    <div class="card border-0 shadow-sm overflow-hidden flex-grow-1" style="min-height: 250px;">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3168.628236556408!2d-122.08625158469247!3d37.42206557982567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fba02425dad8f%3A0x6c296c66619367e0!2sGoogleplex!5e0!3m2!1sen!2sus!4v1614123456789!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Map Section -->
+<section class="py-0">
+    <div class="w-100" style="height: 450px; filter: grayscale(20%);">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3168.628236556408!2d-122.08625158469247!3d37.42206557982567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fba02425dad8f%3A0x6c296c66619367e0!2sGoogleplex!5e0!3m2!1sen!2sus!4v1614123456789!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+</section>
+
 @endsection
 
 

@@ -24,13 +24,16 @@
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top {{ request()->routeIs('home') ? '' : 'bg-body shadow-sm' }}">
+    <nav class="navbar navbar-expand-lg fixed-top transition-all" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">
-                <i class="fas fa-graduation-cap me-2"></i>School ERP
+            <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
+                <span class="icon-square bg-primary-custom text-white rounded-3 me-2" style="width: 2.5rem; height: 2.5rem; font-size: 1.2rem;">
+                    <i class="fas fa-graduation-cap"></i>
+                </span>
+                <span class="fw-bold text-dark">School ERP</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars fa-lg text-dark"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
@@ -53,13 +56,13 @@
                         <a class="nav-link {{ request()->routeIs('pages.blog') ? 'active' : '' }}" href="{{ route('pages.blog') }}">Blog</a>
                     </li>
                 </ul>
-                <div class="d-flex gap-2">
+                <div class="d-flex gap-3 mt-3 mt-lg-0">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="btn btn-primary-custom">Dashboard</a>
+                        <a href="{{ url('/dashboard') }}" class="btn btn-primary-custom px-4">Dashboard</a>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-outline-custom">Log in</a>
+                        <a href="{{ route('login') }}" class="btn btn-link text-decoration-none text-dark fw-bold px-0 me-2">Log in</a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-primary-custom">Get Started</a>
+                            <a href="{{ route('register') }}" class="btn btn-primary-custom px-4 shadow-sm">Get Started</a>
                         @endif
                     @endauth
                 </div>
@@ -67,48 +70,73 @@
         </div>
     </nav>
 
-    <div class="{{ request()->routeIs('home') ? '' : 'pt-5 mt-5' }}">
+    <div class="main-content">
         @yield('content')
     </div>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row g-4">
+    <footer class="footer pt-5 pb-2 bg-dark text-white position-relative overflow-hidden">
+        <!-- Abstract Shapes -->
+        <div class="position-absolute top-0 end-0 opacity-10">
+             <i class="fas fa-circle-notch fa-10x fa-spin" style="animation-duration: 20s;"></i>
+        </div>
+        
+        <div class="container position-relative z-1">
+            <div class="row g-5 mb-5">
                 <div class="col-lg-4">
-                    <h4 class="footer-title">School ERP</h4>
-                    <p class="mb-4">A comprehensive solution for educational institutions to manage their day-to-day operations efficiently and effectively.</p>
-                    <div>
+                    <a href="{{ route('home') }}" class="d-flex align-items-center text-white text-decoration-none mb-4">
+                        <span class="icon-square bg-primary-custom text-white rounded-3 me-2">
+                            <i class="fas fa-graduation-cap"></i>
+                        </span>
+                        <span class="fw-bold fs-3">School ERP</span>
+                    </a>
+                    <p class="mb-4 text-secondary">A comprehensive solution for educational institutions to manage their day-to-day operations efficiently and effectively.</p>
+                    <div class="d-flex gap-3">
                         <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
                         <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-6">
-                    <h5 class="text-white mb-3">Quick Links</h5>
-                    <a href="{{ route('home') }}" class="footer-link">Home</a>
-                    <a href="{{ route('pages.features') }}" class="footer-link">Features</a>
-                    <a href="{{ route('pages.pricing') }}" class="footer-link">Pricing</a>
-                    <a href="{{ route('pages.about') }}" class="footer-link">About Us</a>
-                    <a href="{{ route('pages.contact') }}" class="footer-link">Contact</a>
+                <div class="col-lg-2 col-6">
+                    <h5 class="text-white fw-bold mb-4">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ route('home') }}" class="footer-link">Home</a></li>
+                        <li><a href="{{ route('pages.features') }}" class="footer-link">Features</a></li>
+                        <li><a href="{{ route('pages.pricing') }}" class="footer-link">Pricing</a></li>
+                        <li><a href="{{ route('pages.about') }}" class="footer-link">About Us</a></li>
+                        <li><a href="{{ route('pages.contact') }}" class="footer-link">Contact</a></li>
+                    </ul>
                 </div>
-                <div class="col-lg-2 col-md-6">
-                    <h5 class="text-white mb-3">Modules</h5>
-                    <a href="#" class="footer-link">Student Info</a>
-                    <a href="#" class="footer-link">Fee Collection</a>
-                    <a href="#" class="footer-link">Attendance</a>
-                    <a href="#" class="footer-link">Examinations</a>
+                <div class="col-lg-2 col-6">
+                    <h5 class="text-white fw-bold mb-4">Modules</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">Student Info</a></li>
+                        <li><a href="#" class="footer-link">Fee Collection</a></li>
+                        <li><a href="#" class="footer-link">Attendance</a></li>
+                        <li><a href="#" class="footer-link">Examinations</a></li>
+                        <li><a href="#" class="footer-link">HR & Payroll</a></li>
+                    </ul>
                 </div>
                 <div class="col-lg-4">
-                    <h5 class="text-white mb-3">Contact Us</h5>
-                    <p><i class="fas fa-map-marker-alt me-2"></i> 123 Tech Park, Innovation Street</p>
-                    <p><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</p>
-                    <p><i class="fas fa-envelope me-2"></i> support@schoolerp.com</p>
+                    <h5 class="text-white fw-bold mb-4">Contact Us</h5>
+                    <ul class="list-unstyled text-secondary">
+                        <li class="mb-3 d-flex"><i class="fas fa-map-marker-alt mt-1 me-3 text-primary-custom"></i> 123 Tech Park, Innovation Street, Silicon Valley, CA</li>
+                        <li class="mb-3 d-flex"><i class="fas fa-phone mt-1 me-3 text-primary-custom"></i> +1 (555) 123-4567</li>
+                        <li class="mb-3 d-flex"><i class="fas fa-envelope mt-1 me-3 text-primary-custom"></i> support@schoolerp.com</li>
+                    </ul>
                 </div>
             </div>
-            <div class="border-top border-secondary mt-5 pt-4 text-center text-muted small">
-                <p>&copy; {{ date('Y') }} School ERP. All rights reserved.</p>
+            <div class="border-top border-secondary border-opacity-25 pt-4 pb-4 text-center text-secondary small">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-md-start mb-3 mb-md-0">
+                        <p class="mb-0">&copy; {{ date('Y') }} School ERP. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="#" class="text-secondary text-decoration-none me-3 hover-white">Privacy Policy</a>
+                        <a href="#" class="text-secondary text-decoration-none hover-white">Terms of Service</a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
@@ -123,17 +151,32 @@
         });
         
         // Navbar scroll effect
-        window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('mainNav');
+        
+        function updateNavbar() {
             if (window.scrollY > 50) {
-                document.querySelector('.navbar').classList.add('shadow-sm');
-                document.querySelector('.navbar').style.padding = '0.5rem 0';
+                navbar.classList.add('shadow-sm', 'bg-white', 'py-2');
+                navbar.classList.remove('py-4');
             } else {
-                if (!document.querySelector('.navbar').classList.contains('bg-body')) {
-                    document.querySelector('.navbar').classList.remove('shadow-sm');
-                    document.querySelector('.navbar').style.padding = '1rem 0';
+                // If not on home page, keep white bg
+                if (!document.querySelector('.hero-section')) {
+                     navbar.classList.add('bg-white', 'shadow-sm', 'py-2');
+                } else {
+                    navbar.classList.remove('shadow-sm', 'bg-white', 'py-2');
+                    navbar.classList.add('py-4');
                 }
             }
-        });
+        }
+
+        window.addEventListener('scroll', updateNavbar);
+        
+        // Initial check
+        if (!document.querySelector('.hero-section')) {
+             navbar.classList.add('bg-white', 'shadow-sm', 'py-2');
+        } else {
+             navbar.classList.add('py-4');
+             updateNavbar();
+        }
     </script>
     @stack('scripts')
 </body>
