@@ -8,10 +8,10 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Bootstrap 5 CSS -->
+        <link rel="stylesheet" href="{{ asset('font-awesome/css/all.min.css') }}">
         <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
         
         <!-- Fonts -->
-         <link rel="stylesheet" href="{{ asset('font-awesome/css/all.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/inter.css') }}">
         <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 

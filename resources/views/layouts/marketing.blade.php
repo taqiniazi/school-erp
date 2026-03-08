@@ -9,10 +9,10 @@
     <link href="{{ asset('css/inter.css') }}" rel="stylesheet">
     
     <!-- Bootstrap 5 CSS -->
+    <link href="{{ asset('font-awesome/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     
     <!-- FontAwesome -->
-    <link href="{{ asset('font-awesome/css/all.min.css') }}" rel="stylesheet">
     
     <!-- AOS Animation -->
     <link href="{{ asset('css/aos.css') }}" rel="stylesheet">
