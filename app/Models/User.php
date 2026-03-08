@@ -14,7 +14,38 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use BelongsToSchool, HasApiTokens, HasFactory, HasRoles, Notifiable, RecordsActivity, SoftDeletes;
+    use BelongsToSchool, HasApiTokens, HasFactory, Notifiable, RecordsActivity, SoftDeletes;
+    use HasRoles {
+        hasRole as traitHasRole;
+    }
+
+    /**
+     * Override hasRole to support local role column
+     */
+    public function hasRole($roles, string $guard = null): bool
+    {
+        // Check local role column for Super Admin
+        if ($this->role === 'super_admin') {
+            if (is_string($roles) && ($roles === 'Super Admin' || str_contains($roles, 'Super Admin'))) {
+                return true;
+            }
+            if (is_array($roles) && in_array('Super Admin', $roles)) {
+                return true;
+            }
+        }
+
+        // Check local role column for School Admin
+        if ($this->role === 'school_admin') {
+             if (is_string($roles) && ($roles === 'School Admin' || str_contains($roles, 'School Admin'))) {
+                return true;
+            }
+            if (is_array($roles) && in_array('School Admin', $roles)) {
+                return true;
+            }
+        }
+
+        return $this->traitHasRole($roles, $guard);
+    }
 
     /**
      * The attributes that are mass assignable.

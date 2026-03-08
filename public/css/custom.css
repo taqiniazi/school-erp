@@ -598,7 +598,7 @@ body {
     bottom: -3rem;
 }
 .card-header {
-    background-color: var(--primary-color);
+    background-color: var(--dark-color);
 }
 .card-header .text-primary {
     color: white !important;
