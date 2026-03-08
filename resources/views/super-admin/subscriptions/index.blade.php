@@ -76,12 +76,12 @@
                                 <td>
                                     <div class="btn-group" role="group">
                                         @if(in_array($subscription->status, ['active', 'trialing']))
-                                            <form action="{{ route('super-admin.subscriptions.cancel', $subscription->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this subscription?');">
+                                            <form action="{{ route('super-admin.subscriptions.cancel', $subscription->id) }}" method="POST" data-confirm-message="Are you sure you want to cancel this subscription?" data-confirm-style="danger">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
                                             </form>
                                         @else
-                                            <form action="{{ route('super-admin.subscriptions.activate', $subscription->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to activate this subscription?');">
+                                            <form action="{{ route('super-admin.subscriptions.activate', $subscription->id) }}" method="POST" data-confirm-message="Are you sure you want to activate this subscription?">
                                                 @csrf
                                                 <button type="submit" class="btn btn-success btn-sm">Activate</button>
                                             </form>

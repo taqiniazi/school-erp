@@ -48,7 +48,7 @@
                                     <div class="d-flex gap-2">
                                         <a href="{{ route('super-admin.roles.edit', $role->id) }}" class="btn btn-sm btn-info text-white">Edit</a>
                                         @if(!in_array($role->name, ['Super Admin', 'School Admin', 'Teacher', 'Student', 'Parent']))
-                                            <form action="{{ route('super-admin.roles.destroy', $role->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                                            <form action="{{ route('super-admin.roles.destroy', $role->id) }}" method="POST" data-confirm-message="Are you sure you want to delete this role?" data-confirm-style="danger">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>

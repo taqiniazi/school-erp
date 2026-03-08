@@ -1,15 +1,15 @@
-@extends('layouts.bootstrap')
+@extends('layouts.app')
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Teachers</h1>
+    <h1 class="h3 mb-0 text-gray-800">Teachers</h1>
     <a href="{{ route('teachers.create') }}" class="btn btn-primary">Add Teacher</a>
 </div>
 
-<div class="card">
+<div class="card shadow mb-4">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped align-middle">
+            <table class="table table-bordered table-striped align-middle">
                 <thead>
                     <tr>
                         <th>Photo</th>
@@ -46,10 +46,10 @@
                             <div class="btn-group" role="group">
                                 <a href="{{ route('teachers.show', $teacher) }}" class="btn btn-sm btn-info text-white">View</a>
                                 <a href="{{ route('teachers.edit', $teacher) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('teachers.destroy', $teacher) }}" method="POST" class="d-inline">
+                                <form action="{{ route('teachers.destroy', $teacher) }}" method="POST" class="d-inline" data-confirm-message="Are you sure you want to delete this teacher? This will also delete their user account." data-confirm-style="danger">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this teacher? This will also delete their user account.')">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
                             </div>
                         </td>

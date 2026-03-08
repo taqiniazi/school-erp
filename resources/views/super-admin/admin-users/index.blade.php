@@ -57,7 +57,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         @if(auth()->id() !== $u->id)
-                                            <form action="{{ route('super-admin.admin-users.destroy', $u->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this admin and their school? This action cannot be undone.');">
+                                            <form action="{{ route('super-admin.admin-users.destroy', $u->id) }}" method="POST" data-confirm-message="Are you sure you want to delete this admin and their school? This action cannot be undone." data-confirm-style="danger">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger" title="Delete">

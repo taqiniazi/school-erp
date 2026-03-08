@@ -88,8 +88,51 @@
                     sidebar.classList.toggle('active');
                 });
             }
+
+            // Global Confirmation Modal Logic
+            const confirmationModalEl = document.getElementById('confirmationModal');
+            if (confirmationModalEl) {
+                const confirmationModal = new bootstrap.Modal(confirmationModalEl);
+                const confirmButton = document.getElementById('confirmButton');
+                const confirmationMessage = document.getElementById('confirmationMessage');
+                let targetForm = null;
+
+                // Handle forms with data-confirm-message attribute
+                document.addEventListener('submit', function(e) {
+                    const form = e.target;
+                    const message = form.getAttribute('data-confirm-message');
+                    
+                    if (message) {
+                        e.preventDefault();
+                        targetForm = form;
+                        confirmationMessage.textContent = message;
+                        
+                        // Check if it's a delete/danger action
+                        if (form.getAttribute('data-confirm-style') === 'danger' || message.toLowerCase().includes('delete') || message.toLowerCase().includes('cancel')) {
+                            confirmButton.classList.remove('btn-primary');
+                            confirmButton.classList.add('btn-danger');
+                        } else {
+                            confirmButton.classList.remove('btn-danger');
+                            confirmButton.classList.add('btn-primary');
+                        }
+                        
+                        confirmationModal.show();
+                    }
+                });
+
+                confirmButton.addEventListener('click', function() {
+                    if (targetForm) {
+                        // Remove the attribute to prevent the listener from triggering again
+                        targetForm.removeAttribute('data-confirm-message');
+                        targetForm.submit();
+                        confirmationModal.hide();
+                    }
+                });
+            }
         });
     </script>
+    
+    @include('components.confirm-modal')
     @stack('scripts')
 </body>
 </html>
