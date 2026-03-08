@@ -20,7 +20,7 @@ class TenantMiddleware
     {
         if (Auth::check()) {
             $user = Auth::user();
-            if ($user->hasRole('Super Admin')) {
+            if ($user->hasRole('Super Admin') || $user->role === 'super_admin') {
                 SchoolContext::setSchoolId(null);
                 app(PermissionRegistrar::class)->setPermissionsTeamId(null);
 

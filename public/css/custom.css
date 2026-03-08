@@ -597,7 +597,12 @@ body {
 .carousel-indicators {
     bottom: -3rem;
 }
-
+.card-header {
+    background-color: var(--primary-color);
+}
+.card-header .text-primary {
+    color: white !important;
+}
 .carousel-indicators button {
     background-color: var(--primary-color) !important;
     width: 10px !important;

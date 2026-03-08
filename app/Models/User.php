@@ -24,6 +24,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'role',
         'phone_number',
         'password',
         'school_id',
@@ -64,5 +65,10 @@ class User extends Authenticatable
     public function teacherProfile()
     {
         return $this->hasOne(Teacher::class);
+    }
+
+    public function superAdminProfile()
+    {
+        return $this->hasOne(SuperAdmin::class);
     }
 }
