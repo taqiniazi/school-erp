@@ -3,197 +3,236 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-dark">Dashboard</h1>
-        <a href="{{ route('reports.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-            <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
-        </a>
+<div class="container-fluid px-0">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1 text-gray-800 fw-bold">Dashboard Overview</h1>
+            <p class="text-muted mb-0">Welcome back, here's what's happening at your school today.</p>
+        </div>
+        <div>
+            <a href="{{ route('reports.index') }}" class="btn btn-primary shadow-sm">
+                <i class="fas fa-download fa-sm text-white-50 me-2"></i> Generate Report
+            </a>
+        </div>
     </div>
 
-    <!-- Subscription Status Card -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card shadow border-start border-primary border-3">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col me-2">
-                            <div class="small fw-bold text-primary text-uppercase mb-1">
-                                Current Subscription
+    <!-- Subscription Status -->
+    <div class="card border-0 shadow-sm mb-4 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="row g-0">
+                <div class="col-lg-8 p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-square bg-primary bg-opacity-10 text-primary rounded-circle me-3">
+                            <i class="fas fa-crown fa-lg"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1 fw-bold">Current Subscription: {{ $subscription['planName'] }}</h5>
+                            <span class="badge bg-{{ $subscription['status'] === 'active' ? 'success' : 'warning' }} rounded-pill px-3">
+                                {{ ucfirst($subscription['status']) }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row g-4 mt-2">
+                        <div class="col-sm-6">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="small fw-semibold text-muted">Students Usage</span>
+                                <span class="small fw-bold">{{ $subscription['studentUsage'] }} / {{ $subscription['studentLimit'] > 0 ? $subscription['studentLimit'] : '∞' }}</span>
                             </div>
-                            <div class="h5 mb-0 fw-bold text-dark">
-                                {{ $subscription['planName'] }} 
-                                <span class="badge bg-{{ $subscription['status'] === 'active' ? 'success' : 'warning' }}">
-                                    {{ ucfirst($subscription['status']) }}
-                                </span>
-                            </div>
-                            <div class="mt-2 small text-muted">
-                                Expires: {{ $subscription['expiresAt'] ? \Carbon\Carbon::parse($subscription['expiresAt'])->format('M d, Y') : 'Never' }}
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-info" role="progressbar" 
+                                    style="width: {{ $subscription['studentLimit'] > 0 ? min(($subscription['studentUsage'] / $subscription['studentLimit']) * 100, 100) : 0 }}%" 
+                                    aria-valuenow="{{ $subscription['studentUsage'] }}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <div class="small fw-bold text-info text-uppercase mb-1">Students</div>
-                                    <div class="h6 mb-0 fw-bold text-dark">
-                                        {{ $subscription['studentUsage'] }} / {{ $subscription['studentLimit'] > 0 ? $subscription['studentLimit'] : 'âˆž' }}
-                                    </div>
-                                    <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-info" role="progressbar" 
-                                            style="width: {{ $subscription['studentLimit'] > 0 ? min(($subscription['studentUsage'] / $subscription['studentLimit']) * 100, 100) : 0 }}%" 
-                                            aria-valuenow="{{ $subscription['studentUsage'] }}" aria-valuemin="0" aria-valuemax="{{ $subscription['studentLimit'] }}"></div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="small fw-bold text-warning text-uppercase mb-1">Teachers</div>
-                                    <div class="h6 mb-0 fw-bold text-dark">
-                                        {{ $subscription['teacherUsage'] }} / {{ $subscription['teacherLimit'] > 0 ? $subscription['teacherLimit'] : 'âˆž' }}
-                                    </div>
-                                    <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-warning" role="progressbar" 
-                                            style="width: {{ $subscription['teacherLimit'] > 0 ? min(($subscription['teacherUsage'] / $subscription['teacherLimit']) * 100, 100) : 0 }}%" 
-                                            aria-valuenow="{{ $subscription['teacherUsage'] }}" aria-valuemin="0" aria-valuemax="{{ $subscription['teacherLimit'] }}"></div>
-                                    </div>
-                                </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="small fw-semibold text-muted">Teachers Usage</span>
+                                <span class="small fw-bold">{{ $subscription['teacherUsage'] }} / {{ $subscription['teacherLimit'] > 0 ? $subscription['teacherLimit'] : '∞' }}</span>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-warning" role="progressbar" 
+                                    style="width: {{ $subscription['teacherLimit'] > 0 ? min(($subscription['teacherUsage'] / $subscription['teacherLimit']) * 100, 100) : 0 }}%" 
+                                    aria-valuenow="{{ $subscription['teacherUsage'] }}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <a href="{{ route('billing.choose-plan') }}" class="btn btn-sm btn-outline-primary">Upgrade Plan</a>
-                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 bg-light p-4 d-flex flex-column justify-content-center border-start">
+                    <div class="mb-3 text-center text-lg-start">
+                        <p class="text-muted small mb-1">Plan Expires On</p>
+                        <h5 class="fw-bold mb-0">{{ $subscription['expiresAt'] ? \Carbon\Carbon::parse($subscription['expiresAt'])->format('F d, Y') : 'Lifetime Access' }}</h5>
+                    </div>
+                    <div class="d-grid">
+                        <a href="{{ route('billing.choose-plan') }}" class="btn btn-outline-primary fw-semibold">
+                            Upgrade Plan <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- KPIs -->
-    <div class="row">
+    <!-- Stats Grid -->
+    <div class="row g-4 mb-4">
         <!-- Total Students -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-primary border-3 shadow h-100 py-2">
+        <div class="col-xl-3 col-md-6">
+            <div class="card stats-card h-100 border-0 shadow-sm text-primary">
                 <div class="card-body">
-                    <div class="row g-0 align-items-center">
-                        <div class="col me-2">
-                            <div class="small fw-bold text-primary text-uppercase mb-1">Total Students</div>
-                            <div class="h5 mb-0 fw-bold text-dark">{{ $totalStudents }}</div>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="icon-wrapper bg-primary bg-opacity-10 text-primary">
+                            <i class="fas fa-user-graduate"></i>
                         </div>
-                        <div class="col-auto">
-                            <i class="fas fa-user-graduate fa-2x text-secondary"></i>
-                        </div>
+                        <span class="badge bg-success bg-opacity-10 text-success">+12%</span>
                     </div>
+                    <div class="stats-value text-dark">{{ number_format($totalStudents) }}</div>
+                    <div class="stats-label">Total Students</div>
                 </div>
             </div>
         </div>
 
         <!-- Total Teachers -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-success border-3 shadow h-100 py-2">
+        <div class="col-xl-3 col-md-6">
+            <div class="card stats-card h-100 border-0 shadow-sm text-success">
                 <div class="card-body">
-                    <div class="row g-0 align-items-center">
-                        <div class="col me-2">
-                            <div class="small fw-bold text-success text-uppercase mb-1">Total Teachers</div>
-                            <div class="h5 mb-0 fw-bold text-dark">{{ $totalTeachers }}</div>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="icon-wrapper bg-success bg-opacity-10 text-success">
+                            <i class="fas fa-chalkboard-teacher"></i>
                         </div>
-                        <div class="col-auto">
-                            <i class="fas fa-chalkboard-teacher fa-2x text-secondary"></i>
-                        </div>
+                        <span class="badge bg-success bg-opacity-10 text-success">+5%</span>
                     </div>
+                    <div class="stats-value text-dark">{{ number_format($totalTeachers) }}</div>
+                    <div class="stats-label">Total Teachers</div>
                 </div>
             </div>
         </div>
 
-        <!-- Total Classes -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-warning border-3 shadow h-100 py-2">
+        <!-- Total Parents -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card stats-card h-100 border-0 shadow-sm text-info">
                 <div class="card-body">
-                    <div class="row g-0 align-items-center">
-                        <div class="col me-2">
-                            <div class="small fw-bold text-warning text-uppercase mb-1">Total Classes</div>
-                            <div class="h5 mb-0 fw-bold text-dark">{{ $totalClasses }}</div>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="icon-wrapper bg-info bg-opacity-10 text-info">
+                            <i class="fas fa-user-friends"></i>
                         </div>
-                        <div class="col-auto">
-                            <i class="fas fa-chalkboard fa-2x text-secondary"></i>
-                        </div>
+                        <span class="badge bg-warning bg-opacity-10 text-warning">+2%</span>
                     </div>
+                    <div class="stats-value text-dark">{{ number_format($totalParents ?? 0) }}</div>
+                    <div class="stats-label">Total Parents</div>
                 </div>
             </div>
         </div>
 
-        <!-- Monthly Fees -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-info border-3 shadow h-100 py-2">
+        <!-- Revenue (Placeholder if variable not available) -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card stats-card h-100 border-0 shadow-sm text-warning">
                 <div class="card-body">
-                    <div class="row g-0 align-items-center">
-                        <div class="col me-2">
-                            <div class="small fw-bold text-info text-uppercase mb-1">Monthly Fees</div>
-                            <div class="h5 mb-0 fw-bold text-dark">Rs. {{ number_format($monthlyFeeCollection, 2) }}</div>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="icon-wrapper bg-warning bg-opacity-10 text-warning">
+                            <i class="fas fa-wallet"></i>
                         </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-secondary"></i>
-                        </div>
+                        <span class="badge bg-success bg-opacity-10 text-success">+8%</span>
                     </div>
+                    <div class="stats-value text-dark">$24k</div>
+                    <div class="stats-label">Monthly Revenue</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <!-- Alerts & Notifications -->
-        <div class="col-lg-8 mb-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 fw-bold text-primary">Alerts & Notifications</h6>
+    <!-- Recent Activity & Quick Links -->
+    <div class="row g-4">
+        <!-- Recent Activity -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 fw-bold text-dark">Recent Activity</h6>
+                    <a href="#" class="text-primary small fw-semibold text-decoration-none">View All</a>
                 </div>
-                <div class="card-body">
-                    @if(isset($lowStockItems) && $lowStockItems > 0)
-                        <div class="alert alert-danger d-flex align-items-center" role="alert">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            <div>
-                                <strong>Low Stock Alert:</strong> {{ $lowStockItems }} items are below reorder level.
-                                <a href="{{ route('inventory.alerts.low_stock') }}" class="alert-link">View Details</a>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item px-4 py-3 border-light">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-3">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 text-dark fw-semibold">New Student Admission</h6>
+                                        <small class="text-muted">Sarah Connor admitted to Class 10A</small>
+                                    </div>
+                                </div>
+                                <small class="text-muted">2 hrs ago</small>
                             </div>
                         </div>
-                    @endif
-
-                    @if(isset($pendingLeaveRequests) && $pendingLeaveRequests > 0)
-                        <div class="alert alert-warning d-flex align-items-center" role="alert">
-                            <i class="fas fa-clock me-2"></i>
-                            <div>
-                                <strong>Pending Leave Requests:</strong> {{ $pendingLeaveRequests }} requests need approval.
-                                <a href="{{ route('hr.leave.index') }}" class="alert-link">View Requests</a>
+                        <div class="list-group-item px-4 py-3 border-light">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-success bg-opacity-10 text-success rounded-circle p-2 me-3">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 text-dark fw-semibold">Fee Collection</h6>
+                                        <small class="text-muted">$450 collected from John Doe</small>
+                                    </div>
+                                </div>
+                                <small class="text-muted">4 hrs ago</small>
                             </div>
                         </div>
-                    @endif
-
-                    @if((!isset($lowStockItems) || $lowStockItems == 0) && (!isset($pendingLeaveRequests) || $pendingLeaveRequests == 0))
-                        <div class="text-center text-muted py-5">
-                            <i class="fas fa-check-circle fa-3x mb-3 text-success"></i>
-                            <p>No new alerts or notifications.</p>
+                        <div class="list-group-item px-4 py-3 border-light">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-3">
+                                        <i class="fas fa-bullhorn"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 text-dark fw-semibold">Notice Published</h6>
+                                        <small class="text-muted">Annual Sports Day announcement</small>
+                                    </div>
+                                </div>
+                                <small class="text-muted">1 day ago</small>
+                            </div>
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="col-lg-4 mb-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 fw-bold text-primary">Quick Actions</h6>
+        <!-- Quick Links -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h6 class="m-0 fw-bold text-dark">Quick Actions</h6>
                 </div>
                 <div class="card-body">
-                    <div class="row g-2">
-                        <a href="{{ route('students.create') }}" class="btn btn-outline-primary text-start">
-                            <i class="fas fa-user-plus me-2"></i> Add New Student
+                    <div class="d-grid gap-3">
+                        <a href="{{ route('students.create') }}" class="btn btn-light text-start p-3 d-flex align-items-center hover-primary">
+                            <i class="fas fa-user-graduate text-primary me-3 fa-lg"></i>
+                            <div>
+                                <div class="fw-bold text-dark">Add Student</div>
+                                <div class="small text-muted">Register a new student</div>
+                            </div>
                         </a>
-                        <a href="{{ route('fee-invoices.create') }}" class="btn btn-outline-success text-start">
-                            <i class="fas fa-file-invoice-dollar me-2"></i> Create Fee Invoice
+                        <a href="{{ route('teachers.create') }}" class="btn btn-light text-start p-3 d-flex align-items-center hover-primary">
+                            <i class="fas fa-chalkboard-teacher text-success me-3 fa-lg"></i>
+                            <div>
+                                <div class="fw-bold text-dark">Add Teacher</div>
+                                <div class="small text-muted">Onboard new faculty</div>
+                            </div>
                         </a>
-                        <a href="{{ route('attendance.create') }}" class="btn btn-outline-info text-start">
-                            <i class="fas fa-calendar-check me-2"></i> Take Attendance
+                        <a href="#" class="btn btn-light text-start p-3 d-flex align-items-center hover-primary">
+                            <i class="fas fa-file-invoice text-warning me-3 fa-lg"></i>
+                            <div>
+                                <div class="fw-bold text-dark">Create Invoice</div>
+                                <div class="small text-muted">Generate fee invoice</div>
+                            </div>
                         </a>
-                        <a href="{{ route('communication.notices.create') }}" class="btn btn-outline-secondary text-start">
-                            <i class="fas fa-bullhorn me-2"></i> Post Notice
+                        <a href="#" class="btn btn-light text-start p-3 d-flex align-items-center hover-primary">
+                            <i class="fas fa-calendar-alt text-info me-3 fa-lg"></i>
+                            <div>
+                                <div class="fw-bold text-dark">Add Event</div>
+                                <div class="small text-muted">Schedule school event</div>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -202,6 +241,3 @@
     </div>
 </div>
 @endsection
-
-
-

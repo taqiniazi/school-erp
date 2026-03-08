@@ -579,6 +579,14 @@ body {
 }
 
 /* Form Controls */
+.form-floating > .form-control, .form-control{
+    border-radius: 8px;
+    border:1px solid #ddd !important;
+}
+.form-control:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: unset;
+}
 .form-floating > .form-control:focus,
 .form-floating > .form-control:not(:placeholder-shown) {
     padding-top: 1.625rem;
