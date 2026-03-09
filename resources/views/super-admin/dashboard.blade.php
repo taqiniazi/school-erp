@@ -93,7 +93,7 @@
         <div class="col-xl-8 col-lg-7">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 fw-bold text-primary">Revenue Overview (Last 6 Months)</h6>
+                    <h6 class="m-0 fw-bold">Revenue Overview (Last 6 Months)</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-area">
@@ -105,7 +105,7 @@
         <div class="col-xl-4 col-lg-5">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 fw-bold text-primary">New Schools (Last 6 Months)</h6>
+                    <h6 class="m-0 fw-bold">New Schools (Last 6 Months)</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-bar pt-4 pb-2">
@@ -122,7 +122,7 @@
         <div class="col-lg-6 mb-4">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 fw-bold text-primary">Recent Payments</h6>
+                    <h6 class="m-0 fw-bold">Recent Payments</h6>
                     <a href="{{ route('super-admin.payments.index') }}" class="btn btn-sm btn-primary">View All</a>
                 </div>
                 <div class="card-body">
@@ -168,7 +168,7 @@
         <div class="col-lg-6 mb-4">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 fw-bold text-primary">Recent Subscriptions</h6>
+                    <h6 class="m-0 fw-bold">Recent Subscriptions</h6>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

@@ -4,7 +4,7 @@
             <div class="col-md-8">
                 <div class="card shadow">
                     <div class="card-header py-3">
-                        <h6 class="m-0 fw-bold text-primary">Create Fee Structure</h6>
+                        <h6 class="m-0 fw-bold">Create Fee Structure</h6>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('fee-structures.store') }}" method="POST">

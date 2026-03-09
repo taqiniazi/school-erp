@@ -2,7 +2,7 @@
     <div class="container-fluid py-4">
         <div class="card shadow">
             <div class="card-header py-3">
-                <h6 class="m-0 fw-bold text-primary">{{ __('Edit Invoice') }} #{{ $feeInvoice->invoice_no }}</h6>
+                <h6 class="m-0 fw-bold">{{ __('Edit Invoice') }} #{{ $feeInvoice->invoice_no }}</h6>
             </div>
             <div class="card-body">
                 <form action="{{ route('fee-invoices.update', $feeInvoice) }}" method="POST">

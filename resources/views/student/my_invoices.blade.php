@@ -5,7 +5,7 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h6 class="m-0 fw-bold text-primary">
+            <h6 class="m-0 fw-bold">
                 Invoices for {{ $student->first_name }} {{ $student->last_name }}
             </h6>
         </div>

@@ -18,7 +18,7 @@
         <h4 class="fw-bold mb-4 text-dark">Available Portals</h4>
 
         <div class="row g-4">
-            @role('Super Admin|School Admin')
+            @if(auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'School Admin']))
             <div class="col-md-6 col-xl-3">
                 <a href="{{ route('admin.dashboard') }}" class="text-decoration-none card-hover-effect">
                     <div class="card h-100 border-0 shadow-sm text-center py-4 transition-all">
@@ -32,9 +32,9 @@
                     </div>
                 </a>
             </div>
-            @endrole
+            @endif
 
-            @role('Teacher')
+            @if(auth()->check() && auth()->user()->hasRole('Teacher'))
             <div class="col-md-6 col-xl-3">
                 <a href="{{ route('teacher.dashboard') }}" class="text-decoration-none card-hover-effect">
                     <div class="card h-100 border-0 shadow-sm text-center py-4 transition-all">
@@ -48,9 +48,9 @@
                     </div>
                 </a>
             </div>
-            @endrole
+            @endif
 
-            @role('Student')
+            @if(auth()->check() && auth()->user()->hasRole('Student'))
             <div class="col-md-6 col-xl-3">
                 <a href="{{ route('student.dashboard') }}" class="text-decoration-none card-hover-effect">
                     <div class="card h-100 border-0 shadow-sm text-center py-4 transition-all">
@@ -64,9 +64,9 @@
                     </div>
                 </a>
             </div>
-            @endrole
+            @endif
 
-            @role('Parent')
+            @if(auth()->check() && auth()->user()->hasRole('Parent'))
             <div class="col-md-6 col-xl-3">
                 <a href="{{ route('parent.dashboard') }}" class="text-decoration-none card-hover-effect">
                     <div class="card h-100 border-0 shadow-sm text-center py-4 transition-all">
@@ -80,7 +80,7 @@
                     </div>
                 </a>
             </div>
-            @endrole
+            @endif
             
             <div class="col-md-6 col-xl-3">
                 <a href="{{ route('profile.edit') }}" class="text-decoration-none card-hover-effect">

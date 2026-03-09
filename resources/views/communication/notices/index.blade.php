@@ -1,12 +1,12 @@
-﻿<x-app-layout>
+<x-app-layout>
     <div class="container-fluid py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="h3 mb-0 text-dark">Notices Board</h2>
-            @role('Super Admin|School Admin|Teacher')
+            @if(auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'School Admin', 'Teacher']))
             <a href="{{ route('communication.notices.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus me-1"></i> Post New Notice
             </a>
-            @endrole
+            @endif
         </div>
 
         @if(session('success'))
@@ -37,7 +37,7 @@
                                     on {{ $notice->published_at->format('M d, Y h:i A') }}
                                 </p>
                             </div>
-                            @role('Super Admin|School Admin')
+                            @if(auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'School Admin']))
                             <div class="btn-group">
                                 <a href="{{ route('communication.notices.edit', $notice) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                                 <form action="{{ route('communication.notices.destroy', $notice) }}" method="POST" onsubmit="return confirm('Are you sure?');">
@@ -46,7 +46,7 @@
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                 </form>
                             </div>
-                            @endrole
+                            @endif
                         </div>
                         <div class="card-text">
                             {!! nl2br(e($notice->content)) !!}

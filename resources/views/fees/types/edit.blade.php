@@ -4,7 +4,7 @@
             <div class="col-md-8">
                 <div class="card shadow">
                     <div class="card-header py-3">
-                        <h6 class="m-0 fw-bold text-primary">Edit Fee Type</h6>
+                        <h6 class="m-0 fw-bold">Edit Fee Type</h6>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('fee-types.update', $feeType->id) }}" method="POST">

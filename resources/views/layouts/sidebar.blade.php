@@ -8,24 +8,22 @@
 <ul class="list-unstyled components" id="sidebarAccordion">
     <!-- Dashboard -->
     <li>
-        @role('Super Admin')
+        @if(auth()->check() && auth()->user()->hasRole('Super Admin'))
             <a href="{{ route('super-admin.dashboard') }}" class="{{ request()->routeIs('super-admin.dashboard') ? 'active' : '' }}">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
+        @elseif(auth()->check() && auth()->user()->hasRole('School Admin'))
+            <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
         @else
-            @role('School Admin')
-                <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-            @else
-                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-            @endrole
-        @endrole
+            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+        @endif
     </li>
 
-    @role('Super Admin|School Admin')
+    @if(auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'School Admin']))
     
     <!-- School Management -->
     <li>
@@ -33,16 +31,16 @@
             <i class="fas fa-university"></i> School Management
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') ? 'show' : '' }}" id="schoolSubmenu" data-bs-parent="#sidebarAccordion">
-            @role('Super Admin')
+            @if(auth()->check() && auth()->user()->hasRole('Super Admin'))
             <li>
                 <a href="{{ route('super-admin.schools.index') }}" class="{{ request()->routeIs('super-admin.schools.*') ? 'active' : '' }}">Schools</a>
             </li>
-            @endrole
-            @role('School Admin')
+            @endif
+            @if(auth()->check() && auth()->user()->hasRole('School Admin'))
             <li>
                 <a href="{{ route('campuses.index') }}" class="{{ request()->routeIs('campuses.*') ? 'active' : '' }}">Campuses</a>
             </li>
-            @endrole
+            @endif
             <li><a href="#">Departments</a></li>
             <li><a href="#">Designations</a></li>
         </ul>
@@ -54,14 +52,14 @@
             <i class="fas fa-users-cog"></i> User Management
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('admin.audit-logs.*') ? 'show' : '' }}" id="userSubmenu" data-bs-parent="#sidebarAccordion">
-            @role('Super Admin')
+            @if(auth()->check() && auth()->user()->hasRole('Super Admin'))
             <li>
                 <a href="{{ route('super-admin.admin-users.index') }}" class="{{ request()->routeIs('super-admin.admin-users.*') ? 'active' : '' }}">Users</a>
             </li>
             <li>
                 <a href="{{ route('super-admin.roles.index') }}" class="{{ request()->routeIs('super-admin.roles.*') ? 'active' : '' }}">Roles</a>
             </li>
-            @endrole
+            @endif
             <li><a href="#">Permissions</a></li>
             <li>
                 <a href="{{ route('admin.audit-logs.index') }}" class="{{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}">Activity Logs</a>
@@ -290,7 +288,7 @@
             <i class="fas fa-crown"></i> Subscription
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('super-admin.plans.*') || request()->routeIs('super-admin.subscriptions.*') || request()->routeIs('admin.subscription.*') || request()->routeIs('super-admin.payments.*') ? 'show' : '' }}" id="subscriptionSubmenu" data-bs-parent="#sidebarAccordion">
-            @role('Super Admin')
+            @if(auth()->check() && auth()->user()->hasRole('Super Admin'))
             <li>
                 <a href="{{ route('super-admin.plans.index') }}" class="{{ request()->routeIs('super-admin.plans.*') ? 'active' : '' }}">Packages</a>
             </li>
@@ -300,18 +298,18 @@
             <li>
                 <a href="{{ route('super-admin.payment-methods.index') }}" class="{{ request()->routeIs('super-admin.payment-methods.*') ? 'active' : '' }}">Payment Methods</a>
             </li>
-            @endrole
-            @role('School Admin')
+            @endif
+            @if(auth()->check() && auth()->user()->hasRole('School Admin'))
             <li>
                 <a href="{{ route('admin.subscription.index') }}" class="{{ request()->routeIs('admin.subscription.*') ? 'active' : '' }}">My Subscription</a>
             </li>
-            @endrole
+            @endif
             <li><a href="#">Billing</a></li>
-            @role('Super Admin')
+            @if(auth()->check() && auth()->user()->hasRole('Super Admin'))
             <li>
                 <a href="{{ route('super-admin.payments.index') }}" class="{{ request()->routeIs('super-admin.payments.*') ? 'active' : '' }}">Payment History</a>
             </li>
-            @endrole
+            @endif
         </ul>
     </li>
 
@@ -346,20 +344,20 @@
         </a>
         <ul class="collapse list-unstyled" id="settingsSubmenu" data-bs-parent="#sidebarAccordion">
             <li><a href="#">General Settings</a></li>
-            @role('Super Admin')
+            @if(auth()->check() && auth()->user()->hasRole('Super Admin'))
             <li>
                 <a href="{{ route('super-admin.payment-methods.index') }}" class="{{ request()->routeIs('super-admin.payment-methods.*') ? 'active' : '' }}">Payment Methods</a>
             </li>
-            @endrole
+            @endif
             <li><a href="#">Email Settings</a></li>
             <li><a href="#">Backup</a></li>
         </ul>
     </li>
 
-    @endrole
+    @endif
 
     <!-- Teacher Role -->
-    @role('Teacher')
+    @if(auth()->check() && auth()->user()->hasRole('Teacher'))
         <li class="sidebar-heading">TEACHER PORTAL</li>
         <li>
             <a href="{{ route('teacher.dashboard') }}" class="{{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
@@ -386,10 +384,10 @@
                 <i class="fas fa-clipboard-list"></i> Class Attendance
             </a>
         </li>
-    @endrole
+    @endif
 
     <!-- Student Role -->
-    @role('Student')
+    @if(auth()->check() && auth()->user()->hasRole('Student'))
         <li class="sidebar-heading">STUDENT PORTAL</li>
         <li>
             <a href="{{ route('student.dashboard') }}" class="{{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
@@ -416,10 +414,10 @@
                 <i class="fas fa-book"></i> Library Books
             </a>
         </li>
-    @endrole
+    @endif
 
     <!-- Parent Role -->
-    @role('Parent')
+    @if(auth()->check() && auth()->user()->hasRole('Parent'))
         <li class="sidebar-heading">PARENT PORTAL</li>
         <li>
             <a href="{{ route('parent.dashboard') }}" class="{{ request()->routeIs('parent.dashboard') ? 'active' : '' }}">
@@ -427,5 +425,5 @@
             </a>
         </li>
         <!-- Add more parent links here if available -->
-    @endrole
+    @endif
 </ul>

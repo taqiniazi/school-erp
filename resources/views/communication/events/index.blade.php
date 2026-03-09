@@ -1,14 +1,14 @@
-﻿<x-app-layout>
+<x-app-layout>
     <div class="container-fluid py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="h3 mb-0 text-dark">
                 {{ __('Events Calendar') }}
             </h2>
-            @role('Super Admin|School Admin|Teacher')
+            @if(auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'School Admin', 'Teacher']))
             <a href="{{ route('communication.events.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus me-1"></i> {{ __('Add Event') }}
             </a>
-            @endrole
+            @endif
         </div>
 
         @if(session('success'))
@@ -44,7 +44,7 @@
                             - {{ $event->end_date->format('h:i A') }}
                             @endif
                         </div>
-                        @role('Super Admin|School Admin')
+                        @if(auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'School Admin']))
                         <div class="d-flex justify-content-end g-2 pt-3 border-top">
                             <a href="{{ route('communication.events.edit', $event) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                             <form action="{{ route('communication.events.destroy', $event) }}" method="POST" onsubmit="return confirm('Are you sure?');">
@@ -53,7 +53,7 @@
                                 <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                             </form>
                         </div>
-                        @endrole
+                        @endif
                     </div>
                 </div>
             </div>

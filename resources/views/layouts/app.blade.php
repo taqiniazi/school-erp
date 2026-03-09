@@ -14,6 +14,9 @@
     
     <!-- Bootstrap 5 CSS -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- DataTables (local) -->
+    <link href="{{ asset('vendor/datatables/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/datatables/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
     
     <!-- Custom CSS for Admin Panel -->
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
@@ -76,10 +79,47 @@
 
     <!-- Bootstrap 5 JS -->
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <!-- jQuery + DataTables (local) -->
+    <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/dataTables.bootstrap5.min.js') }}"></script>
     
     <!-- Sidebar Toggle Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Auto-enable DataTables on listing tables (skip dashboards and tables marked .no-datatable)
+            if (window.jQuery && jQuery.fn && jQuery.fn.DataTable) {
+                const $ = jQuery;
+                $('table.table').each(function () {
+                    const $tbl = $(this);
+                    // Skip if explicitly disabled, lacks a thead, or inside a container marked as dashboard
+                    if ($tbl.hasClass('no-datatable')) return;
+                    if ($tbl.find('thead').length === 0) return;
+                    if ($tbl.closest('.dashboard, [data-page-type=\"dashboard\"]').length) return;
+                    if ($tbl.data('dt-initialized')) return;
+                    try {
+                        $tbl.DataTable({
+                            paging: true,
+                            pageLength: 10,
+                            lengthChange: true,
+                            ordering: true,
+                            order: [],
+                            responsive: true,
+                            autoWidth: false,
+                            language: {
+                                search: 'Search:',
+                                lengthMenu: 'Show _MENU_',
+                                info: 'Showing _START_ to _END_ of _TOTAL_',
+                                infoEmpty: 'No entries',
+                            }
+                        });
+                        $tbl.data('dt-initialized', true);
+                    } catch (e) {
+                        console.error('DataTable init failed for a table:', e);
+                    }
+                });
+            }
+
             const sidebar = document.getElementById('sidebar');
             const sidebarCollapse = document.getElementById('sidebarCollapse');
             
@@ -136,6 +176,5 @@
     @stack('scripts')
 </body>
 </html>
-
 
 

@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-expand-lg navbar-light bg-body border-bottom shadow-sm sticky-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-body border-bottom shadow-sm sticky-top">
     <div class="container-fluid">
         <!-- Logo -->
         <a class="navbar-brand" href="{{ route('dashboard') }}">
@@ -17,7 +17,7 @@
                     {{ __('Dashboard') }}
                 </x-nav-link>
 
-                @role('Super Admin')
+                @if(auth()->check() && auth()->user()->hasRole('Super Admin'))
                 <x-nav-link :href="route('super-admin.schools.index')" :active="request()->routeIs('super-admin.schools.*')">
                     {{ __('Schools') }}
                 </x-nav-link>
@@ -27,18 +27,18 @@
                 <x-nav-link :href="route('super-admin.payments.index')" :active="request()->routeIs('super-admin.payments.*')">
                     {{ __('Payments') }}
                 </x-nav-link>
-                @endrole
+                @endif
 
-                @role('School Admin')
+                @if(auth()->check() && auth()->user()->hasRole('School Admin'))
                 <x-nav-link :href="route('campuses.index')" :active="request()->routeIs('campuses.*')">
                     {{ __('Campuses') }}
                 </x-nav-link>
                 <x-nav-link :href="route('admin.subscription.index')" :active="request()->routeIs('admin.subscription.*')">
                     {{ __('Subscription') }}
                 </x-nav-link>
-                @endrole
+                @endif
 
-                @role('Super Admin|School Admin')
+                @if(auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'School Admin']))
                 <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.*')">
                     {{ __('Student Attendance') }}
                 </x-nav-link>
@@ -90,9 +90,9 @@
                 <x-nav-link :href="route('transport.vehicles.index')" :active="request()->routeIs('transport.*')">
                     {{ __('Transport') }}
                 </x-nav-link>
-                @endrole
+                @endif
 
-                @role('Teacher')
+                @if(auth()->check() && auth()->user()->hasRole('Teacher'))
                 <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.*')">
                     {{ __('Take Attendance') }}
                 </x-nav-link>
@@ -114,9 +114,9 @@
                 <x-nav-link :href="route('fee-invoices.index')" :active="request()->routeIs('fee-invoices.*')">
                     {{ __('Fee Collection') }}
                 </x-nav-link>
-                @endrole
+                @endif
 
-                @role('Student|Parent')
+                @if(auth()->check() && auth()->user()->hasAnyRole(['Student', 'Parent']))
                 <x-nav-link :href="route('student.my-attendance')" :active="request()->routeIs('student.my-attendance')">
                     {{ __('My Attendance') }}
                 </x-nav-link>
@@ -129,7 +129,7 @@
                 <x-nav-link :href="route('library.my')" :active="request()->routeIs('library.my')">
                     {{ __('My Library') }}
                 </x-nav-link>
-                @endrole
+                @endif
 
                 <!-- Communication (All Roles) -->
                 <x-nav-link :href="route('communication.notices.index')" :active="request()->routeIs('communication.notices.*')">

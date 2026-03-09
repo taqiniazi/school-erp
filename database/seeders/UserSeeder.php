@@ -33,9 +33,13 @@ class UserSeeder extends Seeder
                 'name' => 'Super Admin',
                 'password' => Hash::make('password'),
                 'role' => 'super_admin',
-                'school_id' => $school->id,
+                'school_id' => null,
             ]
         );
+        if ($superAdmin->school_id !== null) {
+            $superAdmin->school_id = null;
+            $superAdmin->save();
+        }
         $superAdmin->syncRoles('Super Admin');
 
         // School Admin

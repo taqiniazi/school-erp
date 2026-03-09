@@ -2,7 +2,7 @@
     <div class="container-fluid py-4">
         <div class="card shadow">
             <div class="card-header py-3">
-                <h6 class="m-0 fw-bold text-primary">{{ __('My Invoices') }}</h6>
+                <h6 class="m-0 fw-bold">{{ __('My Invoices') }}</h6>
             </div>
             <div class="card-body">
                 <h5 class="card-title mb-4">Fee History</h5>
