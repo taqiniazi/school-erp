@@ -305,7 +305,7 @@ body {
 
 .table thead th {
     background: #3F51B5;
-    color: #fff;
+    color: #fff !important;
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.75rem;

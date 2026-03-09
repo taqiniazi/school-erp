@@ -577,7 +577,10 @@ body {
     color: #6b7280;
     margin-bottom: 2rem;
 }
-
+div.dataTables_wrapper div.dataTables_length select {
+    width: -webkit-fill-available;
+    display: inline-block;
+}
 /* Form Controls */
 .form-floating > .form-control, .form-control{
     border-radius: 8px;

@@ -50,7 +50,7 @@
                                             {{ $log->created_at->format('Y-m-d H:i:s') }}
                                         </td>
                                         <td class="p-3 text-nowrap small text-secondary">
-                                            <a href="{{ route('admin.audit-logs.show', $log->id) }}" class="btn btn-sm btn-link text-decoration-none">View</a>
+                                            <a href="{{ route('admin.audit-logs.show', $log->id) }}" class="btn btn-sm btn-success text-decoration-none">View</a>
                                         </td>
                                     </tr>
                                 @endforeach

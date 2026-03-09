@@ -87,17 +87,35 @@
     <!-- Sidebar Toggle Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Auto-enable DataTables on listing tables (skip dashboards and tables marked .no-datatable)
             if (window.jQuery && jQuery.fn && jQuery.fn.DataTable) {
                 const $ = jQuery;
+                if ($.fn.dataTable && $.fn.dataTable.ext && $.fn.dataTable.ext.errMode) {
+                    $.fn.dataTable.ext.errMode = 'none';
+                }
                 $('table.table').each(function () {
                     const $tbl = $(this);
-                    // Skip if explicitly disabled, lacks a thead, or inside a container marked as dashboard
                     if ($tbl.hasClass('no-datatable')) return;
                     if ($tbl.find('thead').length === 0) return;
                     if ($tbl.closest('.dashboard, [data-page-type=\"dashboard\"]').length) return;
                     if ($tbl.data('dt-initialized')) return;
+                    const headerCount = $tbl.find('thead th').length;
+                    const $rows = $tbl.find('tbody tr');
+                    if ($rows.length === 1) {
+                        const $cells = $rows.eq(0).children('td');
+                        if ($cells.length !== headerCount || $cells.attr('colspan')) {
+                            const msg = ($cells.text() || '').trim();
+                            $rows.remove();
+                            $tbl.data('dt-empty-msg', msg || 'No data available');
+                        }
+                    }
                     try {
+                        const language = {
+                            search: 'Search:',
+                            lengthMenu: 'Show _MENU_',
+                            info: 'Showing _START_ to _END_ of _TOTAL_',
+                            infoEmpty: 'No entries',
+                            emptyTable: $tbl.data('dt-empty-msg') || 'No data available'
+                        };
                         $tbl.DataTable({
                             paging: true,
                             pageLength: 10,
@@ -106,12 +124,7 @@
                             order: [],
                             responsive: true,
                             autoWidth: false,
-                            language: {
-                                search: 'Search:',
-                                lengthMenu: 'Show _MENU_',
-                                info: 'Showing _START_ to _END_ of _TOTAL_',
-                                infoEmpty: 'No entries',
-                            }
+                            language
                         });
                         $tbl.data('dt-initialized', true);
                     } catch (e) {
@@ -176,5 +189,4 @@
     @stack('scripts')
 </body>
 </html>
-
 

@@ -42,7 +42,7 @@
                                             </span>
                                         </td>
                                         <td class="p-3 text-nowrap text-end">
-                                            <a href="{{ route('hr.staff.edit', $p) }}" class="btn btn-sm btn-link text-decoration-none">Edit</a>
+                                            <a href="{{ route('hr.staff.edit', $p) }}" class="btn btn-sm btn-success text-decoration-none">Edit</a>
                                             <form action="{{ route('hr.staff.destroy', $p) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')

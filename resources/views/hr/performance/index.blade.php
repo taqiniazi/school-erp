@@ -34,7 +34,7 @@
                                         <td class="p-3 text-nowrap">{{ $r->review_date->format('Y-m-d') }}</td>
                                         <td class="p-3 text-nowrap">{{ number_format($r->score, 2) }}</td>
                                         <td class="p-3 text-nowrap text-end">
-                                            <a href="{{ route('hr.performance.edit', $r) }}" class="btn btn-sm btn-link text-decoration-none">Edit</a>
+                                            <a href="{{ route('hr.performance.edit', $r) }}" class="btn btn-sm btn-success text-decoration-none">Edit</a>
                                             <form action="{{ route('hr.performance.destroy', $r) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')

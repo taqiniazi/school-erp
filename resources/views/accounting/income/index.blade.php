@@ -62,7 +62,7 @@
                                         <td class="p-3 text-nowrap">{{ $row->description }}</td>
                                         <td class="p-3 text-nowrap text-end fw-bold text-success">{{ number_format($row->amount, 2) }}</td>
                                         <td class="p-3 text-nowrap text-end">
-                                            <a href="{{ route('accounting.income.edit', $row) }}" class="btn btn-sm btn-link text-decoration-none">Edit</a>
+                                            <a href="{{ route('accounting.income.edit', $row) }}" class="btn btn-sm btn-success text-decoration-none">Edit</a>
                                             <form action="{{ route('accounting.income.destroy', $row) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this income?')">
                                                 @csrf
                                                 @method('DELETE')

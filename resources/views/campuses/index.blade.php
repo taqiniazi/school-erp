@@ -53,7 +53,7 @@
                                             @endif
                                         </td>
                                         <td class="p-3 text-nowrap small fw-medium">
-                                            <a href="{{ route('campuses.edit', $campus) }}" class="btn btn-sm btn-link text-decoration-none">Edit</a>
+                                            <a href="{{ route('campuses.edit', $campus) }}" class="btn btn-sm btn-success text-decoration-none">Edit</a>
                                             <form action="{{ route('campuses.destroy', $campus) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this campus?');">
                                                 @csrf
                                                 @method('DELETE')

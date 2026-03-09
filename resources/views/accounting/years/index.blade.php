@@ -55,7 +55,7 @@
                                             @endif
                                         </td>
                                         <td class="p-3 text-nowrap text-end">
-                                            <a href="{{ route('financial-years.edit', $year) }}" class="btn btn-sm btn-link text-decoration-none">Edit</a>
+                                            <a href="{{ route('financial-years.edit', $year) }}" class="btn btn-sm btn-suceccess text-decoration-none">Edit</a>
                                             <form action="{{ route('financial-years.destroy', $year) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this financial year?')">
                                                 @csrf
                                                 @method('DELETE')
