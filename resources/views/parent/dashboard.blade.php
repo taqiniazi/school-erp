@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+﻿﻿<x-app-layout>
     <x-slot name="header">
         {{ __('Parent Dashboard') }}
     </x-slot>

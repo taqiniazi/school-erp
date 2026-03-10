@@ -28,6 +28,18 @@ class PaymentMethodSeeder extends Seeder
                 'is_active' => true,
             ],
             [
+                'name' => 'Wise',
+                'type' => 'manual',
+                'instructions' => 'Send a transfer via Wise to the account below, then enter the Wise transfer ID and upload the receipt.',
+                'account_details' => [
+                    'recipient_name' => 'School ERP Corp',
+                    'currency' => 'USD',
+                    'wise_profile_id' => env('WISE_PROFILE_ID', 'Your Wise Profile ID'),
+                    'note' => 'Include your school name in the transfer note',
+                ],
+                'is_active' => true,
+            ],
+            [
                 'name' => 'Easypaisa',
                 'type' => 'manual',
                 'instructions' => 'Please send the amount to the following Easypaisa account and upload the screenshot.',

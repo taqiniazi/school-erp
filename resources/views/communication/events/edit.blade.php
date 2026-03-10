@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+﻿﻿<x-app-layout>
     <div class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-md-8">

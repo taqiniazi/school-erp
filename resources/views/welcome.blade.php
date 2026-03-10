@@ -106,27 +106,79 @@
     </section>
 
     <!-- Trusted By Section -->
-    <section class="py-5 border-bottom bg-white">
-        <div class="container">
-            <p class="text-center text-muted fw-semibold mb-4 text-uppercase small tracking-wide">Trusted by 500+ Educational Institutions</p>
-            <div class="row justify-content-center align-items-center opacity-50 grayscale-hover transition-all">
-                <div class="col-6 col-md-2 text-center mb-4 mb-md-0">
-                    <i class="fas fa-university fa-2x text-secondary"></i>
+    <section class="py-5 bg-light border-bottom position-relative overflow-hidden">
+        <div class="container position-relative z-1">
+            <div class="text-center mb-5">
+                <span class="badge bg-white text-primary border shadow-sm px-3 py-2 rounded-pill mb-3 text-uppercase fw-bold small tracking-wide">Trusted Partners</span>
+                <h2 class="h4 fw-bold text-dark mb-0">Trusted by 500+ Educational Institutions</h2>
+            </div>
+            
+            <div class="row justify-content-center align-items-center g-4 g-lg-5">
+                <!-- Partner 1 -->
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="partner-logo p-3 text-center opacity-50 hover-opacity-100 transition-all cursor-pointer" data-bs-toggle="tooltip" title="Global University">
+                        <i class="fas fa-university fa-3x text-dark mb-2 d-block"></i>
+                        <span class="small fw-bold text-muted d-none d-md-block">Global Univ</span>
+                    </div>
                 </div>
-                <div class="col-6 col-md-2 text-center mb-4 mb-md-0">
-                    <i class="fas fa-graduation-cap fa-2x text-secondary"></i>
+                
+                <!-- Partner 2 -->
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="partner-logo p-3 text-center opacity-50 hover-opacity-100 transition-all cursor-pointer" data-bs-toggle="tooltip" title="Future Academy">
+                        <i class="fas fa-graduation-cap fa-3x text-dark mb-2 d-block"></i>
+                        <span class="small fw-bold text-muted d-none d-md-block">Future Acad</span>
+                    </div>
                 </div>
-                <div class="col-6 col-md-2 text-center mb-4 mb-md-0">
-                    <i class="fas fa-school fa-2x text-secondary"></i>
+                
+                <!-- Partner 3 -->
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="partner-logo p-3 text-center opacity-50 hover-opacity-100 transition-all cursor-pointer" data-bs-toggle="tooltip" title="Smart School System">
+                        <i class="fas fa-school fa-3x text-dark mb-2 d-block"></i>
+                        <span class="small fw-bold text-muted d-none d-md-block">Smart School</span>
+                    </div>
                 </div>
-                <div class="col-6 col-md-2 text-center mb-4 mb-md-0">
-                    <i class="fas fa-book-reader fa-2x text-secondary"></i>
+                
+                <!-- Partner 4 -->
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="partner-logo p-3 text-center opacity-50 hover-opacity-100 transition-all cursor-pointer" data-bs-toggle="tooltip" title="E-Learning Institute">
+                        <i class="fas fa-book-reader fa-3x text-dark mb-2 d-block"></i>
+                        <span class="small fw-bold text-muted d-none d-md-block">E-Learning</span>
+                    </div>
                 </div>
-                <div class="col-6 col-md-2 text-center mb-4 mb-md-0">
-                    <i class="fas fa-chalkboard-teacher fa-2x text-secondary"></i>
+                
+                <!-- Partner 5 -->
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="partner-logo p-3 text-center opacity-50 hover-opacity-100 transition-all cursor-pointer" data-bs-toggle="tooltip" title="Teachers Association">
+                        <i class="fas fa-chalkboard-teacher fa-3x text-dark mb-2 d-block"></i>
+                        <span class="small fw-bold text-muted d-none d-md-block">Teachers Assoc</span>
+                    </div>
+                </div>
+                
+                <!-- Partner 6 -->
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="partner-logo p-3 text-center opacity-50 hover-opacity-100 transition-all cursor-pointer" data-bs-toggle="tooltip" title="International Campus">
+                        <i class="fas fa-globe-americas fa-3x text-dark mb-2 d-block"></i>
+                        <span class="small fw-bold text-muted d-none d-md-block">Intl Campus</span>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <style>
+            .hover-opacity-100:hover {
+                opacity: 1 !important;
+                transform: translateY(-5px);
+            }
+            .transition-all {
+                transition: all 0.3s ease;
+            }
+            .partner-logo i {
+                transition: color 0.3s ease;
+            }
+            .partner-logo:hover i {
+                color: var(--bs-primary) !important;
+            }
+        </style>
     </section>
 
     <!-- Features Section -->

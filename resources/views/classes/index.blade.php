@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+﻿﻿<x-app-layout>
     <div class="container-fluid px-4 py-4">
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
