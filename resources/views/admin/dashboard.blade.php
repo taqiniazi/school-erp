@@ -3,17 +3,18 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-<div class="container-fluid px-0">
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-1 text-gray-800 fw-bold">Dashboard Overview</h1>
-            <p class="text-muted mb-0">Welcome back, here's what's happening at your school today.</p>
-        </div>
-        <div>
-            <a href="{{ route('reports.index') }}" class="btn btn-primary shadow-sm">
-                <i class="fas fa-download fa-sm text-white-50 me-2"></i> Generate Report
-            </a>
+<div class="dashboard container-fluid px-0">
+    <div class="dashboard-hero mb-4">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 position-relative z-1">
+            <div>
+                <div class="dashboard-title">Dashboard Overview</div>
+                <div class="dashboard-subtitle">Welcome back, here’s what’s happening at your school today</div>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{{ route('reports.index') }}" class="btn btn-light fw-semibold shadow-sm">
+                    <i class="fas fa-download me-2"></i> Generate Report
+                </a>
+            </div>
         </div>
     </div>
 

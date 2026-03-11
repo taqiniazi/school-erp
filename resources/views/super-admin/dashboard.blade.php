@@ -1,97 +1,94 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-dark">Super Admin Dashboard</h1>
-        <a href="{{ route('super-admin.payments.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-            <i class="fas fa-file-invoice-dollar fa-sm text-white-50"></i> Verify Payments
-        </a>
-    </div>
-
-    <!-- Stats Cards -->
-    <div class="row">
-        <!-- Total Schools -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-4 border-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row g-0 align-items-center">
-                        <div class="col me-2">
-                            <div class="small fw-bold text-primary text-uppercase mb-1">Total Schools</div>
-                            <div class="h5 mb-0 fw-bold text-dark">{{ $totalSchools }}</div>
-                            <small class="text-muted">Active: {{ $activeSchools }} | Suspended: {{ $suspendedSchools }}</small>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-school fa-2x text-secondary"></i>
-                        </div>
-                    </div>
-                </div>
+<div class="dashboard container-fluid">
+    <div class="dashboard-hero mb-4">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 position-relative z-1">
+            <div>
+                <div class="dashboard-title">Super Admin Dashboard</div>
+                <div class="dashboard-subtitle">Monitor platform performance and approve payments</div>
             </div>
-        </div>
-
-        <!-- Monthly Revenue -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-4 border-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row g-0 align-items-center">
-                        <div class="col me-2">
-                            <div class="small fw-bold text-success text-uppercase mb-1">Monthly Revenue</div>
-                            <div class="h5 mb-0 fw-bold text-dark">Rs. {{ number_format($monthlyRevenue, 2) }}</div>
-                            <small class="text-muted">MRR: Rs. {{ number_format($mrr, 2) }}</small>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-secondary"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Subscriptions -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-4 border-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row g-0 align-items-center">
-                        <div class="col me-2">
-                            <div class="small fw-bold text-info text-uppercase mb-1">Active Subscriptions</div>
-                            <div class="row g-0 align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 me-3 fw-bold text-dark">{{ $activeSubs }}</div>
-                                </div>
-                            </div>
-                            <small class="text-muted">Trialing: {{ $trialSubs }}</small>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-clipboard-list fa-2x text-secondary"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pending Payments -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-start border-4 border-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row g-0 align-items-center">
-                        <div class="col me-2">
-                            <div class="small fw-bold text-warning text-uppercase mb-1">Pending Payments</div>
-                            <div class="h5 mb-0 fw-bold text-dark">{{ $pendingPayments }}</div>
-                            <small class="text-muted">Requires Verification</small>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-comments fa-2x text-secondary"></i>
-                        </div>
-                    </div>
-                </div>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{{ route('super-admin.payments.index') }}" class="btn btn-light fw-semibold shadow-sm">
+                    <i class="fas fa-file-invoice-dollar me-2"></i> Verify Payments
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Charts Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card kpi-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <div class="kpi-label">Total Schools</div>
+                            <div class="kpi-value">{{ $totalSchools }}</div>
+                            <div class="kpi-meta">Active: {{ $activeSchools }} · Suspended: {{ $suspendedSchools }}</div>
+                        </div>
+                        <div class="kpi-icon bg-primary bg-opacity-10 text-primary">
+                            <i class="fas fa-school"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card kpi-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <div class="kpi-label">Monthly Revenue</div>
+                            <div class="kpi-value">Rs. {{ number_format($monthlyRevenue, 2) }}</div>
+                            <div class="kpi-meta">MRR: Rs. {{ number_format($mrr, 2) }}</div>
+                        </div>
+                        <div class="kpi-icon bg-success bg-opacity-10 text-success">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card kpi-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <div class="kpi-label">Active Subscriptions</div>
+                            <div class="kpi-value">{{ $activeSubs }}</div>
+                            <div class="kpi-meta">Trialing: {{ $trialSubs }}</div>
+                        </div>
+                        <div class="kpi-icon bg-info bg-opacity-10 text-info">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card kpi-card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <div class="kpi-label">Pending Payments</div>
+                            <div class="kpi-value">{{ $pendingPayments }}</div>
+                            <div class="kpi-meta">Requires verification</div>
+                        </div>
+                        <div class="kpi-icon bg-warning bg-opacity-10 text-warning">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-xl-8 col-lg-7">
-            <div class="card shadow mb-4">
+            <div class="card kpi-card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 fw-bold">Revenue Overview (Last 6 Months)</h6>
                 </div>
@@ -103,7 +100,7 @@
             </div>
         </div>
         <div class="col-xl-4 col-lg-5">
-            <div class="card shadow mb-4">
+            <div class="card kpi-card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 fw-bold">New Schools (Last 6 Months)</h6>
                 </div>
@@ -118,9 +115,8 @@
 
     <div class="row">
 
-        <!-- Recent Payments -->
         <div class="col-lg-6 mb-4">
-            <div class="card shadow mb-4">
+            <div class="card kpi-card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 fw-bold">Recent Payments</h6>
                     <a href="{{ route('super-admin.payments.index') }}" class="btn btn-sm btn-primary">View All</a>
@@ -164,9 +160,8 @@
             </div>
         </div>
 
-        <!-- Recent Subscriptions -->
         <div class="col-lg-6 mb-4">
-            <div class="card shadow mb-4">
+            <div class="card kpi-card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 fw-bold">Recent Subscriptions</h6>
                 </div>
@@ -388,5 +383,4 @@
     });
 </script>
 @endpush
-
 

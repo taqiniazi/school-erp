@@ -27,10 +27,10 @@
     
     <!-- School Management -->
     <li>
-        <a href="#schoolSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') ? '' : 'collapsed' }}">
+        <a href="#schoolSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') || request()->routeIs('departments.*') || request()->routeIs('designations.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') || request()->routeIs('departments.*') || request()->routeIs('designations.*') ? '' : 'collapsed' }}">
             <i class="fas fa-university"></i> School Management
         </a>
-        <ul class="collapse list-unstyled {{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') ? 'show' : '' }}" id="schoolSubmenu" data-bs-parent="#sidebarAccordion">
+        <ul class="collapse list-unstyled {{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') || request()->routeIs('departments.*') || request()->routeIs('designations.*') ? 'show' : '' }}" id="schoolSubmenu" data-bs-parent="#sidebarAccordion">
             @if(auth()->check() && auth()->user()->hasRole('Super Admin'))
             <li>
                 <a href="{{ route('super-admin.schools.index') }}" class="{{ request()->routeIs('super-admin.schools.*') ? 'active' : '' }}">Schools</a>
@@ -41,17 +41,21 @@
                 <a href="{{ route('campuses.index') }}" class="{{ request()->routeIs('campuses.*') ? 'active' : '' }}">Campuses</a>
             </li>
             @endif
-            <li><a href="#">Departments</a></li>
-            <li><a href="#">Designations</a></li>
+            <li>
+                <a href="{{ route('departments.index') }}" class="{{ request()->routeIs('departments.*') ? 'active' : '' }}">Departments</a>
+            </li>
+            <li>
+                <a href="{{ route('designations.index') }}" class="{{ request()->routeIs('designations.*') ? 'active' : '' }}">Designations</a>
+            </li>
         </ul>
     </li>
 
     <!-- User Management -->
     <li>
-        <a href="#userSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('admin.audit-logs.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('admin.audit-logs.*') ? '' : 'collapsed' }}">
+        <a href="#userSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('permissions.*') || request()->routeIs('admin.audit-logs.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('permissions.*') || request()->routeIs('admin.audit-logs.*') ? '' : 'collapsed' }}">
             <i class="fas fa-users-cog"></i> User Management
         </a>
-        <ul class="collapse list-unstyled {{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('admin.audit-logs.*') ? 'show' : '' }}" id="userSubmenu" data-bs-parent="#sidebarAccordion">
+        <ul class="collapse list-unstyled {{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('permissions.*') || request()->routeIs('admin.audit-logs.*') ? 'show' : '' }}" id="userSubmenu" data-bs-parent="#sidebarAccordion">
             @if(auth()->check() && auth()->user()->hasRole('Super Admin'))
             <li>
                 <a href="{{ route('super-admin.admin-users.index') }}" class="{{ request()->routeIs('super-admin.admin-users.*') ? 'active' : '' }}">Users</a>
@@ -60,7 +64,9 @@
                 <a href="{{ route('super-admin.roles.index') }}" class="{{ request()->routeIs('super-admin.roles.*') ? 'active' : '' }}">Roles</a>
             </li>
             @endif
-            <li><a href="#">Permissions</a></li>
+            <li>
+                <a href="{{ route('permissions.index') }}" class="{{ request()->routeIs('permissions.*') ? 'active' : '' }}">Permissions</a>
+            </li>
             <li>
                 <a href="{{ route('admin.audit-logs.index') }}" class="{{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}">Activity Logs</a>
             </li>
@@ -69,17 +75,25 @@
 
     <!-- Student Management -->
     <li>
-        <a href="#studentSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('students.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('students.*') ? '' : 'collapsed' }}">
+        <a href="#studentSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('students.*') || request()->routeIs('admissions.*') || request()->routeIs('guardians.*') || request()->routeIs('student-promotions.*') || request()->routeIs('student-documents.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('students.*') || request()->routeIs('admissions.*') || request()->routeIs('guardians.*') || request()->routeIs('student-promotions.*') || request()->routeIs('student-documents.*') ? '' : 'collapsed' }}">
             <i class="fas fa-user-graduate"></i> Student Management
         </a>
-        <ul class="collapse list-unstyled {{ request()->routeIs('students.*') ? 'show' : '' }}" id="studentSubmenu" data-bs-parent="#sidebarAccordion">
+        <ul class="collapse list-unstyled {{ request()->routeIs('students.*') || request()->routeIs('admissions.*') || request()->routeIs('guardians.*') || request()->routeIs('student-promotions.*') || request()->routeIs('student-documents.*') ? 'show' : '' }}" id="studentSubmenu" data-bs-parent="#sidebarAccordion">
             <li>
                 <a href="{{ route('students.index') }}" class="{{ request()->routeIs('students.*') ? 'active' : '' }}">Students</a>
             </li>
-            <li><a href="#">Admissions</a></li>
-            <li><a href="#">Guardians</a></li>
-            <li><a href="#">Student Promotion</a></li>
-            <li><a href="#">Student Documents</a></li>
+            <li>
+                <a href="{{ route('admissions.index') }}" class="{{ request()->routeIs('admissions.*') ? 'active' : '' }}">Admissions</a>
+            </li>
+            <li>
+                <a href="{{ route('guardians.index') }}" class="{{ request()->routeIs('guardians.*') ? 'active' : '' }}">Guardians</a>
+            </li>
+            <li>
+                <a href="{{ route('student-promotions.index') }}" class="{{ request()->routeIs('student-promotions.*') ? 'active' : '' }}">Student Promotion</a>
+            </li>
+            <li>
+                <a href="{{ route('student-documents.index') }}" class="{{ request()->routeIs('student-documents.*') ? 'active' : '' }}">Student Documents</a>
+            </li>
         </ul>
     </li>
 
@@ -106,19 +120,25 @@
 
     <!-- Academic Management -->
     <li>
-        <a href="#academicSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') ? '' : 'collapsed' }}">
+        <a href="#academicSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') || request()->routeIs('sections.*') || request()->routeIs('timetable.*') || request()->routeIs('lesson-plans.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') || request()->routeIs('sections.*') || request()->routeIs('timetable.*') || request()->routeIs('lesson-plans.*') ? '' : 'collapsed' }}">
             <i class="fas fa-book-open"></i> Academic Management
         </a>
-        <ul class="collapse list-unstyled {{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') ? 'show' : '' }}" id="academicSubmenu" data-bs-parent="#sidebarAccordion">
+        <ul class="collapse list-unstyled {{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') || request()->routeIs('sections.*') || request()->routeIs('timetable.*') || request()->routeIs('lesson-plans.*') ? 'show' : '' }}" id="academicSubmenu" data-bs-parent="#sidebarAccordion">
             <li>
                 <a href="{{ route('classes.index') }}" class="{{ request()->routeIs('classes.*') ? 'active' : '' }}">Classes</a>
             </li>
-            <li><a href="#">Sections</a></li>
+            <li>
+                <a href="{{ route('sections.index') }}" class="{{ request()->routeIs('sections.*') ? 'active' : '' }}">Sections</a>
+            </li>
             <li>
                 <a href="{{ route('subjects.index') }}" class="{{ request()->routeIs('subjects.*') ? 'active' : '' }}">Subjects</a>
             </li>
-            <li><a href="#">Timetable</a></li>
-            <li><a href="#">Lesson Plans</a></li>
+            <li>
+                <a href="{{ route('timetable.index') }}" class="{{ request()->routeIs('timetable.*') ? 'active' : '' }}">Timetable</a>
+            </li>
+            <li>
+                <a href="{{ route('lesson-plans.index') }}" class="{{ request()->routeIs('lesson-plans.*') ? 'active' : '' }}">Lesson Plans</a>
+            </li>
         </ul>
     </li>
 
@@ -142,11 +162,13 @@
 
     <!-- Examinations -->
     <li>
-        <a href="#examSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? '' : 'collapsed' }}">
+        <a href="#examSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('exam-types.*') || request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('exam-types.*') || request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? '' : 'collapsed' }}">
             <i class="fas fa-edit"></i> Examinations
         </a>
-        <ul class="collapse list-unstyled {{ request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? 'show' : '' }}" id="examSubmenu" data-bs-parent="#sidebarAccordion">
-            <li><a href="#">Exam Types</a></li>
+        <ul class="collapse list-unstyled {{ request()->routeIs('exam-types.*') || request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? 'show' : '' }}" id="examSubmenu" data-bs-parent="#sidebarAccordion">
+            <li>
+                <a href="{{ route('exam-types.index') }}" class="{{ request()->routeIs('exam-types.*') ? 'active' : '' }}">Exam Types</a>
+            </li>
             <li>
                 <a href="{{ route('exams.index') }}" class="{{ request()->routeIs('exams.*') ? 'active' : '' }}">Exams</a>
             </li>
@@ -164,10 +186,10 @@
 
     <!-- Fee Management -->
     <li>
-        <a href="#feeSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') ? '' : 'collapsed' }}">
+        <a href="#feeSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') || request()->routeIs('discounts.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') || request()->routeIs('discounts.*') ? '' : 'collapsed' }}">
             <i class="fas fa-money-check-alt"></i> Fee Management
         </a>
-        <ul class="collapse list-unstyled {{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') ? 'show' : '' }}" id="feeSubmenu" data-bs-parent="#sidebarAccordion">
+        <ul class="collapse list-unstyled {{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') || request()->routeIs('discounts.*') ? 'show' : '' }}" id="feeSubmenu" data-bs-parent="#sidebarAccordion">
             <li>
                 <a href="{{ route('fee-types.index') }}" class="{{ request()->routeIs('fee-types.*') ? 'active' : '' }}">Fee Types</a>
             </li>
@@ -180,7 +202,9 @@
             <li>
                 <a href="{{ route('fee-payments.history') }}" class="{{ request()->routeIs('fee-payments.*') ? 'active' : '' }}">Payments</a>
             </li>
-            <li><a href="#">Discounts</a></li>
+            <li>
+                <a href="{{ route('discounts.index') }}" class="{{ request()->routeIs('discounts.*') ? 'active' : '' }}">Discounts</a>
+            </li>
             <li>
                 <a href="{{ route('reports.financial') }}" class="{{ request()->routeIs('reports.financial') ? 'active' : '' }}">Fee Reports</a>
             </li>
@@ -189,21 +213,25 @@
 
     <!-- HR & Payroll -->
     <li>
-        <a href="#hrSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') ? '' : 'collapsed' }}">
+        <a href="#hrSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') || request()->routeIs('departments.*') || request()->routeIs('payslips.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') || request()->routeIs('departments.*') || request()->routeIs('payslips.*') ? '' : 'collapsed' }}">
             <i class="fas fa-user-tie"></i> HR & Payroll
         </a>
-        <ul class="collapse list-unstyled {{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') ? 'show' : '' }}" id="hrSubmenu" data-bs-parent="#sidebarAccordion">
+        <ul class="collapse list-unstyled {{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') || request()->routeIs('departments.*') || request()->routeIs('payslips.*') ? 'show' : '' }}" id="hrSubmenu" data-bs-parent="#sidebarAccordion">
             <li>
                 <a href="{{ route('hr.staff.index') }}" class="{{ request()->routeIs('hr.staff.*') ? 'active' : '' }}">Employees</a>
             </li>
-            <li><a href="#">Departments</a></li>
+            <li>
+                <a href="{{ route('departments.index') }}" class="{{ request()->routeIs('departments.*') ? 'active' : '' }}">Departments</a>
+            </li>
             <li>
                 <a href="{{ route('hr.leave.index') }}" class="{{ request()->routeIs('hr.leave.*') ? 'active' : '' }}">Leave Management</a>
             </li>
             <li>
                 <a href="{{ route('payroll.salaries.index') }}" class="{{ request()->routeIs('payroll.salaries.*') ? 'active' : '' }}">Payroll</a>
             </li>
-            <li><a href="#">Payslips</a></li>
+            <li>
+                <a href="{{ route('payslips.index') }}" class="{{ request()->routeIs('payslips.*') ? 'active' : '' }}">Payslips</a>
+            </li>
         </ul>
     </li>
 
@@ -216,14 +244,18 @@
             <li>
                 <a href="{{ route('library.books.index') }}" class="{{ request()->routeIs('library.books.*') ? 'active' : '' }}">Books</a>
             </li>
-            <li><a href="#">Categories</a></li>
+            <li>
+                <a href="{{ route('library.categories.index') }}" class="{{ request()->routeIs('library.categories.*') ? 'active' : '' }}">Categories</a>
+            </li>
             <li>
                 <a href="{{ route('library.loans.create') }}" class="{{ request()->routeIs('library.loans.create') ? 'active' : '' }}">Issue Books</a>
             </li>
             <li>
                 <a href="{{ route('library.loans.index') }}" class="{{ request()->routeIs('library.loans.index') ? 'active' : '' }}">Return Books</a>
             </li>
-            <li><a href="#">Library Reports</a></li>
+            <li>
+                <a href="{{ route('library.reports.index') }}" class="{{ request()->routeIs('library.reports.*') ? 'active' : '' }}">Library Reports</a>
+            </li>
         </ul>
     </li>
 
@@ -242,7 +274,9 @@
             <li>
                 <a href="{{ route('transport.drivers.index') }}" class="{{ request()->routeIs('transport.drivers.*') ? 'active' : '' }}">Drivers</a>
             </li>
-            <li><a href="#">Student Transport</a></li>
+            <li>
+                <a href="{{ route('transport.student-transport.index') }}" class="{{ request()->routeIs('transport.student-transport.*') ? 'active' : '' }}">Student Transport</a>
+            </li>
         </ul>
     </li>
 
@@ -258,7 +292,9 @@
             <li>
                 <a href="{{ route('inventory.purchases.index') }}" class="{{ request()->routeIs('inventory.purchases.*') ? 'active' : '' }}">Purchases</a>
             </li>
-            <li><a href="#">Suppliers</a></li>
+            <li>
+                <a href="{{ route('inventory.suppliers.index') }}" class="{{ request()->routeIs('inventory.suppliers.*') ? 'active' : '' }}">Suppliers</a>
+            </li>
             <li>
                 <a href="{{ route('inventory.alerts.low_stock') }}" class="{{ request()->routeIs('inventory.alerts.*') ? 'active' : '' }}">Stock Reports</a>
             </li>
@@ -277,8 +313,12 @@
             <li>
                 <a href="{{ route('communication.messages.index') }}" class="{{ request()->routeIs('communication.messages.*') ? 'active' : '' }}">Messaging</a>
             </li>
-            <li><a href="#">Notifications</a></li>
-            <li><a href="#">Email / SMS</a></li>
+            <li>
+                <a href="{{ route('communication.notifications.index') }}" class="{{ request()->routeIs('communication.notifications.*') ? 'active' : '' }}">Notifications</a>
+            </li>
+            <li>
+                <a href="{{ route('communication.email-sms.index') }}" class="{{ request()->routeIs('communication.email-sms.*') ? 'active' : '' }}">Email / SMS</a>
+            </li>
         </ul>
     </li>
 
@@ -304,7 +344,15 @@
                 <a href="{{ route('admin.subscription.index') }}" class="{{ request()->routeIs('admin.subscription.*') ? 'active' : '' }}">My Subscription</a>
             </li>
             @endif
-            <li><a href="#">Billing</a></li>
+            @if(auth()->check() && auth()->user()->hasRole('School Admin'))
+            <li>
+                <a href="{{ route('billing.payment.history') }}" class="{{ request()->routeIs('billing.*') ? 'active' : '' }}">Billing</a>
+            </li>
+            @elseif(auth()->check() && auth()->user()->hasRole('Super Admin'))
+            <li>
+                <a href="{{ route('super-admin.payments.index') }}" class="{{ request()->routeIs('super-admin.payments.*') ? 'active' : '' }}">Billing</a>
+            </li>
+            @endif
             @if(auth()->check() && auth()->user()->hasRole('Super Admin'))
             <li>
                 <a href="{{ route('super-admin.payments.index') }}" class="{{ request()->routeIs('super-admin.payments.*') ? 'active' : '' }}">Payment History</a>
@@ -339,18 +387,24 @@
 
     <!-- System Settings -->
     <li>
-        <a href="#settingsSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">
+        <a href="#settingsSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('settings.*') || request()->routeIs('super-admin.payment-methods.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('settings.*') || request()->routeIs('super-admin.payment-methods.*') ? '' : 'collapsed' }}">
             <i class="fas fa-cogs"></i> System Settings
         </a>
-        <ul class="collapse list-unstyled" id="settingsSubmenu" data-bs-parent="#sidebarAccordion">
-            <li><a href="#">General Settings</a></li>
+        <ul class="collapse list-unstyled {{ request()->routeIs('settings.*') || request()->routeIs('super-admin.payment-methods.*') ? 'show' : '' }}" id="settingsSubmenu" data-bs-parent="#sidebarAccordion">
+            <li>
+                <a href="{{ route('settings.general') }}" class="{{ request()->routeIs('settings.general') ? 'active' : '' }}">General Settings</a>
+            </li>
             @if(auth()->check() && auth()->user()->hasRole('Super Admin'))
             <li>
                 <a href="{{ route('super-admin.payment-methods.index') }}" class="{{ request()->routeIs('super-admin.payment-methods.*') ? 'active' : '' }}">Payment Methods</a>
             </li>
             @endif
-            <li><a href="#">Email Settings</a></li>
-            <li><a href="#">Backup</a></li>
+            <li>
+                <a href="{{ route('settings.email') }}" class="{{ request()->routeIs('settings.email') ? 'active' : '' }}">Email Settings</a>
+            </li>
+            <li>
+                <a href="{{ route('settings.backup') }}" class="{{ request()->routeIs('settings.backup') ? 'active' : '' }}">Backup</a>
+            </li>
         </ul>
     </li>
 

@@ -150,6 +150,72 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         // Subjects
         Route::resource('subjects', SubjectController::class);
 
+        Route::get('departments', function () {
+            return view('admin.placeholders.module', ['title' => 'Departments']);
+        })->name('departments.index');
+
+        Route::get('designations', function () {
+            return view('admin.placeholders.module', ['title' => 'Designations']);
+        })->name('designations.index');
+
+        Route::get('permissions', function () {
+            return view('admin.placeholders.module', ['title' => 'Permissions']);
+        })->name('permissions.index');
+
+        Route::get('admissions', function () {
+            return view('admin.placeholders.module', ['title' => 'Admissions']);
+        })->name('admissions.index');
+
+        Route::get('guardians', function () {
+            return view('admin.placeholders.module', ['title' => 'Guardians']);
+        })->name('guardians.index');
+
+        Route::get('student-promotions', function () {
+            return view('admin.placeholders.module', ['title' => 'Student Promotion']);
+        })->name('student-promotions.index');
+
+        Route::get('student-documents', function () {
+            return view('admin.placeholders.module', ['title' => 'Student Documents']);
+        })->name('student-documents.index');
+
+        Route::get('sections', function () {
+            return view('admin.placeholders.module', ['title' => 'Sections']);
+        })->name('sections.index');
+
+        Route::get('timetable', function () {
+            return view('admin.placeholders.module', ['title' => 'Timetable']);
+        })->name('timetable.index');
+
+        Route::get('lesson-plans', function () {
+            return view('admin.placeholders.module', ['title' => 'Lesson Plans']);
+        })->name('lesson-plans.index');
+
+        Route::get('exam-types', function () {
+            return view('admin.placeholders.module', ['title' => 'Exam Types']);
+        })->name('exam-types.index');
+
+        Route::get('discounts', function () {
+            return view('admin.placeholders.module', ['title' => 'Discounts']);
+        })->name('discounts.index');
+
+        Route::get('payslips', function () {
+            return view('admin.placeholders.module', ['title' => 'Payslips']);
+        })->name('payslips.index');
+
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('general', function () {
+                return view('admin.placeholders.module', ['title' => 'General Settings']);
+            })->name('general');
+
+            Route::get('email', function () {
+                return view('admin.placeholders.module', ['title' => 'Email Settings']);
+            })->name('email');
+
+            Route::get('backup', function () {
+                return view('admin.placeholders.module', ['title' => 'Backup']);
+            })->name('backup');
+        });
+
         // Campuses
         Route::resource('campuses', App\Http\Controllers\CampusController::class);
 
@@ -177,6 +243,9 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
             Route::resource('issues', App\Http\Controllers\InventoryIssueController::class);
             Route::resource('returns', App\Http\Controllers\InventoryReturnController::class);
             Route::get('alerts/low-stock', [App\Http\Controllers\InventoryAlertController::class, 'lowStock'])->name('alerts.low_stock');
+            Route::get('suppliers', function () {
+                return view('admin.placeholders.module', ['title' => 'Suppliers']);
+            })->name('suppliers.index');
         });
 
         // Library
@@ -184,6 +253,12 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
             Route::resource('books', App\Http\Controllers\LibraryBookController::class);
             Route::resource('loans', App\Http\Controllers\LibraryLoanController::class);
             Route::post('loans/{libraryLoan}/return', [\App\Http\Controllers\LibraryLoanController::class, 'returnBook'])->name('loans.return');
+            Route::get('categories', function () {
+                return view('admin.placeholders.module', ['title' => 'Library Categories']);
+            })->name('categories.index');
+            Route::get('reports', function () {
+                return view('admin.placeholders.module', ['title' => 'Library Reports']);
+            })->name('reports.index');
         });
 
         // Examinations
@@ -213,6 +288,9 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
             Route::resource('vehicles', App\Http\Controllers\VehicleController::class);
             Route::resource('routes', App\Http\Controllers\TransportRouteController::class);
             Route::resource('drivers', App\Http\Controllers\DriverController::class);
+            Route::get('student-transport', function () {
+                return view('admin.placeholders.module', ['title' => 'Student Transport']);
+            })->name('student-transport.index');
         });
         Route::resource('fee-types', App\Http\Controllers\FeeTypeController::class);
         Route::resource('fee-structures', App\Http\Controllers\FeeStructureController::class);
@@ -256,6 +334,12 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
             Route::resource('events', App\Http\Controllers\EventController::class);
             Route::resource('messages', App\Http\Controllers\MessageController::class)->except(['edit', 'update', 'destroy']);
             Route::get('messages/sent', [App\Http\Controllers\MessageController::class, 'sent'])->name('messages.sent');
+            Route::get('notifications', function () {
+                return view('admin.placeholders.module', ['title' => 'Notifications']);
+            })->name('notifications.index');
+            Route::get('email-sms', function () {
+                return view('admin.placeholders.module', ['title' => 'Email / SMS']);
+            })->name('email-sms.index');
         });
     });
 
