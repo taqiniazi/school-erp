@@ -31,60 +31,56 @@
                 </ul>
             </li>
 
+            <li class="nav-item me-2">
+                <button type="button" class="nav-link btn btn-link p-0" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon fa-lg"></i>
+                </button>
+            </li>
+
+            <li class="nav-item dropdown me-3">
+                <a class="nav-link dropdown-toggle" href="#" id="localeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ strtoupper(app()->getLocale()) }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="localeDropdown" style="min-width: 140px;">
+                    <li>
+                        <form method="POST" action="{{ route('ui.locale') }}">
+                            @csrf
+                            <input type="hidden" name="locale" value="en">
+                            <button type="submit" class="dropdown-item {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</button>
+                        </form>
+                    </li>
+                    <li>
+                        <form method="POST" action="{{ route('ui.locale') }}">
+                            @csrf
+                            <input type="hidden" name="locale" value="es">
+                            <button type="submit" class="dropdown-item {{ app()->getLocale() === 'es' ? 'active' : '' }}">ES</button>
+                        </form>
+                    </li>
+                </ul>
+            </li>
+
             <!-- Notifications -->
             <li class="nav-item dropdown me-3">
-                <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                   data-notifications-endpoint="{{ route('ui.notifications') }}"
+                   data-notifications-mark-all-read="{{ route('ui.notifications.mark-all-read') }}"
+                   data-notifications-index-url="{{ route('communication.notifications.index') }}">
                     <i class="far fa-bell fa-lg"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white small">
-                        3
-                        <span class="visually-hidden">unread messages</span>
+                    <span id="notificationBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white small d-none">
+                        0
+                        <span class="visually-hidden">{{ __('unread notifications') }}</span>
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-0" aria-labelledby="notificationDropdown" style="width: 320px;">
                     <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light rounded-top">
-                        <h6 class="mb-0 fw-bold">Notifications</h6>
-                        <a href="#" class="text-decoration-none small text-primary">Mark all read</a>
+                        <h6 class="mb-0 fw-bold">{{ __('Notifications') }}</h6>
+                        <button type="button" class="btn btn-link p-0 text-decoration-none small text-primary" id="markAllReadBtn">{{ __('Mark all read') }}</button>
                     </div>
-                    <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
-                        <a href="#" class="list-group-item list-group-item-action border-0 px-3 py-3">
-                            <div class="d-flex align-items-start">
-                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-3">
-                                    <i class="fas fa-user-plus"></i>
-                                </div>
-                                <div>
-                                    <p class="mb-1 small text-dark fw-medium">New student registration</p>
-                                    <p class="mb-0 small text-muted">John Doe registered for Class 10</p>
-                                    <small class="text-muted" style="font-size: 0.75rem;">2 mins ago</small>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0 px-3 py-3">
-                            <div class="d-flex align-items-start">
-                                <div class="bg-success bg-opacity-10 text-success rounded-circle p-2 me-3">
-                                    <i class="fas fa-money-bill-wave"></i>
-                                </div>
-                                <div>
-                                    <p class="mb-1 small text-dark fw-medium">Fee Payment Received</p>
-                                    <p class="mb-0 small text-muted">Invoice #1234 paid by Sarah</p>
-                                    <small class="text-muted" style="font-size: 0.75rem;">1 hour ago</small>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0 px-3 py-3">
-                            <div class="d-flex align-items-start">
-                                <div class="bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-3">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                </div>
-                                <div>
-                                    <p class="mb-1 small text-dark fw-medium">Low Attendance Alert</p>
-                                    <p class="mb-0 small text-muted">Class 5B attendance is below 80%</p>
-                                    <small class="text-muted" style="font-size: 0.75rem;">3 hours ago</small>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                    <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;" id="notificationList"></div>
                     <div class="p-2 text-center border-top bg-light rounded-bottom">
-                        <a href="#" class="text-decoration-none small fw-bold text-primary">View All Notifications</a>
+                        <a href="{{ route('communication.notifications.index') }}" class="text-decoration-none small fw-bold text-primary" id="viewAllNotificationsLink">
+                            {{ __('View All Notifications') }}
+                        </a>
                     </div>
                 </div>
             </li>

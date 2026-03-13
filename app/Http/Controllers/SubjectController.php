@@ -6,6 +6,7 @@ use App\Models\Subject;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class SubjectController extends Controller
 {
@@ -31,17 +32,42 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:subjects',
-            'code' => 'required|string|max:255|unique:subjects',
-            'type' => 'required|in:theory,practical,both',
-        ]);
+        $rows = [];
+        if (is_array($request->input('subjects'))) {
+            $validated = $request->validate([
+                'subjects' => ['required', 'array', 'min:1'],
+                'subjects.*.name' => ['required', 'string', 'max:255', 'distinct', 'unique:subjects,name'],
+                'subjects.*.code' => ['required', 'string', 'max:255', 'distinct', 'unique:subjects,code'],
+                'subjects.*.type' => ['required', 'in:theory,practical,both'],
+            ]);
+            $rows = $validated['subjects'];
+        } else {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255|unique:subjects',
+                'code' => 'required|string|max:255|unique:subjects',
+                'type' => 'required|in:theory,practical,both',
+            ]);
+            $rows = [[
+                'name' => $validated['name'],
+                'code' => $validated['code'],
+                'type' => $validated['type'],
+            ]];
+        }
 
-        Subject::create($validated);
+        DB::transaction(function () use ($rows) {
+            foreach ($rows as $row) {
+                Subject::create([
+                    'name' => $row['name'],
+                    'code' => $row['code'],
+                    'type' => $row['type'],
+                ]);
+            }
+        });
         
         Cache::forget('all_subjects');
 
-        return redirect()->route('subjects.index')->with('success', 'Subject created successfully.');
+        $message = count($rows) > 1 ? 'Subjects created successfully.' : 'Subject created successfully.';
+        return redirect()->route('subjects.index')->with('success', $message);
     }
 
     /**

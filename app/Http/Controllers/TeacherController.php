@@ -50,6 +50,80 @@ class TeacherController extends Controller
     {
         // Check Plan Limits
         $school = auth()->user()->school;
+        if (is_array($request->input('teachers'))) {
+            $validated = $request->validate([
+                'teachers' => ['required', 'array', 'min:1'],
+                'teachers.*.name' => ['required', 'string', 'max:255'],
+                'teachers.*.email' => ['required', 'email', 'distinct', Rule::unique('users', 'email')],
+                'teachers.*.password' => ['required', 'string', 'min:8'],
+                'teachers.*.password_confirmation' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $parts = explode('.', $attribute);
+                        $index = $parts[1] ?? null;
+                        if ($index === null) return;
+                        $password = data_get($request->input('teachers'), $index . '.password');
+                        if ((string) $value !== (string) $password) {
+                            $fail('The password confirmation does not match.');
+                        }
+                    },
+                ],
+                'teachers.*.qualification' => ['required', 'string', 'max:255'],
+                'teachers.*.joining_date' => ['required', 'date'],
+                'teachers.*.address' => ['required', 'string'],
+                'teachers.*.phone' => ['nullable', 'string'],
+                'teachers.*.emergency_contact' => ['nullable', 'string'],
+                'teachers.*.salary_structure_id' => ['nullable', 'exists:salary_structures,id'],
+                'teachers.*.campus_id' => ['nullable', 'exists:campuses,id'],
+                'teachers.*.photo' => ['nullable', 'image', 'max:2048'],
+            ]);
+
+            $rows = $validated['teachers'];
+
+            $plan = $school?->current_plan;
+            if (!$plan) {
+                return redirect()->back()->with('error', 'No active plan found for your school. Please contact support.');
+            }
+            if (!is_null($plan->max_teachers)) {
+                $currentCount = $school->teachers()->count();
+                if ($currentCount + count($rows) > (int) $plan->max_teachers) {
+                    return redirect()->back()->with('error', 'You have reached the maximum number of teachers allowed by your current plan. Please upgrade your subscription.');
+                }
+            }
+
+            DB::transaction(function () use ($rows, $request) {
+                foreach ($rows as $idx => $row) {
+                    $user = User::create([
+                        'name' => $row['name'],
+                        'email' => $row['email'],
+                        'password' => Hash::make($row['password']),
+                    ]);
+
+                    $user->assignRole('Teacher');
+
+                    $path = null;
+                    if ($request->hasFile("teachers.$idx.photo")) {
+                        $path = $request->file("teachers.$idx.photo")->store('teachers', 'public');
+                    }
+
+                    Teacher::create([
+                        'user_id' => $user->id,
+                        'qualification' => $row['qualification'],
+                        'joining_date' => $row['joining_date'],
+                        'address' => $row['address'],
+                        'phone' => $row['phone'] ?? null,
+                        'emergency_contact' => $row['emergency_contact'] ?? null,
+                        'salary_structure_id' => $row['salary_structure_id'] ?? null,
+                        'campus_id' => $row['campus_id'] ?? null,
+                        'photo_path' => $path,
+                        'status' => 'active',
+                    ]);
+                }
+            });
+
+            return redirect()->route('teachers.index')->with('success', 'Teachers created successfully.');
+        }
+
         if (!$school->canAddTeacher()) {
             return redirect()->back()->with('error', 'You have reached the maximum number of teachers allowed by your current plan. Please upgrade your subscription.');
         }

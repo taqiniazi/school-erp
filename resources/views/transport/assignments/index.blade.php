@@ -1,14 +1,12 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
-        <h2 class="fw-semibold h4 text-dark lh-sm">
-            {{ __('Student Transport Assignments') }}
-        </h2>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">{{ __('Student Transport Assignments') }}</h1>
+            <a href="{{ route('transport.assignments.create') }}" class="btn btn-primary">New Assignment</a>
+        </div>
     </x-slot>
     <div class="py-5">
         <div class="container-fluid px-4">
-            <div class="mb-4">
-                <a href="{{ route('transport.assignments.create') }}" class="btn btn-primary">New Assignment</a>
-            </div>
             <div class="card shadow-sm border-0 rounded-3">
                 <div class="card-body p-4">
                     <div class="table-responsive">
@@ -55,7 +53,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 

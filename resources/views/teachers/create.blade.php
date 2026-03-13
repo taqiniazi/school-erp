@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -10,114 +10,227 @@
     <div class="card-body">
         <form action="{{ route('teachers.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            
-            <h4 class="mb-3">User Account</h4>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="name" class="form-label">Full Name</label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
-                    @error('name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
-                    @error('email')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required>
-                    @error('password')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="password_confirmation" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
-                </div>
+            @php
+                $teachersOld = old('teachers');
+                if (!is_array($teachersOld) || count($teachersOld) === 0) {
+                    $teachersOld = [[
+                        'name' => old('name'),
+                        'email' => old('email'),
+                        'qualification' => old('qualification'),
+                        'joining_date' => old('joining_date'),
+                        'address' => old('address'),
+                        'phone' => old('phone'),
+                        'emergency_contact' => old('emergency_contact'),
+                        'salary_structure_id' => old('salary_structure_id'),
+                        'campus_id' => old('campus_id'),
+                    ]];
+                }
+            @endphp
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="fw-semibold">Teachers</div>
+                <button type="button" class="btn btn-sm btn-outline-primary" id="add_teacher_row">
+                    <i class="fas fa-plus"></i> Add More
+                </button>
             </div>
 
-            <hr class="my-4">
+            <div id="teachers_container">
+                @foreach($teachersOld as $index => $row)
+                    <div class="teacher-item border rounded p-3 mb-3">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" name="teachers[{{ $index }}][name]" value="{{ data_get($row, 'name') }}" required>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="teachers[{{ $index }}][email]" value="{{ data_get($row, 'email') }}" required>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Qualification</label>
+                                <input type="text" class="form-control" name="teachers[{{ $index }}][qualification]" value="{{ data_get($row, 'qualification') }}" required>
+                            </div>
 
-            <h4 class="mb-3">Teacher Profile</h4>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="qualification" class="form-label">Qualification</label>
-                    <input type="text" class="form-control @error('qualification') is-invalid @enderror" id="qualification" name="qualification" value="{{ old('qualification') }}" required>
-                    @error('qualification')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="joining_date" class="form-label">Joining Date</label>
-                    <input type="date" class="form-control @error('joining_date') is-invalid @enderror" id="joining_date" name="joining_date" value="{{ old('joining_date') }}" required>
-                    @error('joining_date')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="campus_id" class="form-label">Campus</label>
-                    <select class="form-select @error('campus_id') is-invalid @enderror" id="campus_id" name="campus_id">
-                        <option value="">Select Campus</option>
-                        @foreach($campuses as $campus)
-                            <option value="{{ $campus->id }}" {{ old('campus_id') == $campus->id ? 'selected' : '' }}>{{ $campus->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('campus_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="salary_structure_id" class="form-label">Salary Structure</label>
-                    <select class="form-select @error('salary_structure_id') is-invalid @enderror" id="salary_structure_id" name="salary_structure_id">
-                        <option value="">Select Salary Structure</option>
-                        @foreach($salaryStructures as $structure)
-                            <option value="{{ $structure->id }}" {{ old('salary_structure_id') == $structure->id ? 'selected' : '' }}>
-                                {{ $structure->grade }} - {{ number_format($structure->basic_salary, 2) }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('salary_structure_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="photo" class="form-label">Photo</label>
-                    <input type="file" class="form-control @error('photo') is-invalid @enderror" id="photo" name="photo">
-                    @error('photo')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-12 mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <textarea class="form-control @error('address') is-invalid @enderror" id="address" name="address" rows="3" required>{{ old('address') }}</textarea>
-                    @error('address')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone') }}">
-                    @error('phone')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="emergency_contact" class="form-label">Emergency Contact</label>
-                    <input type="text" class="form-control @error('emergency_contact') is-invalid @enderror" id="emergency_contact" name="emergency_contact" value="{{ old('emergency_contact') }}">
-                    @error('emergency_contact')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control" name="teachers[{{ $index }}][password]" required>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" name="teachers[{{ $index }}][password_confirmation]" required>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Joining Date</label>
+                                <input type="date" class="form-control" name="teachers[{{ $index }}][joining_date]" value="{{ data_get($row, 'joining_date') }}" required>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Campus</label>
+                                <select class="form-select" name="teachers[{{ $index }}][campus_id]">
+                                    <option value="">Select Campus</option>
+                                    @foreach($campuses as $campus)
+                                        <option value="{{ $campus->id }}" {{ (string) data_get($row, 'campus_id') === (string) $campus->id ? 'selected' : '' }}>{{ $campus->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Salary Structure</label>
+                                <select class="form-select" name="teachers[{{ $index }}][salary_structure_id]">
+                                    <option value="">Select Salary Structure</option>
+                                    @foreach($salaryStructures as $structure)
+                                        <option value="{{ $structure->id }}" {{ (string) data_get($row, 'salary_structure_id') === (string) $structure->id ? 'selected' : '' }}>
+                                            {{ $structure->grade }} - {{ number_format($structure->basic_salary, 2) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Phone</label>
+                                <input type="text" class="form-control" name="teachers[{{ $index }}][phone]" value="{{ data_get($row, 'phone') }}">
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Emergency Contact</label>
+                                <input type="text" class="form-control" name="teachers[{{ $index }}][emergency_contact]" value="{{ data_get($row, 'emergency_contact') }}">
+                            </div>
+
+                            <div class="col-12 col-md-8">
+                                <label class="form-label">Address</label>
+                                <textarea class="form-control" name="teachers[{{ $index }}][address]" rows="2" required>{{ data_get($row, 'address') }}</textarea>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Photo</label>
+                                <input type="file" class="form-control" name="teachers[{{ $index }}][photo]">
+                            </div>
+                            <div class="col-12 col-md-1 text-md-end">
+                                <button type="button" class="btn btn-outline-danger w-100 remove-teacher-row">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
 
-            <button type="submit" class="btn btn-primary">Create Teacher</button>
+            <button type="submit" class="btn btn-primary">Create Teachers</button>
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const container = document.getElementById('teachers_container');
+        const addBtn = document.getElementById('add_teacher_row');
+
+        function renumberRows() {
+            const rows = container.querySelectorAll('.teacher-item');
+            rows.forEach((row, idx) => {
+                row.querySelectorAll('[name]').forEach((el) => {
+                    el.name = el.name.replace(/teachers\[\d+\]/, `teachers[${idx}]`);
+                });
+            });
+        }
+
+        function addRow() {
+            const idx = container.querySelectorAll('.teacher-item').length;
+            const div = document.createElement('div');
+            div.className = 'teacher-item border rounded p-3 mb-3';
+            div.innerHTML = `
+                <div class="row g-3 align-items-end">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="teachers[${idx}][name]" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="teachers[${idx}][email]" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Qualification</label>
+                        <input type="text" class="form-control" name="teachers[${idx}][qualification]" required>
+                    </div>
+
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" name="teachers[${idx}][password]" required>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" name="teachers[${idx}][password_confirmation]" required>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Joining Date</label>
+                        <input type="date" class="form-control" name="teachers[${idx}][joining_date]" required>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Campus</label>
+                        <select class="form-select" name="teachers[${idx}][campus_id]">
+                            <option value="">Select Campus</option>
+                            @foreach($campuses as $campus)
+                                <option value="{{ $campus->id }}">{{ $campus->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Salary Structure</label>
+                        <select class="form-select" name="teachers[${idx}][salary_structure_id]">
+                            <option value="">Select Salary Structure</option>
+                            @foreach($salaryStructures as $structure)
+                                <option value="{{ $structure->id }}">{{ $structure->grade }} - {{ number_format($structure->basic_salary, 2) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Phone</label>
+                        <input type="text" class="form-control" name="teachers[${idx}][phone]">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Emergency Contact</label>
+                        <input type="text" class="form-control" name="teachers[${idx}][emergency_contact]">
+                    </div>
+
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control" name="teachers[${idx}][address]" rows="2" required></textarea>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Photo</label>
+                        <input type="file" class="form-control" name="teachers[${idx}][photo]">
+                    </div>
+                    <div class="col-12 col-md-1 text-md-end">
+                        <button type="button" class="btn btn-outline-danger w-100 remove-teacher-row">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        addBtn.addEventListener('click', addRow);
+
+        container.addEventListener('click', function (e) {
+            const btn = e.target.closest('.remove-teacher-row');
+            if (!btn) return;
+
+            const row = btn.closest('.teacher-item');
+            const rows = container.querySelectorAll('.teacher-item');
+
+            if (rows.length <= 1) {
+                row.querySelectorAll('input[type="text"], input[type="email"], input[type="date"], textarea').forEach((el) => (el.value = ''));
+                row.querySelectorAll('input[type="password"]').forEach((el) => (el.value = ''));
+                row.querySelectorAll('input[type="file"]').forEach((el) => (el.value = ''));
+                row.querySelectorAll('select').forEach((el) => (el.selectedIndex = 0));
+                return;
+            }
+
+            row.remove();
+            renumberRows();
+        });
+    });
+</script>
+@endpush
 @endsection
 
 

@@ -1,17 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="fw-semibold h4 text-dark lh-sm">
-            {{ __('Staff Profiles') }}
-        </h2>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">{{ __('Staff Profiles') }}</h1>
+            <a href="{{ route('hr.staff.create') }}" class="btn btn-primary">New Profile</a>
+        </div>
     </x-slot>
     <div class="py-5">
         <div class="container-fluid px-4">
             <div class="card shadow-sm border-0 rounded-3">
                 <div class="card-body p-4">
-                    <div class="d-flex justify-content-between mb-4">
-                        <div></div>
-                        <a href="{{ route('hr.staff.create') }}" class="btn btn-primary">New Profile</a>
-                    </div>
                     @if(session('success'))
                         <div class="alert alert-success mb-4" role="alert">
                             {{ session('success') }}
@@ -61,7 +58,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 

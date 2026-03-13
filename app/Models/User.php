@@ -59,6 +59,7 @@ class User extends Authenticatable
         'phone_number',
         'password',
         'school_id',
+        'ui_settings',
     ];
 
     /**
@@ -79,6 +80,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'ui_settings' => 'array',
     ];
 
     public function students()

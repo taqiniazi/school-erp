@@ -4,6 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script>
+        (function () {
+            const serverTheme = @json(auth()->check() ? data_get(auth()->user()->ui_settings, 'theme') : null);
+            const storedTheme = localStorage.getItem('ui.theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = storedTheme ?? serverTheme ?? (prefersDark ? 'dark' : 'light');
+            document.documentElement.dataset.bsTheme = theme;
+            document.documentElement.classList.toggle('dark', theme === 'dark');
+        })();
+    </script>
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -41,11 +51,22 @@
             @include('layouts.topbar')
 
             <!-- Main Content -->
-            <main class="flex-grow-1 p-4 bg-light">
+            <main class="flex-grow-1 p-4 bg-body-tertiary">
                 <div class="container-fluid">
                     @if (isset($header))
-                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom">
-                            <h1 class="h3 fw-bold text-dark">{{ $header }}</h1>
+                        @php
+                            $headerValue = trim((string) $header);
+                            $headerHasHtml = \Illuminate\Support\Str::contains($headerValue, '<');
+                        @endphp
+
+                        <div class="pb-2 mb-4 border-bottom">
+                            @if ($headerHasHtml)
+                                {!! $header !!}
+                            @else
+                                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                                    <h1 class="h3 fw-bold text-dark mb-0">{{ $header }}</h1>
+                                </div>
+                            @endif
                         </div>
                     @endif
 
@@ -83,6 +104,7 @@
     <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     
     <!-- Sidebar Toggle Script -->
     <script>
@@ -189,4 +211,3 @@
     @stack('scripts')
 </body>
 </html>
-

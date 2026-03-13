@@ -11,6 +11,7 @@ use App\Models\StaffProfile;
 use App\Models\SchoolClass;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller

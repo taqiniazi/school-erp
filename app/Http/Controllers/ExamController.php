@@ -71,6 +71,88 @@ class ExamController extends Controller
 
     public function storeSchedule(Request $request, Exam $exam)
     {
+        if (is_array($request->input('schedules'))) {
+            $validated = $request->validate([
+                'schedules' => ['required', 'array', 'min:1'],
+                'schedules.*.school_class_id' => ['required', 'exists:school_classes,id'],
+                'schedules.*.subject_id' => ['required', 'exists:subjects,id'],
+                'schedules.*.exam_date' => ['required', 'date'],
+                'schedules.*.start_time' => ['required'],
+                'schedules.*.end_time' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $parts = explode('.', $attribute);
+                        $index = $parts[1] ?? null;
+                        if ($index === null) return;
+                        $start = data_get($request->input('schedules'), $index . '.start_time');
+                        if ($start && $value && strtotime($value) <= strtotime($start)) {
+                            $fail('End time must be after start time.');
+                        }
+                    },
+                ],
+                'schedules.*.max_marks' => ['required', 'integer', 'min:1'],
+                'schedules.*.pass_marks' => [
+                    'required',
+                    'integer',
+                    'min:0',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $parts = explode('.', $attribute);
+                        $index = $parts[1] ?? null;
+                        if ($index === null) return;
+                        $max = data_get($request->input('schedules'), $index . '.max_marks');
+                        if (is_numeric($max) && is_numeric($value) && (int) $value > (int) $max) {
+                            $fail('Pass marks must be less than or equal to max marks.');
+                        }
+                    },
+                ],
+            ]);
+
+            $rows = $validated['schedules'];
+
+            $pairCounts = [];
+            foreach ($rows as $row) {
+                $key = $row['school_class_id'] . ':' . $row['subject_id'];
+                $pairCounts[$key] = ($pairCounts[$key] ?? 0) + 1;
+            }
+            $duplicateKey = collect($pairCounts)->first(fn ($count) => $count > 1);
+            if ($duplicateKey) {
+                return redirect()->back()->with('error', 'Duplicate schedules found in your submission.');
+            }
+
+            $classIds = array_values(array_unique(array_map(fn ($r) => $r['school_class_id'], $rows)));
+            $subjectIds = array_values(array_unique(array_map(fn ($r) => $r['subject_id'], $rows)));
+            $existingPairs = ExamSchedule::where('exam_id', $exam->id)
+                ->whereIn('school_class_id', $classIds)
+                ->whereIn('subject_id', $subjectIds)
+                ->get(['school_class_id', 'subject_id'])
+                ->map(fn ($s) => $s->school_class_id . ':' . $s->subject_id)
+                ->flip();
+
+            foreach ($rows as $row) {
+                $key = $row['school_class_id'] . ':' . $row['subject_id'];
+                if ($existingPairs->has($key)) {
+                    return redirect()->back()->with('error', 'Schedule for one or more class/subject pairs already exists.');
+                }
+            }
+
+            DB::transaction(function () use ($exam, $rows) {
+                foreach ($rows as $row) {
+                    ExamSchedule::create([
+                        'exam_id' => $exam->id,
+                        'school_class_id' => $row['school_class_id'],
+                        'subject_id' => $row['subject_id'],
+                        'exam_date' => $row['exam_date'],
+                        'start_time' => $row['start_time'],
+                        'end_time' => $row['end_time'],
+                        'max_marks' => $row['max_marks'],
+                        'pass_marks' => $row['pass_marks'],
+                    ]);
+                }
+            });
+
+            return redirect()->back()->with('success', 'Exam schedules added successfully.');
+        }
+
         $request->validate([
             'school_class_id' => 'required|exists:school_classes,id',
             'subject_id' => 'required|exists:subjects,id',
@@ -81,7 +163,6 @@ class ExamController extends Controller
             'pass_marks' => 'required|integer|min:0|lte:max_marks',
         ]);
 
-        // Check for duplicate schedule
         $exists = ExamSchedule::where('exam_id', $exam->id)
             ->where('school_class_id', $request->school_class_id)
             ->where('subject_id', $request->subject_id)

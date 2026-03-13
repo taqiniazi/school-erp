@@ -10,6 +10,7 @@ use App\Models\Campus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 use Illuminate\Support\Facades\Cache;
 
@@ -53,6 +54,90 @@ class StudentController extends Controller
     {
         // Check Plan Limits
         $school = auth()->user()->school;
+        if (is_array($request->input('students'))) {
+            $validated = $request->validate([
+                'students' => ['required', 'array', 'min:1'],
+                'students.*.first_name' => ['required', 'string', 'max:255'],
+                'students.*.last_name' => ['required', 'string', 'max:255'],
+                'students.*.admission_number' => ['required', 'string', 'max:255', 'distinct', Rule::unique('students', 'admission_number')],
+                'students.*.roll_number' => ['nullable', 'string'],
+                'students.*.dob' => ['required', 'date'],
+                'students.*.gender' => ['required', 'in:male,female,other'],
+                'students.*.school_class_id' => ['required', 'exists:school_classes,id'],
+                'students.*.section_id' => ['required', 'exists:sections,id'],
+                'students.*.campus_id' => ['nullable', 'exists:campuses,id'],
+                'students.*.admission_date' => ['required', 'date'],
+                'students.*.address' => ['required', 'string'],
+                'students.*.phone' => ['nullable', 'string'],
+                'students.*.email' => ['nullable', 'email', 'distinct', Rule::unique('students', 'email')],
+                'students.*.parent_id' => ['nullable', 'exists:users,id'],
+                'students.*.relation' => ['nullable', 'string', 'max:255'],
+                'students.*.photo' => ['nullable', 'image', 'max:2048'],
+            ]);
+
+            $rows = $validated['students'];
+
+            $plan = $school?->current_plan;
+            if (!$plan) {
+                return redirect()->back()->with('error', 'No active plan found for your school. Please contact support.');
+            }
+            if (!is_null($plan->max_students)) {
+                $currentCount = $school->students()->count();
+                if ($currentCount + count($rows) > (int) $plan->max_students) {
+                    return redirect()->back()->with('error', 'You have reached the maximum number of students allowed by your current plan. Please upgrade your subscription.');
+                }
+            }
+
+            $admissionNumbers = array_map(fn ($r) => (string) ($r['admission_number'] ?? ''), $rows);
+            $dupeAdmission = collect(array_count_values($admissionNumbers))->first(fn ($c) => $c > 1);
+            if ($dupeAdmission) {
+                return redirect()->back()->with('error', 'Duplicate admission numbers found in your submission.');
+            }
+
+            $emails = array_values(array_filter(array_map(fn ($r) => $r['email'] ?? null, $rows)));
+            if (count($emails) > 0) {
+                $dupeEmail = collect(array_count_values($emails))->first(fn ($c) => $c > 1);
+                if ($dupeEmail) {
+                    return redirect()->back()->with('error', 'Duplicate student emails found in your submission.');
+                }
+            }
+
+            DB::transaction(function () use ($rows, $request) {
+                foreach ($rows as $idx => $row) {
+                    $path = null;
+                    if ($request->hasFile("students.$idx.photo")) {
+                        $path = $request->file("students.$idx.photo")->store('students', 'public');
+                    }
+
+                    $student = Student::create([
+                        'first_name' => $row['first_name'],
+                        'last_name' => $row['last_name'],
+                        'admission_number' => $row['admission_number'],
+                        'roll_number' => $row['roll_number'] ?? null,
+                        'dob' => $row['dob'],
+                        'gender' => $row['gender'],
+                        'school_class_id' => $row['school_class_id'],
+                        'section_id' => $row['section_id'],
+                        'campus_id' => $row['campus_id'] ?? null,
+                        'admission_date' => $row['admission_date'],
+                        'address' => $row['address'],
+                        'phone' => $row['phone'] ?? null,
+                        'email' => $row['email'] ?? null,
+                        'photo_path' => $path,
+                        'status' => 'active',
+                    ]);
+
+                    if (!empty($row['parent_id'])) {
+                        $student->parents()->attach($row['parent_id'], [
+                            'relation' => $row['relation'] ?? 'Guardian',
+                        ]);
+                    }
+                }
+            });
+
+            return redirect()->route('students.index')->with('success', 'Students admitted successfully.');
+        }
+
         if (!$school->canAddStudent()) {
             return redirect()->back()->with('error', 'You have reached the maximum number of students allowed by your current plan. Please upgrade your subscription.');
         }
