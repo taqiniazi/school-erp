@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         {{ __('Student Dashboard') }}
     </x-slot>
