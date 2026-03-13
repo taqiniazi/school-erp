@@ -1,18 +1,17 @@
 <x-app-layout>
-    <div class="container-fluid px-4 py-4">
-        <!-- Page Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
             <div>
-                <h1 class="h3 text-gray-800 mb-1">Students</h1>
-                <p class="text-muted small mb-0">Manage student records, admissions, and academic progress.</p>
+                <h1 class="h3 fw-bold text-dark mb-0">Students</h1>
+                <div class="text-muted">Manage student records, admissions, and academic progress.</div>
             </div>
-            <a href="{{ route('students.create') }}" class="btn btn-primary shadow-sm">
+            <a href="{{ route('students.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus me-2"></i>Add New Student
             </a>
         </div>
+    </x-slot>
 
-        <!-- Stats Cards (Optional - can be added later) -->
-        
+    <div class="container-fluid px-4 py-4">
         <!-- Main Content Card -->
         <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
             <div class="card-header bg-white py-3 border-bottom border-light d-flex justify-content-between align-items-center">

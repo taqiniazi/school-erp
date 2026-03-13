@@ -1,14 +1,16 @@
 <x-app-layout>
-    <div class="container-fluid py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="h3 mb-0 text-dark">Notices Board</h2>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Notices Board</h1>
             @if(auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'School Admin', 'Teacher']))
             <a href="{{ route('communication.notices.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus me-1"></i> Post New Notice
             </a>
             @endif
         </div>
+    </x-slot>
 
+    <div class="container-fluid py-4">
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -71,4 +73,3 @@
         </div>
     </div>
 </x-app-layout>
-

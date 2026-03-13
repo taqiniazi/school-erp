@@ -1,21 +1,16 @@
-﻿@extends('layouts.app')
-
-@section('title', 'Edit Payment Method')
-
-@section('content')
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-dark">Edit Payment Method</h1>
-        <a href="{{ route('super-admin.payment-methods.index') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back
-        </a>
-    </div>
-
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 fw-bold">Edit Payment Method: {{ $paymentMethod->name }}</h6>
+<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Edit Payment Method</h1>
+            <a href="{{ route('super-admin.payment-methods.index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
         </div>
-        <div class="card-body">
+    </x-slot>
+
+    <div class="container-fluid py-4">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
             <form action="{{ route('super-admin.payment-methods.update', $paymentMethod) }}" method="POST">
                 @csrf
                 @method('PUT')
@@ -109,8 +104,8 @@
                 instructionsGroup.style.display = 'none';
                 accountDetailsGroup.style.display = 'none';
             } else {
-                instructionsGroup.style.display = 'd-block';
-                accountDetailsGroup.style.display = 'd-block';
+                instructionsGroup.style.display = 'block';
+                accountDetailsGroup.style.display = 'block';
             }
         }
 
@@ -154,7 +149,7 @@
                 
                 if (key && value) {
                     const hiddenInput = document.createElement('input');
-                    hiddenInput.type = 'd-none';
+                    hiddenInput.type = 'hidden';
                     hiddenInput.name = `account_details[${key}]`;
                     hiddenInput.value = value;
                     this.appendChild(hiddenInput);
@@ -164,7 +159,6 @@
     });
 </script>
 @endpush
-@endsection
-
+</x-app-layout>
 
 

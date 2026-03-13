@@ -1,16 +1,18 @@
-﻿﻿<x-app-layout>
+﻿<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Manage Invoices</h1>
+            @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('School Admin'))
+                <a href="{{ route('fee-invoices.create') }}" class="btn btn-primary">
+                    Generate Invoices (Bulk)
+                </a>
+            @endif
+        </div>
+    </x-slot>
+
     <div class="container-fluid py-4">
         <div class="card shadow">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="card-title h5 mb-0">Manage Invoices</h3>
-                    @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('School Admin'))
-                        <a href="{{ route('fee-invoices.create') }}" class="btn btn-primary">
-                            Generate Invoices (Bulk)
-                        </a>
-                    @endif
-                </div>
-
                 <!-- Filter Form -->
                 <form action="{{ route('fee-invoices.index') }}" method="GET" class="mb-4">
                     <div class="row g-3 align-items-end">
@@ -107,5 +109,4 @@
         </div>
     </div>
 </x-app-layout>
-
 

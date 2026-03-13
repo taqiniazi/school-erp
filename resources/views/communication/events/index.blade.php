@@ -1,22 +1,22 @@
 <x-app-layout>
-    <div class="container-fluid py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="h3 mb-0 text-dark">
-                {{ __('Events Calendar') }}
-            </h2>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">{{ __('Events Calendar') }}</h1>
             @if(auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'School Admin', 'Teacher']))
-            <a href="{{ route('communication.events.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i> {{ __('Add Event') }}
-            </a>
+                <a href="{{ route('communication.events.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i> {{ __('Add Event') }}
+                </a>
             @endif
         </div>
+    </x-slot>
+
+    <div class="container-fluid py-4">
 
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        @endif
 
         <div class="row g-4">
             @forelse($events as $event)
@@ -74,5 +74,4 @@
         </div>
     </div>
 </x-app-layout>
-
 

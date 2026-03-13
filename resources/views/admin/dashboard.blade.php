@@ -1,25 +1,22 @@
-@extends('layouts.app')
-
-@section('title', 'Admin Dashboard')
-
-@section('content')
-<div class="dashboard container-fluid px-0">
-    <div class="dashboard-hero mb-4">
-        <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 position-relative z-1">
+<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
             <div>
-                <div class="dashboard-title">Dashboard Overview</div>
-                <div class="dashboard-subtitle">Welcome back, here’s what’s happening at your school today</div>
+                <h1 class="h3 fw-bold text-dark mb-0">Dashboard Overview</h1>
+                <div class="text-muted">Welcome back, here’s what’s happening at your school today</div>
             </div>
             <div class="d-flex flex-wrap gap-2">
-                <a href="{{ route('reports.index') }}" class="btn btn-light fw-semibold shadow-sm">
+                <a href="{{ route('reports.index') }}" class="btn btn-primary">
                     <i class="fas fa-download me-2"></i> Generate Report
                 </a>
-                <button type="button" class="btn btn-outline-secondary fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#dashboardCustomizeModal">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#dashboardCustomizeModal">
                     <i class="fas fa-sliders-h me-2"></i> Customize
                 </button>
             </div>
         </div>
-    </div>
+    </x-slot>
+
+<div class="dashboard container-fluid px-0 py-4">
 
     <div data-dashboard-grid data-dashboard-key="admin-dashboard">
         <div class="dashboard-widget mb-4" data-widget-key="subscription" data-widget-label="Subscription Status">
@@ -286,4 +283,4 @@
         </div>
     </div>
 </div>
-@endsection
+</x-app-layout>

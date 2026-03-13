@@ -1,16 +1,13 @@
-﻿﻿@extends('layouts.app')
-
-@section('content')
-<div class="container-fluid">
-    <div class="d-sm-d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-dark">Subscriptions</h1>
-    </div>
-
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 fw-bold">Manage Subscriptions</h6>
+﻿<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Subscriptions</h1>
         </div>
-        <div class="card-body">
+    </x-slot>
+
+    <div class="container-fluid py-4">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -39,26 +36,26 @@
             </form>
 
             <div class="table-responsive">
-                <table class="table table-bordered table-striped w-100">
-                    <thead>
+                <table class="table table-hover w-100 mb-0 align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <th>School</th>
-                            <th>Plan</th>
-                            <th>Status</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Action</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">School</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Plan</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Status</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Start Date</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">End Date</th>
+                            <th class="p-3 text-end small fw-medium text-secondary text-uppercase">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($subscriptions as $subscription)
                             <tr>
-                                <td>
+                                <td class="p-3">
                                     <div class="fw-bold">{{ $subscription->school->name ?? 'N/A' }}</div>
                                     <small class="text-muted">{{ $subscription->school->email ?? 'N/A' }}</small>
                                 </td>
-                                <td>{{ $subscription->plan->name ?? 'N/A' }}</td>
-                                <td>
+                                <td class="p-3 text-nowrap">{{ $subscription->plan->name ?? 'N/A' }}</td>
+                                <td class="p-3 text-nowrap">
                                     @if($subscription->status === 'active')
                                         <span class="badge bg-success">Active</span>
                                     @elseif($subscription->status === 'trialing')
@@ -71,9 +68,9 @@
                                         <span class="badge bg-secondary">{{ ucfirst($subscription->status) }}</span>
                                     @endif
                                 </td>
-                                <td>{{ $subscription->current_period_start ? $subscription->current_period_start->format('Y-m-d') : '-' }}</td>
-                                <td>{{ $subscription->current_period_end ? $subscription->current_period_end->format('Y-m-d') : '-' }}</td>
-                                <td>
+                                <td class="p-3 text-nowrap">{{ $subscription->current_period_start ? $subscription->current_period_start->format('Y-m-d') : '-' }}</td>
+                                <td class="p-3 text-nowrap">{{ $subscription->current_period_end ? $subscription->current_period_end->format('Y-m-d') : '-' }}</td>
+                                <td class="p-3 text-nowrap text-end">
                                     <div class="btn-group" role="group">
                                         @if(in_array($subscription->status, ['active', 'trialing']))
                                             <form action="{{ route('super-admin.subscriptions.cancel', $subscription->id) }}" method="POST" data-confirm-message="Are you sure you want to cancel this subscription?" data-confirm-style="danger">
@@ -91,18 +88,17 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">No subscriptions found.</td>
+                                <td colspan="6" class="p-3 text-center text-secondary">No subscriptions found.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-            <div class="mt-3">
+            <div class="mt-4">
                 {{ $subscriptions->links() }}
             </div>
         </div>
     </div>
 </div>
-@endsection
-
+</x-app-layout>
 

@@ -1,11 +1,13 @@
-﻿﻿@extends('layouts.app')
+﻿<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">My Report Card</h1>
+        </div>
+    </x-slot>
 
-@section('content')
-<div class="card">
-    <div class="card-header">
-        My Report Card
-    </div>
-    <div class="card-body">
+    <div class="container-fluid py-4">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-4">
         <form action="{{ route('student.report_card') }}" method="GET" class="row g-3 mb-4">
             @if(isset($children) && $children->count() > 1)
                 <div class="col-md-3">
@@ -19,7 +21,7 @@
                     </select>
                 </div>
             @elseif(isset($children) && $children->count() == 1)
-                 <input type="d-none" name="student_id" value="{{ $children->first()->id }}">
+                 <input type="hidden" name="student_id" value="{{ $children->first()->id }}">
             @endif
 
             <div class="col-md-3">
@@ -36,7 +38,7 @@
         </form>
 
         @if($exam)
-            <div class="card border-primary">
+            <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <span>Report Card: {{ $exam->name }}</span>
                     <a href="{{ route('student.report_card', array_merge(request()->all(), ['export_pdf' => 1])) }}" class="btn btn-sm btn-light text-primary">Download PDF</a>
@@ -54,26 +56,26 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-hover w-100 mb-0 align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Subject</th>
-                                    <th>Max Marks</th>
-                                    <th>Pass Marks</th>
-                                    <th>Obtained</th>
-                                    <th>Grade</th>
-                                    <th>Result</th>
-                                    <th>Remarks</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Subject</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Max Marks</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Pass Marks</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Obtained</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Grade</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Result</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($data as $row)
                                 <tr>
-                                    <td>{{ $row['subject'] }}</td>
-                                    <td>{{ $row['max_marks'] }}</td>
-                                    <td>{{ $row['pass_marks'] }}</td>
-                                    <td>{{ $row['obtained'] }}</td>
-                                    <td>{{ $row['grade'] }}</td>
+                                    <td class="p-3">{{ $row['subject'] }}</td>
+                                    <td class="p-3 text-nowrap">{{ $row['max_marks'] }}</td>
+                                    <td class="p-3 text-nowrap">{{ $row['pass_marks'] }}</td>
+                                    <td class="p-3 text-nowrap">{{ $row['obtained'] }}</td>
+                                    <td class="p-3 text-nowrap">{{ $row['grade'] }}</td>
                                     <td>
                                         @if($row['is_pass'])
                                             <span class="badge bg-success">Pass</span>
@@ -81,15 +83,15 @@
                                             <span class="badge bg-danger">Fail</span>
                                         @endif
                                     </td>
-                                    <td>{{ $row['remarks'] }}</td>
+                                    <td class="p-3">{{ $row['remarks'] }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr class="fw-bold">
-                                    <td colspan="3" class="text-end">Total</td>
-                                    <td>{{ $totalObtained }} / {{ $totalMax }}</td>
-                                    <td colspan="3">
+                                    <td colspan="3" class="p-3 text-end">Total</td>
+                                    <td class="p-3 text-nowrap">{{ $totalObtained }} / {{ $totalMax }}</td>
+                                    <td colspan="3" class="p-3">
                                         Percentage: {{ number_format($overallPercentage, 2) }}% 
                                         (Grade: {{ $overallGrade ? $overallGrade->grade_name : 'N/A' }})
                                     </td>
@@ -104,8 +106,8 @@
         @else
             <div class="alert alert-info">Please select an exam to view the report card.</div>
         @endif
+            </div>
+        </div>
     </div>
-</div>
-@endsection
-
+</x-app-layout>
 

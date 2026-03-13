@@ -1,21 +1,17 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="dashboard container-fluid">
-    <div class="dashboard-hero mb-4">
-        <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 position-relative z-1">
+<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
             <div>
-                <div class="dashboard-title">Super Admin Dashboard</div>
-                <div class="dashboard-subtitle">Monitor platform performance and approve payments</div>
+                <h1 class="h3 fw-bold text-dark mb-0">Super Admin Dashboard</h1>
+                <div class="text-muted">Monitor platform performance and approve payments</div>
             </div>
-            <div class="d-flex flex-wrap gap-2">
-                <a href="{{ route('super-admin.payments.index') }}" class="btn btn-light fw-semibold shadow-sm">
-                    <i class="fas fa-file-invoice-dollar me-2"></i> Verify Payments
-                </a>
-            </div>
+            <a href="{{ route('super-admin.payments.index') }}" class="btn btn-primary">
+                <i class="fas fa-file-invoice-dollar me-2"></i> Verify Payments
+            </a>
         </div>
-    </div>
+    </x-slot>
 
+    <div class="dashboard container-fluid py-4">
     <div class="row g-4 mb-4">
         <div class="col-xl-3 col-md-6">
             <div class="card kpi-card h-100">
@@ -206,8 +202,7 @@
             </div>
         </div>
     </div>
-</div>
-@endsection
+    </div>
 
 @push('scripts')
 <script>
@@ -383,4 +378,4 @@
     });
 </script>
 @endpush
-
+</x-app-layout>

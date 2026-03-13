@@ -1,12 +1,16 @@
 <x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Create Designation</h1>
+            <a href="{{ route('designations.index') }}" class="btn btn-secondary">Back</a>
+        </div>
+    </x-slot>
+
     <div class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card shadow">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 fw-bold">Create Designation</h6>
-                    </div>
-                    <div class="card-body">
+                <div class="card shadow-sm border-0 rounded-3">
+                    <div class="card-body p-4">
                         <form action="{{ route('designations.store') }}" method="POST">
                             @csrf
                             @php

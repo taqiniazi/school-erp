@@ -1,14 +1,13 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Payment Verification</h1>
+        </div>
+    </x-slot>
 
-@section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 fw-bold">Payment Verification</h6>
-                </div>
-                <div class="card-body">
+    <div class="container-fluid py-4">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-4">
                     @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
@@ -17,30 +16,30 @@
                     @endif
 
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped w-100" id="dataTable">
-                            <thead>
+                        <table class="table table-hover w-100 mb-0 align-middle" id="dataTable">
+                            <thead class="table-light">
                                 <tr>
-                                    <th>Date</th>
-                                    <th>School / User</th>
-                                    <th>Plan</th>
-                                    <th>Amount</th>
-                                    <th>Method</th>
-                                    <th>Proof</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Date</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">School / User</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Plan</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Amount</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Method</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Proof</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Status</th>
+                                    <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($payments as $payment)
                                     <tr>
-                                        <td>{{ $payment->created_at->format('Y-m-d H:i') }}</td>
-                                        <td>
+                                        <td class="p-3 text-nowrap">{{ $payment->created_at->format('Y-m-d H:i') }}</td>
+                                        <td class="p-3">
                                             <div class="fw-bold">{{ $payment->school->name ?? 'N/A' }}</div>
                                             <small class="text-muted">ID: {{ $payment->school_id }}</small>
                                         </td>
-                                        <td>{{ $payment->plan->name ?? 'N/A' }}</td>
-                                        <td>Rs. {{ number_format($payment->amount, 2) }}</td>
-                                        <td>
+                                        <td class="p-3 text-nowrap">{{ $payment->plan->name ?? 'N/A' }}</td>
+                                        <td class="p-3 text-nowrap">Rs. {{ number_format($payment->amount, 2) }}</td>
+                                        <td class="p-3">
                                             @if($payment->paymentMethod)
                                                 <span class="badge bg-info text-dark">{{ $payment->paymentMethod->name }}</span>
                                             @else
@@ -49,14 +48,14 @@
                                             <br>
                                             <small class="text-muted">{{ $payment->transaction_reference }}</small>
                                         </td>
-                                        <td>
+                                        <td class="p-3 text-nowrap">
                                             @if($payment->proof_file_path)
                                                 <a href="{{ asset('storage/' . $payment->proof_file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
                                             @else
                                                 -
                                             @endif
                                         </td>
-                                        <td>
+                                        <td class="p-3 text-nowrap">
                                             @if($payment->status === 'approved')
                                                 <span class="badge bg-success">Approved</span>
                                             @elseif($payment->status === 'rejected')
@@ -65,7 +64,7 @@
                                                 <span class="badge bg-warning text-dark">Pending</span>
                                             @endif
                                         </td>
-                                        <td>
+                                        <td class="p-3">
                                             @if($payment->status === 'pending')
                                                 <form action="{{ route('super-admin.payments.update', $payment->id) }}" method="POST">
                                                     @csrf
@@ -85,21 +84,18 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="text-center">No payments found.</td>
+                                        <td colspan="8" class="p-3 text-center text-secondary">No payments found.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-3">
+                    <div class="mt-4">
                         {{ $payments->links() }}
                     </div>
-                </div>
             </div>
         </div>
     </div>
-</div>
-@endsection
-
+</x-app-layout>
 
 

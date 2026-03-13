@@ -1,13 +1,14 @@
-﻿@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Edit Teacher</h1>
+            <a href="{{ route('teachers.index') }}" class="btn btn-secondary">Back</a>
+        </div>
+    </x-slot>
 
-@section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Edit Teacher</h1>
-    <a href="{{ route('teachers.index') }}" class="btn btn-secondary">Back</a>
-</div>
-
-<div class="card">
-    <div class="card-body">
+    <div class="container-fluid py-4">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-4">
         <form action="{{ route('teachers.update', $teacher) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -123,8 +124,9 @@
 
             <button type="submit" class="btn btn-primary">Update Teacher</button>
         </form>
+            </div>
+        </div>
     </div>
-</div>
-@endsection
+</x-app-layout>
 
 

@@ -1,24 +1,20 @@
-﻿﻿@extends('layouts.app')
+﻿<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Complete Your Subscription</h1>
+            <a href="{{ route('billing.choose-plan') }}" class="btn btn-secondary">Change Plan</a>
+        </div>
+    </x-slot>
 
-@section('title', 'Complete Payment')
-
-@section('content')
-<div class="container-fluid">
-    <div class="d-sm-d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-dark">Complete Your Subscription</h1>
-    </div>
-
+    <div class="container-fluid py-4">
     <div class="row">
         <!-- Plan Details -->
         <div class="col-lg-4 mb-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Selected Plan</h6>
-                </div>
-                <div class="card-body">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
                     <div class="text-center mb-4">
-                        <h4 class="font-weight-bold text-primary">{{ $plan->name }}</h4>
-                        <div class="display-4 font-weight-bold">Rs. {{ number_format($plan->price) }}</div>
+                        <h4 class="fw-bold text-primary">{{ $plan->name }}</h4>
+                        <div class="display-4 fw-bold">Rs. {{ number_format($plan->price) }}</div>
                         <div class="text-muted text-uppercase small">Per {{ ucfirst($plan->billing_cycle) }}</div>
                     </div>
                     
@@ -40,21 +36,14 @@
                             <span class="badge bg-primary rounded-pill">{{ $plan->storage_limit_mb ? $plan->storage_limit_mb . ' MB' : 'Unlimited' }}</span>
                         </li>
                     </ul>
-
-                    <div class="text-center">
-                        <a href="{{ route('billing.choose-plan') }}" class="btn btn-link">Change Plan</a>
-                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Payment Options -->
         <div class="col-lg-8">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Payment Methods</h6>
-                </div>
-                <div class="card-body">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
                     @if(session('error'))
                         <div class="alert alert-danger">{{ session('error') }}</div>
                     @endif
@@ -75,7 +64,7 @@
                                 <div class="col-md-6 mb-3">
                                     <form action="{{ route('billing.payment.stripe', $plan->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-primary btn-lg btn-d-block">
+                                        <button type="submit" class="btn btn-primary btn-lg d-block w-100">
                                             <i class="fab fa-stripe fa-2x align-middle me-2"></i> Pay with Stripe
                                         </button>
                                     </form>
@@ -83,7 +72,7 @@
                                 <div class="col-md-6 mb-3">
                                     <form action="{{ route('billing.payment.paypal', $plan->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-info btn-lg btn-d-block text-white">
+                                        <button type="submit" class="btn btn-info btn-lg d-block w-100 text-white">
                                             <i class="fab fa-paypal fa-2x align-middle me-2"></i> Pay with PayPal
                                         </button>
                                     </form>
@@ -101,7 +90,7 @@
                                 
                                 <div class="mb-3">
                                     <label for="payment_method_id" class="form-label">Select Payment Method</label>
-                                    <select class="form-control @error('payment_method_id') is-invalid @enderror" id="payment_method_id" name="payment_method_id" required onchange="updateInstructions()">
+                                    <select class="form-select @error('payment_method_id') is-invalid @enderror" id="payment_method_id" name="payment_method_id" required onchange="updateInstructions()">
                                         <option value="">-- Select Method --</option>
                                         @foreach($manualMethods as $method)
                                             <option value="{{ $method->id }}" data-instructions="{{ $method->details }}">{{ $method->name }}</option>
@@ -166,7 +155,6 @@
     }
 </script>
 @endpush
-@endsection
-
+</x-app-layout>
 
 

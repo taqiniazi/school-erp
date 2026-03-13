@@ -1,17 +1,17 @@
-﻿﻿<x-app-layout>
-    <div class="container-fluid px-4 py-4">
-        <!-- Page Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+﻿<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h1 class="h3 text-gray-800 mb-1">Classes</h1>
+                <h1 class="h3 fw-bold text-dark mb-0">Classes</h1>
                 <p class="text-muted small mb-0">Manage academic classes, sections, and subject allocations.</p>
             </div>
             <a href="{{ route('classes.create') }}" class="btn btn-primary shadow-sm">
                 <i class="fas fa-plus me-2"></i>Add New Class
             </a>
         </div>
+    </x-slot>
 
-        <!-- Main Content Card -->
+    <div class="container-fluid px-4 py-4">
         <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
             <div class="card-header bg-white py-3 border-bottom border-light d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0 text-primary fw-bold"><i class="fas fa-chalkboard me-2"></i>Class List</h5>

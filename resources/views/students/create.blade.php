@@ -1,8 +1,9 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
-        <h2 class="fw-semibold h4 text-dark lh-sm">
-            {{ __('Add New Student') }}
-        </h2>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">{{ __('Add New Student') }}</h1>
+            <a href="{{ route('students.index') }}" class="btn btn-secondary">Back</a>
+        </div>
     </x-slot>
 
     <div class="py-5">
@@ -366,5 +367,4 @@
     </script>
     @endpush
 </x-app-layout>
-
 

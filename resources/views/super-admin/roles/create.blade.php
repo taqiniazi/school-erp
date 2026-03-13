@@ -1,19 +1,16 @@
-﻿﻿@extends('layouts.app')
-
-@section('content')
-<div class="container-fluid">
-    <div class="d-sm-d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-dark">Create Role</h1>
-        <a href="{{ route('super-admin.roles.index') }}" class="btn btn-sm btn-secondary shadow-sm">
-            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to Roles
-        </a>
-    </div>
-
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 fw-bold">Role Details</h6>
+﻿<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Create Role</h1>
+            <a href="{{ route('super-admin.roles.index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to Roles
+            </a>
         </div>
-        <div class="card-body">
+    </x-slot>
+
+    <div class="container-fluid py-4">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul class="mb-0">
@@ -112,6 +109,5 @@
     });
 </script>
 @endpush
-@endsection
-
+</x-app-layout>
 

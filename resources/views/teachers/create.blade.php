@@ -1,15 +1,16 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Add Teacher</h1>
+            <a href="{{ route('teachers.index') }}" class="btn btn-secondary">Back</a>
+        </div>
+    </x-slot>
 
-@section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Add Teacher</h1>
-    <a href="{{ route('teachers.index') }}" class="btn btn-secondary">Back</a>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <form action="{{ route('teachers.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+    <div class="container-fluid py-4">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-4">
+                <form action="{{ route('teachers.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
             @php
                 $teachersOld = old('teachers');
                 if (!is_array($teachersOld) || count($teachersOld) === 0) {
@@ -111,10 +112,12 @@
                 @endforeach
             </div>
 
-            <button type="submit" class="btn btn-primary">Create Teachers</button>
-        </form>
+                    <button type="submit" class="btn btn-primary">Create Teachers</button>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
+</x-app-layout>
 
 @push('scripts')
 <script>
@@ -231,6 +234,4 @@
     });
 </script>
 @endpush
-@endsection
-
 

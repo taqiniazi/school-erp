@@ -1,9 +1,7 @@
-﻿﻿<x-app-layout>
-    <div class="container-fluid py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="h3 mb-0 text-dark">
-                {{ __('Inbox') }}
-            </h2>
+﻿<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">{{ __('Inbox') }}</h1>
             <div class="btn-group">
                 <a href="{{ route('communication.messages.create') }}" class="btn btn-primary">
                     <i class="fas fa-pen me-1"></i> {{ __('Compose') }}
@@ -13,9 +11,12 @@
                 </a>
             </div>
         </div>
+    </x-slot>
 
-        <div class="card shadow-sm">
-            <div class="card-body">
+    <div class="container-fluid py-4">
+
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-4">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
@@ -24,13 +25,13 @@
                 @endif
 
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover w-100 mb-0 align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th scope="col">{{ __('From') }}</th>
-                                <th scope="col">{{ __('Subject') }}</th>
-                                <th scope="col">{{ __('Date') }}</th>
-                                <th scope="col" class="text-end">{{ __('Actions') }}</th>
+                                <th class="p-3 text-start small fw-medium text-secondary text-uppercase">{{ __('From') }}</th>
+                                <th class="p-3 text-start small fw-medium text-secondary text-uppercase">{{ __('Subject') }}</th>
+                                <th class="p-3 text-start small fw-medium text-secondary text-uppercase">{{ __('Date') }}</th>
+                                <th class="p-3 text-end small fw-medium text-secondary text-uppercase">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,5 +77,3 @@
         </div>
     </div>
 </x-app-layout>
-
-

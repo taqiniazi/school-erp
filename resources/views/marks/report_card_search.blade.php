@@ -1,48 +1,51 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Search Student Report Card</h1>
+        </div>
+    </x-slot>
 
-@section('content')
-<div class="card">
-    <div class="card-header">
-        Search Student Report Card
+    <div class="container-fluid py-4">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-4">
+                <form action="{{ route('marks.generate_report_card') }}" method="GET" class="row g-3">
+                    <div class="col-md-3">
+                        <label for="exam_id" class="form-label">Exam</label>
+                        <select name="exam_id" id="exam_id" class="form-select" required>
+                            <option value="">Select Exam</option>
+                            @foreach($exams as $exam)
+                                <option value="{{ $exam->id }}">{{ $exam->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="school_class_id" class="form-label">Class</label>
+                        <select name="school_class_id" id="school_class_id" class="form-select" required>
+                            <option value="">Select Class</option>
+                            @foreach($classes as $class)
+                                <option value="{{ $class->id }}">{{ $class->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="section_id" class="form-label">Section</label>
+                        <select name="section_id" id="section_id" class="form-select" required>
+                            <option value="">Select Section</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="student_id" class="form-label">Student</label>
+                        <select name="student_id" id="student_id" class="form-select" required>
+                            <option value="">Select Student</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Generate Report Card</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <form action="{{ route('marks.generate_report_card') }}" method="GET" class="row g-3">
-            <div class="col-md-3">
-                <label for="exam_id" class="form-label">Exam</label>
-                <select name="exam_id" id="exam_id" class="form-select" required>
-                    <option value="">Select Exam</option>
-                    @foreach($exams as $exam)
-                        <option value="{{ $exam->id }}">{{ $exam->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="school_class_id" class="form-label">Class</label>
-                <select name="school_class_id" id="school_class_id" class="form-select" required>
-                    <option value="">Select Class</option>
-                    @foreach($classes as $class)
-                        <option value="{{ $class->id }}">{{ $class->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="section_id" class="form-label">Section</label>
-                <select name="section_id" id="section_id" class="form-select" required>
-                    <option value="">Select Section</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="student_id" class="form-label">Student</label>
-                <select name="student_id" id="student_id" class="form-select" required>
-                    <option value="">Select Student</option>
-                </select>
-            </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Generate Report Card</button>
-            </div>
-        </form>
-    </div>
-</div>
 
 <script>
     document.getElementById('school_class_id').addEventListener('change', function() {
@@ -93,4 +96,4 @@
         }
     });
 </script>
-@endsection
+</x-app-layout>

@@ -1,19 +1,20 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿@extends('layouts.app')
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Manage Class: {{ $schoolClass->name }} ({{ $schoolClass->numeric_value }})</h1>
+            <a href="{{ route('classes.index') }}" class="btn btn-secondary">Back</a>
+        </div>
+    </x-slot>
 
-@section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Manage Class: {{ $schoolClass->name }} ({{ $schoolClass->numeric_value }})</h1>
-    <a href="{{ route('classes.index') }}" class="btn btn-secondary">Back</a>
-</div>
-
-<div class="row">
+    <div class="container-fluid py-4">
+        <div class="row">
     <!-- Sections Management -->
     <div class="col-md-6">
-        <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-header bg-white py-3 border-bottom">
                 <h5 class="mb-0">Sections</h5>
             </div>
-            <div class="card-body">
+            <div class="card-body p-4">
                 <ul class="list-group mb-3">
                     @forelse($schoolClass->sections as $section)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -21,7 +22,7 @@
                         <form action="{{ route('sections.destroy', $section) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Remove this section?')">Remove</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this section?')">Remove</button>
                         </form>
                     </li>
                     @empty
@@ -40,11 +41,11 @@
 
     <!-- Subjects Management -->
     <div class="col-md-6">
-        <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-header bg-white py-3 border-bottom">
                 <h5 class="mb-0">Assigned Subjects</h5>
             </div>
-            <div class="card-body">
+            <div class="card-body p-4">
                 <ul class="list-group mb-3">
                     @forelse($schoolClass->subjects as $subject)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -54,7 +55,7 @@
                         <form action="{{ route('classes.subjects.destroy', ['schoolClass' => $schoolClass, 'subject' => $subject]) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Remove this subject from class?')">Remove</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this subject from class?')">Remove</button>
                         </form>
                     </li>
                     @empty
@@ -64,7 +65,7 @@
 
                 <form action="{{ route('classes.subjects.store', $schoolClass) }}" method="POST" class="d-flex gap-2">
                     @csrf
-                    <select name="subject_id" class="form-control" required>
+                    <select name="subject_id" class="form-select" required>
                         <option value="">Select Subject</option>
                         @foreach($allSubjects as $subj)
                             @if(!$schoolClass->subjects->contains($subj->id))
@@ -78,6 +79,6 @@
         </div>
     </div>
 </div>
-@endsection
-
+    </div>
+</x-app-layout>
 

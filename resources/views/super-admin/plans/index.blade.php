@@ -1,13 +1,14 @@
-﻿﻿@extends('layouts.app')
+﻿<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Plans Management</h1>
+            <a href="{{ route('super-admin.plans.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create New Plan
+            </a>
+        </div>
+    </x-slot>
 
-@section('content')
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-dark">Plans Management</h1>
-        <a href="{{ route('super-admin.plans.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Create New Plan
-        </a>
-    </div>
+    <div class="container-fluid py-4">
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -16,54 +17,51 @@
         </div>
     @endif
 
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 fw-bold">All Subscription Plans</h6>
-        </div>
-        <div class="card-body">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover w-100" id="plansTable">
+                <table class="table table-hover w-100 mb-0 align-middle" id="plansTable">
                     <thead class="table-light">
                         <tr>
-                            <th>Name</th>
-                            <th>Code</th>
-                            <th>Price</th>
-                            <th>Billing Cycle</th>
-                            <th>Limits (Stu/Tch/Cam)</th>
-                            <th>Storage</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Name</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Code</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Price</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Billing Cycle</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Limits (Stu/Tch/Cam)</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Storage</th>
+                            <th class="p-3 text-start small fw-medium text-secondary text-uppercase">Status</th>
+                            <th class="p-3 text-end small fw-medium text-secondary text-uppercase">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($plans as $plan)
                             <tr>
-                                <td>{{ $plan->name }}</td>
-                                <td><code>{{ $plan->code }}</code></td>
-                                <td>${{ number_format($plan->price, 2) }}</td>
-                                <td><span class="badge bg-info">{{ ucfirst($plan->billing_cycle) }}</span></td>
+                                <td class="p-3 text-nowrap">{{ $plan->name }}</td>
+                                <td class="p-3 text-nowrap"><code>{{ $plan->code }}</code></td>
+                                <td class="p-3 text-nowrap">${{ number_format($plan->price, 2) }}</td>
+                                <td class="p-3 text-nowrap"><span class="badge bg-info">{{ ucfirst($plan->billing_cycle) }}</span></td>
                                 <td>
-                                    {{ $plan->max_students ?? 'âˆž' }} / 
-                                    {{ $plan->max_teachers ?? 'âˆž' }} / 
-                                    {{ $plan->max_campuses ?? 'âˆž' }}
+                                    {!! $plan->max_students ?? '&#8734;' !!} /
+                                    {!! $plan->max_teachers ?? '&#8734;' !!} /
+                                    {!! $plan->max_campuses ?? '&#8734;' !!}
                                 </td>
-                                <td>{{ $plan->storage_limit_mb ? $plan->storage_limit_mb . ' MB' : 'Unlimited' }}</td>
-                                <td>
+                                <td class="p-3 text-nowrap">{{ $plan->storage_limit_mb ? $plan->storage_limit_mb . ' MB' : 'Unlimited' }}</td>
+                                <td class="p-3 text-nowrap">
                                     @if($plan->is_active)
                                         <span class="badge bg-success">Active</span>
                                     @else
                                         <span class="badge bg-danger">Inactive</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="p-3 text-nowrap text-end">
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route('super-admin.plans.edit', $plan) }}" class="btn btn-sm btn-info text-white" title="Edit">
+                                        <a href="{{ route('super-admin.plans.edit', $plan) }}" class="btn btn-sm btn-outline-primary" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('super-admin.plans.destroy', $plan) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this plan?');" style="display: d-inline-block;">
+                                        <form action="{{ route('super-admin.plans.destroy', $plan) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this plan?');" class="d-inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -72,19 +70,17 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">No plans found.</td>
+                                <td colspan="8" class="p-3 text-center text-secondary">No plans found.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-            <div class="mt-3">
+            <div class="mt-4">
                 {{ $plans->links() }}
             </div>
         </div>
     </div>
 </div>
-@endsection
-
-
+</x-app-layout>
 
