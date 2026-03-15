@@ -9,7 +9,7 @@ class TransportRouteController extends Controller
 {
     public function index()
     {
-        $routes = TransportRoute::orderBy('name')->paginate(20);
+        $routes = TransportRoute::orderBy('name')->get();
         return view('transport.routes.index', compact('routes'));
     }
 
@@ -59,4 +59,3 @@ class TransportRouteController extends Controller
         return redirect()->route('transport.routes.index')->with('success', 'Route deleted.');
     }
 }
-

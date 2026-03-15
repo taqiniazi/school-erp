@@ -15,7 +15,7 @@ class SchoolController extends Controller
             $q->latest();
         }])
         ->withCount(['students', 'teachers', 'campuses'])
-        ->paginate(20);
+        ->get();
         
         return view('super-admin.schools.index', compact('schools'));
     }

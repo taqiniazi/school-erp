@@ -11,7 +11,7 @@ class PerformanceReviewController extends Controller
 {
     public function index()
     {
-        $reviews = PerformanceReview::with('teacher')->orderByDesc('review_date')->paginate(20);
+        $reviews = PerformanceReview::with('teacher')->orderByDesc('review_date')->get();
         return view('hr.performance.index', compact('reviews'));
     }
 
@@ -72,4 +72,3 @@ class PerformanceReviewController extends Controller
         return redirect()->route('hr.performance.index')->with('success', 'Review deleted.');
     }
 }
-

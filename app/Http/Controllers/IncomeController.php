@@ -23,7 +23,7 @@ class IncomeController extends Controller
             $query->whereDate('date', '<=', $request->end_date);
         }
 
-        $incomes = $query->orderBy('date', 'desc')->paginate(20);
+        $incomes = $query->orderBy('date', 'desc')->get();
         $years = FinancialYear::orderBy('start_date', 'desc')->get();
 
         return view('accounting.income.index', compact('incomes', 'years'));
@@ -106,4 +106,3 @@ class IncomeController extends Controller
         return redirect()->route('accounting.income.index')->with('success', 'Income deleted.');
     }
 }
-

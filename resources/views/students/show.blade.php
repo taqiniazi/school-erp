@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark  lh-sm">
             {{ __('Student Details') }}
@@ -56,7 +56,7 @@
                                 <div class="row mb-2">
                                     <div class="col-md-4 fw-medium text-secondary">Class & Section:</div>
                                     <div class="col-md-8">
-                                        {{ $student->schoolClass->name ?? 'N/A' }} - {{ $student->section->name ?? 'N/A' }}
+                                        {{ $student->schoolClass?->name ?? 'N/A' }} - {{ $student->section?->name ?? 'N/A' }}
                                     </div>
                                 </div>
                                 <div class="row mb-2">
@@ -72,10 +72,13 @@
                                     <div class="col-md-8">
                                         @if($student->parents && $student->parents->count() > 0)
                                             @foreach($student->parents as $parent)
+                                                @php($parentUser = $parent->user)
                                                 <div class="mb-2">
-                                                    <span class="fw-semibold">{{ $parent->user->name }}</span> 
-                                                    <span class="small text-secondary">({{ $parent->pivot->relation }})</span>
-                                                    <div class="small text-secondary">{{ $parent->user->email }}</div>
+                                                    <span class="fw-semibold">{{ $parentUser?->name ?? 'N/A' }}</span>
+                                                    <span class="small text-secondary">({{ $parent->pivot->relation ?? 'Guardian' }})</span>
+                                                    @if($parentUser?->email)
+                                                        <div class="small text-secondary">{{ $parentUser->email }}</div>
+                                                    @endif
                                                 </div>
                                             @endforeach
                                         @else
@@ -91,6 +94,4 @@
         </div>
     </div>
 </x-app-layout>
-
-
 

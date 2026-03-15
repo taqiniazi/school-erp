@@ -67,9 +67,5 @@
             </div>
             @endforelse
         </div>
-        
-        <div class="mt-4">
-            {{ $notices->links() }}
-        </div>
     </div>
 </x-app-layout>

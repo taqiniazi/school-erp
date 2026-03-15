@@ -171,8 +171,65 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         Route::resource('permissions', App\Http\Controllers\PermissionController::class)
             ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
-        Route::get('admissions', function () {
-            return view('admissions.index');
+        Route::get('admissions', function (\Illuminate\Http\Request $request) {
+            $q = trim((string) $request->get('q', ''));
+            $schoolClassId = $request->get('school_class_id');
+            $sectionId = $request->get('section_id');
+            $status = $request->get('status');
+            $from = $request->get('from');
+            $to = $request->get('to');
+
+            $query = \App\Models\Student::with(['schoolClass', 'section', 'parents'])
+                ->orderByDesc('admission_date')
+                ->orderByDesc('id');
+
+            if ($q !== '') {
+                $query->where(function ($w) use ($q) {
+                    $w->where('admission_number', 'like', '%' . $q . '%')
+                        ->orWhere('first_name', 'like', '%' . $q . '%')
+                        ->orWhere('last_name', 'like', '%' . $q . '%')
+                        ->orWhere('email', 'like', '%' . $q . '%')
+                        ->orWhere('phone', 'like', '%' . $q . '%');
+                });
+            }
+
+            if (!empty($schoolClassId)) {
+                $query->where('school_class_id', $schoolClassId);
+            }
+
+            if (!empty($sectionId)) {
+                $query->where('section_id', $sectionId);
+            }
+
+            if (!empty($status)) {
+                $query->where('status', $status);
+            }
+
+            if (!empty($from)) {
+                $query->whereDate('admission_date', '>=', $from);
+            }
+
+            if (!empty($to)) {
+                $query->whereDate('admission_date', '<=', $to);
+            }
+
+            $admissions = $query->get();
+
+            $classes = \App\Models\SchoolClass::orderBy('numeric_value')->orderBy('name')->get();
+            $sections = [];
+            if (!empty($schoolClassId)) {
+                $sections = \App\Models\Section::where('school_class_id', $schoolClassId)->orderBy('name')->get();
+            }
+
+            $now = \Carbon\Carbon::now();
+            $kpis = [
+                'total_students' => \App\Models\Student::count(),
+                'active_students' => \App\Models\Student::where('status', 'active')->count(),
+                'admitted_today' => \App\Models\Student::whereDate('admission_date', $now->toDateString())->count(),
+                'admitted_this_month' => \App\Models\Student::whereDate('admission_date', '>=', $now->copy()->startOfMonth()->toDateString())->count(),
+            ];
+
+            return view('admissions.index', compact('admissions', 'classes', 'sections', 'q', 'schoolClassId', 'sectionId', 'status', 'from', 'to', 'kpis'));
         })->name('admissions.index');
 
         Route::get('guardians', function () {
@@ -342,11 +399,11 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         Route::prefix('communication')->name('communication.')->group(function () {
             Route::resource('notices', App\Http\Controllers\NoticeController::class);
             Route::resource('events', App\Http\Controllers\EventController::class);
-            Route::resource('messages', App\Http\Controllers\MessageController::class)->except(['edit', 'update', 'destroy']);
             Route::get('messages/sent', [App\Http\Controllers\MessageController::class, 'sent'])->name('messages.sent');
+            Route::resource('messages', App\Http\Controllers\MessageController::class)->except(['edit', 'update', 'destroy']);
             Route::get('notifications', function () {
                 $user = auth()->user();
-                $notifications = $user->notifications()->latest()->paginate(15);
+                $notifications = $user->notifications()->latest()->get();
                 $unreadCount = $user->unreadNotifications()->count();
                 return view('communication.notifications.index', compact('notifications', 'unreadCount'));
             })->name('notifications.index');

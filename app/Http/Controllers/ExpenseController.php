@@ -23,7 +23,7 @@ class ExpenseController extends Controller
             $query->whereDate('date', '<=', $request->end_date);
         }
 
-        $expenses = $query->orderBy('date', 'desc')->paginate(20);
+        $expenses = $query->orderBy('date', 'desc')->get();
         $years = FinancialYear::orderBy('start_date', 'desc')->get();
 
         return view('accounting.expense.index', compact('expenses', 'years'));
@@ -106,4 +106,3 @@ class ExpenseController extends Controller
         return redirect()->route('accounting.expense.index')->with('success', 'Expense deleted.');
     }
 }
-

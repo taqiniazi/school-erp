@@ -43,10 +43,6 @@
                                 </a>
                             @endforeach
                         </div>
-
-                        <div class="mt-3">
-                            {{ $notifications->links() }}
-                        </div>
                     @else
                         <div class="text-center py-5 text-secondary">
                             <p class="mb-0">{{ __('No notifications yet.') }}</p>

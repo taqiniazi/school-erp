@@ -17,7 +17,7 @@ class AdminUserController extends Controller
     public function index()
     {
         // Fetch users who have 'School Admin' role
-        $admins = User::role('School Admin')->with('school')->latest()->paginate(20);
+        $admins = User::role('School Admin')->with('school')->latest()->get();
 
         return view('super-admin.admin-users.index', compact('admins'));
     }

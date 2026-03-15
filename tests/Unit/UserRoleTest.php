@@ -44,6 +44,7 @@ class UserRoleTest extends TestCase
     {
         $user = new User();
         $user->role = 'super_admin';
+        $user->setRelation('roles', collect());
 
         // 'Teacher' is not in the allowed list for super_admin column logic
         // It will fall through to traitHasRole.

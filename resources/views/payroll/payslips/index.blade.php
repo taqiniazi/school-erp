@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Payslips') }}
@@ -62,15 +62,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-4">
-                        {{ $payslips->withQueryString()->links() }}
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </x-app-layout>
-
 
 
 

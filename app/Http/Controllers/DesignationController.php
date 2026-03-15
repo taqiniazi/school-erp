@@ -12,7 +12,7 @@ class DesignationController extends Controller
 {
     public function index()
     {
-        $designations = Designation::orderBy('name')->paginate(20);
+        $designations = Designation::orderBy('name')->get();
         return view('designations.index', compact('designations'));
     }
 

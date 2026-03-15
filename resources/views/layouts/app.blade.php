@@ -38,8 +38,8 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
-    <div class="wrapper">
+<body class="admin-body">
+    <div class="wrapper admin-shell">
         <!-- Sidebar -->
         <nav id="sidebar">
             @include('layouts.sidebar')
@@ -51,7 +51,7 @@
             @include('layouts.topbar')
 
             <!-- Main Content -->
-            <main class="flex-grow-1 p-4 bg-body-tertiary">
+            <main class="flex-grow-1 p-4 bg-body-tertiary admin-main">
                 <div class="container-fluid">
                     @if (isset($header))
                         @php
@@ -59,7 +59,7 @@
                             $headerHasHtml = \Illuminate\Support\Str::contains($headerValue, '<');
                         @endphp
 
-                        <div class="pb-2 mb-4 border-bottom">
+                        <div class="page-header">
                             @if ($headerHasHtml)
                                 {!! $header !!}
                             @else
@@ -108,7 +108,22 @@
     
     <!-- Sidebar Toggle Script -->
     <script>
+        function cleanupOverlays() {
+            const hasShownModal = document.querySelector('.modal.show, .modal.showing, .offcanvas.show, .offcanvas.showing');
+            if (hasShownModal) return;
+            document.querySelectorAll('.modal-backdrop, .offcanvas-backdrop').forEach((el) => el.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
+        }
+
+        window.addEventListener('pageshow', cleanupOverlays);
+
         document.addEventListener('DOMContentLoaded', function() {
+            cleanupOverlays();
+            window.setTimeout(cleanupOverlays, 50);
+            window.setTimeout(cleanupOverlays, 300);
+
             if (window.jQuery && jQuery.fn && jQuery.fn.DataTable) {
                 const $ = jQuery;
                 if ($.fn.dataTable && $.fn.dataTable.ext && $.fn.dataTable.ext.errMode) {

@@ -12,7 +12,7 @@ class InventoryReturnController extends Controller
 {
     public function index()
     {
-        $returns = InventoryReturn::with('item')->orderByDesc('return_date')->paginate(20);
+        $returns = InventoryReturn::with('item')->orderByDesc('return_date')->get();
         return view('inventory.returns.index', compact('returns'));
     }
 
@@ -50,4 +50,3 @@ class InventoryReturnController extends Controller
         return redirect()->route('inventory.returns.index')->with('success', 'Return recorded and stock updated.');
     }
 }
-

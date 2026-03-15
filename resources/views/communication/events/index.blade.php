@@ -68,10 +68,5 @@
             </div>
             @endforelse
         </div>
-        
-        <div class="mt-4">
-            {{ $events->links() }}
-        </div>
     </div>
 </x-app-layout>
-

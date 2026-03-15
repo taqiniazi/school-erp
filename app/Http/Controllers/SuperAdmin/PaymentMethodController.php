@@ -13,7 +13,7 @@ class PaymentMethodController extends Controller
      */
     public function index()
     {
-        $methods = PaymentMethod::latest()->paginate(10);
+        $methods = PaymentMethod::latest()->get();
         return view('super-admin.payment-methods.index', compact('methods'));
     }
 

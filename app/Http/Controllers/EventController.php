@@ -20,7 +20,7 @@ class EventController extends Controller
     {
         $events = Event::where('start_date', '>=', now()->subDay()) // Show today's events too
             ->orderBy('start_date')
-            ->paginate(10);
+            ->get();
 
         return view('communication.events.index', compact('events'));
     }

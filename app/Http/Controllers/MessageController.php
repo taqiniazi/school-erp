@@ -17,7 +17,7 @@ class MessageController extends Controller
         $messages = Message::with('sender')
             ->where('recipient_id', Auth::id())
             ->latest()
-            ->paginate(15);
+            ->get();
 
         return view('communication.messages.index', compact('messages'));
     }
@@ -30,7 +30,7 @@ class MessageController extends Controller
         $messages = Message::with('recipient')
             ->where('sender_id', Auth::id())
             ->latest()
-            ->paginate(15);
+            ->get();
 
         return view('communication.messages.sent', compact('messages'));
     }

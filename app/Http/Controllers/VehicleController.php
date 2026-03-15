@@ -11,7 +11,7 @@ class VehicleController extends Controller
 {
     public function index()
     {
-        $vehicles = Vehicle::with(['driver', 'route'])->orderBy('registration_number')->paginate(20);
+        $vehicles = Vehicle::with(['driver', 'route'])->orderBy('registration_number')->get();
         return view('transport.vehicles.index', compact('vehicles'));
     }
 
@@ -67,4 +67,3 @@ class VehicleController extends Controller
         return redirect()->route('transport.vehicles.index')->with('success', 'Vehicle deleted.');
     }
 }
-

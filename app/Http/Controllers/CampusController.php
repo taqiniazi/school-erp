@@ -12,7 +12,7 @@ class CampusController extends Controller
      */
     public function index()
     {
-        $campuses = Campus::paginate(10);
+        $campuses = Campus::get();
         return view('campuses.index', compact('campuses'));
     }
 

@@ -27,7 +27,7 @@ class TeacherController extends Controller
     {
         $teachers = Teacher::with(['user', 'salaryStructure', 'allocations.subject', 'allocations.schoolClass', 'allocations.section'])
                         ->latest()
-                        ->paginate(10);
+                        ->get();
         return view('teachers.index', compact('teachers'));
     }
 

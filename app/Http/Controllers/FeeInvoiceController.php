@@ -37,7 +37,7 @@ class FeeInvoiceController extends Controller
             $query->where('status', $request->status);
         }
 
-        $invoices = $query->orderBy('issue_date', 'desc')->paginate(20);
+        $invoices = $query->orderBy('issue_date', 'desc')->get();
         
         $classes = Cache::remember('all_classes', 3600, function () {
             return SchoolClass::all();

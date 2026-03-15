@@ -1,5 +1,5 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!-- Confirmation Modal -->
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-d-none="true">
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header border-0 pb-0">
@@ -23,6 +23,5 @@
         </div>
     </div>
 </div>
-
 
 

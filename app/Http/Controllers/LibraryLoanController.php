@@ -13,7 +13,7 @@ class LibraryLoanController extends Controller
 {
     public function index()
     {
-        $loans = LibraryLoan::with(['book', 'user'])->orderByDesc('created_at')->paginate(20);
+        $loans = LibraryLoan::with(['book', 'user'])->orderByDesc('created_at')->get();
         return view('library.loans.index', compact('loans'));
     }
 
@@ -81,4 +81,3 @@ class LibraryLoanController extends Controller
         return redirect()->route('library.loans.index')->with('success', 'Book returned.');
     }
 }
-

@@ -11,7 +11,7 @@ class AuditLogController extends Controller
     {
         $logs = AuditLog::with('user')
             ->latest()
-            ->paginate(20);
+            ->get();
 
         return view('admin.audit_logs.index', compact('logs'));
     }

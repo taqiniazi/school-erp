@@ -15,7 +15,7 @@ class TeacherAllocationController extends Controller
     {
         $allocations = TeacherAllocation::with(['teacher.user', 'subject', 'schoolClass', 'section'])
             ->latest()
-            ->paginate(10);
+            ->get();
             
         $teachers = Teacher::with('user')->get();
         $classes = SchoolClass::with('sections')->get();

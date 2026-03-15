@@ -22,7 +22,7 @@ class PermissionController extends Controller
             $query->where('name', 'like', '%' . $q . '%');
         }
 
-        $permissions = $query->orderBy('name')->paginate(30)->withQueryString();
+        $permissions = $query->orderBy('name')->get();
 
         return view('permissions.index', compact('permissions', 'q'));
     }
@@ -82,4 +82,3 @@ class PermissionController extends Controller
         return redirect()->route('permissions.index')->with('success', 'Permission deleted successfully.');
     }
 }
-

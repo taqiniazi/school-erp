@@ -74,15 +74,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-4">
-                        {{ $expenses->withQueryString()->links() }}
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </x-app-layout>
-
 
 
 

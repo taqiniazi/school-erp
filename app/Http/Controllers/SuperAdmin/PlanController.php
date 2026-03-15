@@ -10,7 +10,7 @@ class PlanController extends Controller
 {
     public function index()
     {
-        $plans = Plan::paginate(20);
+        $plans = Plan::get();
         return view('super-admin.plans.index', compact('plans'));
     }
 

@@ -92,7 +92,7 @@ class PaymentController extends Controller
         $payments = SubscriptionPayment::with('plan')
             ->where('school_id', auth()->user()->school_id)
             ->latest()
-            ->paginate(10);
+            ->get();
             
         return view('billing.history', compact('payments'));
     }

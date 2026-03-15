@@ -9,7 +9,7 @@ class LibraryBookController extends Controller
 {
     public function index()
     {
-        $books = LibraryBook::orderBy('title')->paginate(20);
+        $books = LibraryBook::orderBy('title')->get();
         return view('library.books.index', compact('books'));
     }
 
@@ -72,4 +72,3 @@ class LibraryBookController extends Controller
         return redirect()->route('library.books.index')->with('success', 'Book deleted.');
     }
 }
-

@@ -54,9 +54,5 @@
                 </div>
             </div>
         </div>
-
-        <div class="mt-4">
-            {{ $designations->links() }}
-        </div>
     </div>
 </x-app-layout>

@@ -123,11 +123,6 @@
                     </table>
                 </div>
             </div>
-            @if($students->hasPages())
-            <div class="card-footer bg-white py-3 border-top border-light">
-                {{ $students->links() }}
-            </div>
-            @endif
         </div>
     </div>
 </x-app-layout>

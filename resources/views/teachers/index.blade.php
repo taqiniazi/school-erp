@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
@@ -116,11 +116,6 @@
                     </table>
                 </div>
             </div>
-            @if($teachers->hasPages())
-            <div class="card-footer bg-white py-3 border-top border-light">
-                {{ $teachers->links() }}
-            </div>
-            @endif
         </div>
     </div>
 </x-app-layout>

@@ -24,7 +24,7 @@ class NoticeController extends Controller
         $user = Auth::user();
         
         if ($user->hasRole(['Super Admin', 'School Admin', 'Teacher'])) {
-            $notices = Notice::with('creator')->latest()->paginate(10);
+            $notices = Notice::with('creator')->latest()->get();
         } else {
             // Students and Parents see general notices and role-specific ones
             $userRoles = $user->getRoleNames(); // Collection of role names
@@ -33,7 +33,7 @@ class NoticeController extends Controller
             $notices = Notice::with('creator')
                 ->whereIn('audience_role', $rolesToCheck)
                 ->latest()
-                ->paginate(10);
+                ->get();
         }
 
         return view('communication.notices.index', compact('notices'));

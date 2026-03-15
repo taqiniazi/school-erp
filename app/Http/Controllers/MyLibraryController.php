@@ -12,8 +12,7 @@ class MyLibraryController extends Controller
         $loans = LibraryLoan::with('book')
             ->where('user_id', Auth::id())
             ->orderByDesc('created_at')
-            ->paginate(20);
+            ->get();
         return view('library/my/index', compact('loans'));
     }
 }
-

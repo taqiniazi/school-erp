@@ -1,21 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="fw-semibold h4 text-dark lh-sm mb-0">
-            Permissions
-        </h2>
-    </x-slot>
-
-    <div class="container-fluid py-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <form class="d-flex gap-2" method="GET" action="{{ route('permissions.index') }}">
-                <input type="text" name="q" value="{{ $q }}" class="form-control" placeholder="Search permissions...">
-                <button type="submit" class="btn btn-outline-secondary">Search</button>
-            </form>
-
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h1 class="h3 fw-bold text-dark mb-0">Permissions</h1>
             @role('Super Admin')
                 <a href="{{ route('permissions.create') }}" class="btn btn-primary">Add Permission</a>
             @endrole
         </div>
+    </x-slot>
+
+    <div class="container-fluid py-4">
+     
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -44,7 +38,7 @@
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this permission?')">Delete</button>
                                             </form>
                                         @else
-                                            <span class="text-muted">No actions</span>
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-3 py-2">No actions</span>
                                         @endrole
                                     </td>
                                 </tr>
@@ -57,10 +51,6 @@
                     </table>
                 </div>
             </div>
-        </div>
-
-        <div class="mt-3">
-            {{ $permissions->links() }}
         </div>
     </div>
 </x-app-layout>

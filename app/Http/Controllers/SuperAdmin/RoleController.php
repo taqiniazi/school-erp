@@ -12,13 +12,16 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::where('guard_name', 'web')->latest()->paginate(20);
+        $roles = Role::where('guard_name', 'web')->latest()->get();
         return view('super-admin.roles.index', compact('roles'));
     }
 
     public function create()
     {
-        $permissions = Permission::all()->groupBy(function ($permission) {
+        $permissions = Permission::query()
+            ->where('guard_name', 'web')
+            ->get()
+            ->groupBy(function ($permission) {
             return explode('.', $permission->name)[0];
         });
         return view('super-admin.roles.create', compact('permissions'));
@@ -34,8 +37,14 @@ class RoleController extends Controller
 
         $role = Role::create(['name' => $request->name, 'guard_name' => 'web']);
 
-        if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
+        $permissionIds = array_map('intval', $request->input('permissions', []));
+        if ($permissionIds !== []) {
+            $permissions = Permission::query()
+                ->where('guard_name', 'web')
+                ->whereIn('id', $permissionIds)
+                ->get();
+
+            $role->syncPermissions($permissions);
         }
 
         return redirect()->route('super-admin.roles.index')->with('success', 'Role created successfully.');
@@ -43,7 +52,10 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
-        $permissions = Permission::all()->groupBy(function ($permission) {
+        $permissions = Permission::query()
+            ->where('guard_name', 'web')
+            ->get()
+            ->groupBy(function ($permission) {
             return explode('.', $permission->name)[0];
         });
         $rolePermissions = $role->permissions->pluck('id')->toArray();
@@ -60,11 +72,13 @@ class RoleController extends Controller
 
         $role->update(['name' => $request->name]);
 
-        if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
-        } else {
-            $role->syncPermissions([]);
-        }
+        $permissionIds = array_map('intval', $request->input('permissions', []));
+        $permissions = Permission::query()
+            ->where('guard_name', 'web')
+            ->whereIn('id', $permissionIds)
+            ->get();
+
+        $role->syncPermissions($permissions);
 
         return redirect()->route('super-admin.roles.index')->with('success', 'Role updated successfully.');
     }

@@ -24,7 +24,7 @@ class SubscriptionController extends Controller
             });
         }
 
-        $subscriptions = $query->latest()->paginate(20);
+        $subscriptions = $query->latest()->get();
 
         return view('super-admin.subscriptions.index', compact('subscriptions'));
     }

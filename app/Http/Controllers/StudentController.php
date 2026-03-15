@@ -21,9 +21,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        // Optimizing with caching for listing is tricky due to pagination and filters.
-        // But we can ensure relations are eager loaded, which they are.
-        $students = Student::with(['schoolClass', 'section', 'parents'])->latest()->paginate(10);
+        $students = Student::with(['schoolClass', 'section', 'parents'])->latest()->get();
         return view('students.index', compact('students'));
     }
 

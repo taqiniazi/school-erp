@@ -9,7 +9,7 @@ class InventoryItemController extends Controller
 {
     public function index()
     {
-        $items = InventoryItem::orderBy('name')->paginate(20);
+        $items = InventoryItem::orderBy('name')->get();
         return view('inventory.items.index', compact('items'));
     }
 
@@ -74,4 +74,3 @@ class InventoryItemController extends Controller
         return redirect()->route('inventory.items.index')->with('success', 'Item deleted.');
     }
 }
-

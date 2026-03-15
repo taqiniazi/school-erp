@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+﻿﻿<x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h1 class="h3 fw-bold text-dark mb-0">Library Books</h1>
@@ -56,14 +56,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-4">
-                    {{ $books->links() }}
-                </div>
-                <div class="mt-4">
-                    {{ $books->links() }}
-                </div>
             </div>
         </div>
     </div>
 </x-app-layout>
-

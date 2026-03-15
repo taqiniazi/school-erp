@@ -12,7 +12,7 @@ class StudentTransportController extends Controller
 {
     public function index()
     {
-        $assignments = StudentTransport::with(['student', 'route', 'vehicle'])->orderByDesc('created_at')->paginate(20);
+        $assignments = StudentTransport::with(['student', 'route', 'vehicle'])->orderByDesc('created_at')->get();
         return view('transport.assignments.index', compact('assignments'));
     }
 
@@ -46,4 +46,3 @@ class StudentTransportController extends Controller
         return redirect()->route('transport.assignments.index')->with('success', 'Assignment removed.');
     }
 }
-

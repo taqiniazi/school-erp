@@ -12,7 +12,7 @@ class InventoryPurchaseController extends Controller
 {
     public function index()
     {
-        $purchases = InventoryPurchase::with('item')->orderByDesc('purchase_date')->paginate(20);
+        $purchases = InventoryPurchase::with('item')->orderByDesc('purchase_date')->get();
         return view('inventory.purchases.index', compact('purchases'));
     }
 
@@ -52,4 +52,3 @@ class InventoryPurchaseController extends Controller
         return redirect()->route('inventory.purchases.index')->with('success', 'Purchase recorded and stock updated.');
     }
 }
-

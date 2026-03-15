@@ -9,7 +9,7 @@ class DriverController extends Controller
 {
     public function index()
     {
-        $drivers = Driver::orderBy('name')->paginate(20);
+        $drivers = Driver::orderBy('name')->get();
         return view('transport.drivers.index', compact('drivers'));
     }
 
@@ -57,4 +57,3 @@ class DriverController extends Controller
         return redirect()->route('transport.drivers.index')->with('success', 'Driver deleted.');
     }
 }
-

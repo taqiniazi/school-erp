@@ -177,8 +177,21 @@
              navbar.classList.add('py-4');
              updateNavbar();
         }
+
+        function cleanupOverlays() {
+            const hasShownModal = document.querySelector('.modal.show, .modal.showing, .offcanvas.show, .offcanvas.showing');
+            if (hasShownModal) return;
+            document.querySelectorAll('.modal-backdrop, .offcanvas-backdrop').forEach((el) => el.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
+        }
+
+        window.addEventListener('pageshow', cleanupOverlays);
+        cleanupOverlays();
+        window.setTimeout(cleanupOverlays, 50);
+        window.setTimeout(cleanupOverlays, 300);
     </script>
     @stack('scripts')
 </body>
 </html>
-

@@ -28,7 +28,7 @@ class PayslipController extends Controller
                   ->whereYear('pay_month', date('Y', strtotime($request->month)));
         }
 
-        $payslips = $query->orderBy('pay_month', 'desc')->paginate(20);
+        $payslips = $query->orderBy('pay_month', 'desc')->get();
         $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
 
         return view('payroll.payslips.index', compact('payslips', 'teachers'));
@@ -129,4 +129,3 @@ class PayslipController extends Controller
         return $pdf->download('payslip_' . $payslip->payslip_no . '.pdf');
     }
 }
-

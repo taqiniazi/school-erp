@@ -12,7 +12,7 @@ class InventoryIssueController extends Controller
 {
     public function index()
     {
-        $issues = InventoryIssue::with('item')->orderByDesc('issue_date')->paginate(20);
+        $issues = InventoryIssue::with('item')->orderByDesc('issue_date')->get();
         return view('inventory.issues.index', compact('issues'));
     }
 
@@ -55,4 +55,3 @@ class InventoryIssueController extends Controller
         return redirect()->route('inventory.issues.index')->with('success', 'Issue recorded and stock updated.');
     }
 }
-
