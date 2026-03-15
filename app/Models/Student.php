@@ -58,4 +58,9 @@ class Student extends Model
                     ->withPivot('relation')
                     ->withTimestamps();
     }
+
+    public function documents()
+    {
+        return $this->hasMany(StudentDocument::class);
+    }
 }

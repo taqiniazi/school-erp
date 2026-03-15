@@ -5,11 +5,17 @@ use App\Http\Controllers\Billing\SubscriptionSelectionController;
 use App\Http\Controllers\ParentDashboardController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\SchoolClassController;
+use App\Http\Controllers\SectionController;
+use App\Http\Controllers\LessonPlanController;
+use App\Http\Controllers\StudentDocumentController;
+use App\Http\Controllers\StudentPromotionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherDashboardController;
+use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\UiController;
 use Illuminate\Support\Facades\Route;
 
@@ -232,29 +238,35 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
             return view('admissions.index', compact('admissions', 'classes', 'sections', 'q', 'schoolClassId', 'sectionId', 'status', 'from', 'to', 'kpis'));
         })->name('admissions.index');
 
-        Route::get('guardians', function () {
-            return view('guardians.index');
-        })->name('guardians.index');
+        Route::get('guardians', [GuardianController::class, 'index'])->name('guardians.index');
+        Route::get('guardians/{guardian}', [GuardianController::class, 'show'])->name('guardians.show');
 
-        Route::get('student-promotions', function () {
-            return view('student-promotions.index');
-        })->name('student-promotions.index');
+        Route::get('student-promotions', [StudentPromotionController::class, 'index'])->name('student-promotions.index');
+        Route::post('student-promotions', [StudentPromotionController::class, 'store'])->name('student-promotions.store');
 
-        Route::get('student-documents', function () {
-            return view('student-documents.index');
-        })->name('student-documents.index');
+        Route::get('student-documents', [StudentDocumentController::class, 'index'])->name('student-documents.index');
+        Route::post('student-documents', [StudentDocumentController::class, 'store'])->name('student-documents.store');
+        Route::get('student-documents/{studentDocument}/download', [StudentDocumentController::class, 'download'])->name('student-documents.download');
+        Route::delete('student-documents/{studentDocument}', [StudentDocumentController::class, 'destroy'])->name('student-documents.destroy');
 
-        Route::get('sections', function () {
-            return view('sections.index');
-        })->name('sections.index');
+        Route::get('sections', [SectionController::class, 'index'])->name('sections.index');
+        Route::post('sections/manage', [SectionController::class, 'store'])->name('sections.manage.store');
+        Route::put('sections/manage/{section}', [SectionController::class, 'update'])->name('sections.manage.update');
+        Route::delete('sections/manage/{section}', [SectionController::class, 'destroy'])->name('sections.manage.destroy');
 
-        Route::get('timetable', function () {
-            return view('timetable.index');
-        })->name('timetable.index');
+        Route::get('timetable', [TimetableController::class, 'index'])->name('timetable.index');
+        Route::get('timetable/create', [TimetableController::class, 'create'])->name('timetable.create');
+        Route::post('timetable', [TimetableController::class, 'store'])->name('timetable.store');
+        Route::get('timetable/{entry}/edit', [TimetableController::class, 'edit'])->name('timetable.edit');
+        Route::put('timetable/{entry}', [TimetableController::class, 'update'])->name('timetable.update');
+        Route::delete('timetable/{entry}', [TimetableController::class, 'destroy'])->name('timetable.destroy');
 
-        Route::get('lesson-plans', function () {
-            return view('lesson-plans.index');
-        })->name('lesson-plans.index');
+        Route::get('lesson-plans', [LessonPlanController::class, 'index'])->name('lesson-plans.index');
+        Route::get('lesson-plans/create', [LessonPlanController::class, 'create'])->name('lesson-plans.create');
+        Route::post('lesson-plans', [LessonPlanController::class, 'store'])->name('lesson-plans.store');
+        Route::get('lesson-plans/{lessonPlan}/edit', [LessonPlanController::class, 'edit'])->name('lesson-plans.edit');
+        Route::put('lesson-plans/{lessonPlan}', [LessonPlanController::class, 'update'])->name('lesson-plans.update');
+        Route::delete('lesson-plans/{lessonPlan}', [LessonPlanController::class, 'destroy'])->name('lesson-plans.destroy');
 
         Route::get('exam-types', function () {
             return view('exam-types.index');

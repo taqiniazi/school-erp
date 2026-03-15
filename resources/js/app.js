@@ -290,8 +290,48 @@ function initDashboard() {
     }
 }
 
+function iconifyActionButtons(root = document) {
+    const map = new Map([
+        ['edit', 'fa-edit'],
+        ['delete', 'fa-trash-alt'],
+        ['remove', 'fa-times'],
+        ['view', 'fa-eye'],
+    ]);
+
+    root.querySelectorAll('.table a.btn, .table button.btn').forEach((el) => {
+        if (!(el instanceof HTMLElement)) return;
+        if (el.dataset.iconified === '1') return;
+        if (el.children.length > 0) return;
+
+        const label = (el.textContent || '').trim();
+        const icon = map.get(label.toLowerCase());
+        if (!icon) return;
+
+        el.dataset.iconified = '1';
+        el.classList.add('btn-icon');
+        el.setAttribute('title', label);
+        el.setAttribute('aria-label', label);
+        el.innerHTML = `<i class="fas ${icon}"></i><span class="visually-hidden">${label}</span>`;
+    });
+}
+
+function initActionButtonIcons() {
+    iconifyActionButtons();
+    window.setTimeout(iconifyActionButtons, 50);
+    window.setTimeout(iconifyActionButtons, 300);
+
+    if (window.jQuery && window.jQuery.fn) {
+        const $ = window.jQuery;
+        if (!document.body.dataset.dtIconifyBound) {
+            document.body.dataset.dtIconifyBound = '1';
+            $(document).on('draw.dt', () => iconifyActionButtons());
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();
     initNotifications();
     initDashboard();
+    initActionButtonIcons();
 });

@@ -33,7 +33,7 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     
     <!-- Chart.js -->
-    <script src="{{ asset('js/chart.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -104,57 +104,30 @@
     <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap5.min.js') }}"></script>
-    <script src="{{ asset('js/Sortable.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     
     <!-- Sidebar Toggle Script -->
     <script>
         function cleanupOverlays() {
-            // Check if any modal or offcanvas is actually shown
-            const activeModals = document.querySelectorAll('.modal.show, .modal.showing, .offcanvas.show, .offcanvas.showing');
-            
-            // Only cleanup if no modals are currently shown
-            if (activeModals.length === 0) {
-                // Remove any stale backdrop elements
-                document.querySelectorAll('.modal-backdrop, .offcanvas-backdrop').forEach((el) => {
-                    el.remove();
-                });
-                
-                // Clean up body classes and styles that Bootstrap adds
-                document.body.classList.remove('modal-open');
-                document.body.style.removeProperty('overflow');
-                document.body.style.removeProperty('padding-right');
-            }
+            const hasShownModal = document.querySelector('.modal.show, .modal.showing, .offcanvas.show, .offcanvas.showing');
+            if (hasShownModal) return;
+            document.querySelectorAll('.modal-backdrop, .offcanvas-backdrop').forEach((el) => el.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
         }
 
-        // Run cleanup on page show (including back-forward cache)
-        window.addEventListener('pageshow', function(e) {
-            if (e.persisted) {
-                cleanupOverlays();
-            }
-        });
+        window.addEventListener('pageshow', cleanupOverlays);
 
-        // Run cleanup on DOM ready and at intervals to catch any stale backdrops
         document.addEventListener('DOMContentLoaded', function() {
-            // Immediate cleanup
             cleanupOverlays();
-            
-            // Additional cleanups with delays to ensure Bootstrap has initialized
-            window.setTimeout(cleanupOverlays, 100);
+            window.setTimeout(cleanupOverlays, 50);
             window.setTimeout(cleanupOverlays, 300);
-            window.setTimeout(cleanupOverlays, 500);
-            
-            // Also run cleanup when any modal is hidden
-            document.querySelectorAll('.modal').forEach(function(modal) {
-                modal.addEventListener('hidden.bs.modal', cleanupOverlays);
-            });
-        });
-    </script>
 
-    <script>
-        if (window.jQuery && jQuery.fn && jQuery.fn.DataTable) {
-            const $ = jQuery;
-            if ($.fn.dataTable && $.fn.dataTable.ext && $.fn.dataTable.ext.errMode) {
-                $.fn.dataTable.ext.errMode = 'none';
+            if (window.jQuery && jQuery.fn && jQuery.fn.DataTable) {
+                const $ = jQuery;
+                if ($.fn.dataTable && $.fn.dataTable.ext && $.fn.dataTable.ext.errMode) {
+                    $.fn.dataTable.ext.errMode = 'none';
                 }
                 $('table.table').each(function () {
                     const $tbl = $(this);
@@ -246,7 +219,7 @@
                     }
                 });
             }
-        }
+        });
     </script>
     
     @include('components.confirm-modal')

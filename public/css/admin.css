@@ -525,6 +525,38 @@ body {
     background-color: rgba(99, 102, 241, 0.06);
 }
 
+.table td form {
+    margin: 0;
+}
+
+.table td form.d-inline {
+    display: inline-block !important;
+}
+
+.table td a.btn,
+.table td button.btn,
+.table td input.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.table td .btn.btn-icon {
+    padding: 0.35rem 0.55rem;
+    line-height: 1;
+}
+
+.table td .btn.btn-icon i {
+    margin: 0;
+}
+
+.table td a.btn:not(:last-child),
+.table td button.btn:not(:last-child),
+.table td input.btn:not(:last-child),
+.table td form:not(:last-child) {
+    margin-inline-end: 0.5rem;
+}
+
 .btn {
     border-radius: 0.9rem;
     transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease, border-color 0.12s ease;
