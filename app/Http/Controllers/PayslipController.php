@@ -8,8 +8,8 @@ use App\Models\PayslipItem;
 use App\Models\StaffAllowance;
 use App\Models\StaffDeduction;
 use App\Models\StaffSalary;
-use App\Models\TeacherAttendance;
 use App\Models\Teacher;
+use App\Models\TeacherAttendance;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,24 +54,86 @@ class PayslipController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'teacher_id' => ['required', 'exists:teachers,id'],
+            'teacher_id' => ['nullable', 'exists:teachers,id'],
             'pay_month' => ['required', 'date'],
         ]);
 
-        $teacher = Teacher::findOrFail($request->teacher_id);
         $payMonth = date('Y-m-01', strtotime($request->pay_month));
         $fy = FinancialYear::where('is_current', true)->first();
 
-        // Fetch active salary
-        $salary = StaffSalary::where('teacher_id', $teacher->id)->where('is_active', true)->first();
-        if (! $salary) {
-            return redirect()->back()->withErrors(['error' => 'No active salary found for this staff.']);
+        $teachers = collect();
+        if ($request->filled('teacher_id')) {
+            $teachers = collect([Teacher::findOrFail($request->teacher_id)]);
+        } else {
+            $teachers = Teacher::query()
+                ->join('users', 'teachers.user_id', '=', 'users.id')
+                ->orderBy('users.name')
+                ->select('teachers.*')
+                ->get();
         }
 
-        // Prevent duplicate payslip for same month
+        $created = 0;
+        $skippedExists = 0;
+        $skippedNoSalary = 0;
+
+        foreach ($teachers as $teacher) {
+            $result = $this->generatePayslipForTeacher($teacher, $payMonth, $fy);
+            if ($result === 'created') {
+                $created++;
+            } elseif ($result === 'exists') {
+                $skippedExists++;
+            } elseif ($result === 'no_salary') {
+                $skippedNoSalary++;
+            }
+        }
+
+        $parts = [];
+        $parts[] = $created.' generated';
+        if ($skippedExists) {
+            $parts[] = $skippedExists.' already existed';
+        }
+        if ($skippedNoSalary) {
+            $parts[] = $skippedNoSalary.' missing salary';
+        }
+
+        return redirect()->route('payslips.index')->with('success', 'Payslip(s): '.implode(', ', $parts).'.');
+    }
+
+    private static function calculateAnnualIncomeTax(float $annualIncome): float
+    {
+        if ($annualIncome <= 600000) {
+            return 0;
+        }
+
+        if ($annualIncome <= 1200000) {
+            return ($annualIncome - 600000) * 0.01;
+        }
+
+        if ($annualIncome <= 2200000) {
+            return 6000 + (($annualIncome - 1200000) * 0.11);
+        }
+
+        if ($annualIncome <= 3200000) {
+            return 116000 + (($annualIncome - 2200000) * 0.23);
+        }
+
+        if ($annualIncome <= 4100000) {
+            return 345000 + (($annualIncome - 3200000) * 0.30);
+        }
+
+        return 615000 + (($annualIncome - 4100000) * 0.35);
+    }
+
+    private function generatePayslipForTeacher(Teacher $teacher, string $payMonth, ?FinancialYear $fy): string
+    {
+        $salary = StaffSalary::where('teacher_id', $teacher->id)->where('is_active', true)->first();
+        if (! $salary) {
+            return 'no_salary';
+        }
+
         $exists = Payslip::where('teacher_id', $teacher->id)->where('pay_month', $payMonth)->exists();
         if ($exists) {
-            return redirect()->back()->withErrors(['error' => 'Payslip already exists for this month.']);
+            return 'exists';
         }
 
         $allowances = StaffAllowance::where('teacher_id', $teacher->id)->where('is_active', true)->get();
@@ -80,6 +142,9 @@ class PayslipController extends Controller
         DB::transaction(function () use ($teacher, $salary, $allowances, $deductions, $payMonth, $fy) {
             $allowSum = 0;
             $deductSum = 0;
+            $hasManualIncomeTax = $deductions->contains(function ($d) {
+                return strtolower(trim((string) $d->name)) === 'income tax';
+            });
 
             $payslip = Payslip::create([
                 'teacher_id' => $teacher->id,
@@ -91,7 +156,7 @@ class PayslipController extends Controller
             ]);
 
             foreach ($allowances as $a) {
-                $amount = $a->is_percentage ? ($salary->basic_salary * ($a->amount / 100)) : $a->amount;
+                $amount = $a->is_percentage ? ($salary->basic_salary * ((float) $a->amount / 100)) : (float) $a->amount;
                 PayslipItem::create([
                     'payslip_id' => $payslip->id,
                     'type' => 'allowance',
@@ -103,8 +168,26 @@ class PayslipController extends Controller
                 $allowSum += $amount;
             }
 
+            if (! $hasManualIncomeTax) {
+                $annualTaxableIncome = ((float) $salary->basic_salary + (float) $allowSum) * 12;
+                $annualIncomeTax = self::calculateAnnualIncomeTax($annualTaxableIncome);
+                $monthlyIncomeTax = round($annualIncomeTax / 12, 2);
+
+                if ($monthlyIncomeTax > 0) {
+                    PayslipItem::create([
+                        'payslip_id' => $payslip->id,
+                        'type' => 'deduction',
+                        'name' => 'Income Tax',
+                        'is_percentage' => false,
+                        'value' => 0,
+                        'amount' => $monthlyIncomeTax,
+                    ]);
+                    $deductSum += $monthlyIncomeTax;
+                }
+            }
+
             foreach ($deductions as $d) {
-                $amount = $d->is_percentage ? ($salary->basic_salary * ($d->amount / 100)) : $d->amount;
+                $amount = $d->is_percentage ? ($salary->basic_salary * ((float) $d->amount / 100)) : (float) $d->amount;
                 PayslipItem::create([
                     'payslip_id' => $payslip->id,
                     'type' => 'deduction',
@@ -123,7 +206,7 @@ class PayslipController extends Controller
             ]);
         });
 
-        return redirect()->route('payslips.index')->with('success', 'Payslip generated.');
+        return 'created';
     }
 
     public function show(Payslip $payslip)

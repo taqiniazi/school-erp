@@ -6,12 +6,16 @@ use App\Models\Campus;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\Student;
+use App\Models\StudentDocument;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class StudentController extends Controller
 {
@@ -36,13 +40,7 @@ class StudentController extends Controller
 
         $campuses = Campus::where('is_active', true)->get();
 
-        // Assuming 'Parent' role exists as per previous tasks
-        // Caching parents list might be too heavy if there are thousands, but for now okay.
-        $parents = Cache::remember('all_parents_role', 300, function () {
-            return User::role('Parent')->get();
-        });
-
-        return view('students.create', compact('classes', 'parents', 'campuses'));
+        return view('students.create', compact('classes', 'campuses'));
     }
 
     /**
@@ -68,9 +66,13 @@ class StudentController extends Controller
                 'students.*.address' => ['required', 'string'],
                 'students.*.phone' => ['nullable', 'string'],
                 'students.*.email' => ['nullable', 'email', 'distinct', Rule::unique('students', 'email')],
-                'students.*.parent_id' => ['nullable', 'exists:users,id'],
+                'students.*.parent_name' => ['required', 'string', 'max:255'],
+                'students.*.parent_email' => ['required', 'email', 'max:255'],
+                'students.*.parent_phone_number' => ['required', 'string', 'max:50'],
                 'students.*.relation' => ['nullable', 'string', 'max:255'],
-                'students.*.photo' => ['nullable', 'image', 'max:2048'],
+                'students.*.photo' => ['required', 'image', 'max:2048'],
+                'students.*.last_class_certificate' => ['nullable', 'file', 'max:5120'],
+                'students.*.b_form_domicile' => ['required', 'file', 'max:5120'],
             ]);
 
             $rows = $validated['students'];
@@ -100,6 +102,21 @@ class StudentController extends Controller
                 }
             }
 
+            $classNames = SchoolClass::whereIn('id', collect($rows)->pluck('school_class_id')->filter()->unique()->values())
+                ->pluck('name', 'id');
+
+            $messages = [];
+            foreach ($rows as $idx => $row) {
+                $className = (string) ($classNames[$row['school_class_id']] ?? '');
+                $isPgOrKg = preg_match('/\b(pg|kg)\b/i', $className) === 1;
+                if (! $isPgOrKg && ! $request->hasFile("students.$idx.last_class_certificate")) {
+                    $messages["students.$idx.last_class_certificate"] = 'Last class certificate is required for this class.';
+                }
+            }
+            if (count($messages) > 0) {
+                throw ValidationException::withMessages($messages);
+            }
+
             DB::transaction(function () use ($rows, $request) {
                 foreach ($rows as $idx => $row) {
                     $path = null;
@@ -125,9 +142,53 @@ class StudentController extends Controller
                         'status' => 'active',
                     ]);
 
-                    if (! empty($row['parent_id'])) {
-                        $student->parents()->attach($row['parent_id'], [
-                            'relation' => $row['relation'] ?? 'Guardian',
+                    $parent = User::where('email', $row['parent_email'])->first();
+                    if (! $parent) {
+                        $parent = User::create([
+                            'name' => $row['parent_name'],
+                            'email' => $row['parent_email'],
+                            'phone_number' => $row['parent_phone_number'],
+                            'password' => Hash::make(Str::random(32)),
+                        ]);
+                    } else {
+                        $parent->update([
+                            'name' => $parent->name ?: $row['parent_name'],
+                            'phone_number' => $parent->phone_number ?: $row['parent_phone_number'],
+                        ]);
+                    }
+                    if (! $parent->hasRole('Parent')) {
+                        $parent->assignRole('Parent');
+                    }
+
+                    $student->parents()->syncWithoutDetaching([
+                        $parent->id => ['relation' => $row['relation'] ?? 'Guardian'],
+                    ]);
+
+                    if ($request->hasFile("students.$idx.last_class_certificate")) {
+                        $file = $request->file("students.$idx.last_class_certificate");
+                        $storedPath = $file->store("student-documents/{$student->id}", 'public');
+                        StudentDocument::create([
+                            'student_id' => $student->id,
+                            'title' => 'Last Class Certificate',
+                            'file_name' => $file->getClientOriginalName(),
+                            'file_path' => $storedPath,
+                            'mime_type' => $file->getClientMimeType(),
+                            'size_bytes' => $file->getSize() ?: 0,
+                            'uploaded_by' => auth()->id(),
+                        ]);
+                    }
+
+                    if ($request->hasFile("students.$idx.b_form_domicile")) {
+                        $file = $request->file("students.$idx.b_form_domicile");
+                        $storedPath = $file->store("student-documents/{$student->id}", 'public');
+                        StudentDocument::create([
+                            'student_id' => $student->id,
+                            'title' => 'B-Form/Domicile',
+                            'file_name' => $file->getClientOriginalName(),
+                            'file_path' => $storedPath,
+                            'mime_type' => $file->getClientMimeType(),
+                            'size_bytes' => $file->getSize() ?: 0,
+                            'uploaded_by' => auth()->id(),
                         ]);
                     }
                 }
@@ -154,10 +215,22 @@ class StudentController extends Controller
             'address' => 'required|string',
             'phone' => 'nullable|string',
             'email' => 'nullable|email|unique:students,email',
-            'parent_id' => 'nullable|exists:users,id',
+            'parent_name' => 'required|string|max:255',
+            'parent_email' => 'required|email|max:255',
+            'parent_phone_number' => 'required|string|max:50',
             'relation' => 'nullable|string',
-            'photo' => 'nullable|image|max:2048',
+            'photo' => 'required|image|max:2048',
+            'last_class_certificate' => 'nullable|file|max:5120',
+            'b_form_domicile' => 'required|file|max:5120',
         ]);
+
+        $className = (string) SchoolClass::whereKey($validated['school_class_id'])->value('name');
+        $isPgOrKg = preg_match('/\b(pg|kg)\b/i', $className) === 1;
+        if (! $isPgOrKg && ! $request->hasFile('last_class_certificate')) {
+            throw ValidationException::withMessages([
+                'last_class_certificate' => 'Last class certificate is required for this class.',
+            ]);
+        }
 
         DB::transaction(function () use ($validated, $request) {
             $path = null;
@@ -183,9 +256,53 @@ class StudentController extends Controller
                 'status' => 'active',
             ]);
 
-            if (! empty($validated['parent_id'])) {
-                $student->parents()->attach($validated['parent_id'], [
-                    'relation' => $validated['relation'] ?? 'Guardian',
+            $parent = User::where('email', $validated['parent_email'])->first();
+            if (! $parent) {
+                $parent = User::create([
+                    'name' => $validated['parent_name'],
+                    'email' => $validated['parent_email'],
+                    'phone_number' => $validated['parent_phone_number'],
+                    'password' => Hash::make(Str::random(32)),
+                ]);
+            } else {
+                $parent->update([
+                    'name' => $parent->name ?: $validated['parent_name'],
+                    'phone_number' => $parent->phone_number ?: $validated['parent_phone_number'],
+                ]);
+            }
+            if (! $parent->hasRole('Parent')) {
+                $parent->assignRole('Parent');
+            }
+
+            $student->parents()->syncWithoutDetaching([
+                $parent->id => ['relation' => $validated['relation'] ?? 'Guardian'],
+            ]);
+
+            if ($request->hasFile('last_class_certificate')) {
+                $file = $request->file('last_class_certificate');
+                $storedPath = $file->store("student-documents/{$student->id}", 'public');
+                StudentDocument::create([
+                    'student_id' => $student->id,
+                    'title' => 'Last Class Certificate',
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $storedPath,
+                    'mime_type' => $file->getClientMimeType(),
+                    'size_bytes' => $file->getSize() ?: 0,
+                    'uploaded_by' => auth()->id(),
+                ]);
+            }
+
+            if ($request->hasFile('b_form_domicile')) {
+                $file = $request->file('b_form_domicile');
+                $storedPath = $file->store("student-documents/{$student->id}", 'public');
+                StudentDocument::create([
+                    'student_id' => $student->id,
+                    'title' => 'B-Form/Domicile',
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $storedPath,
+                    'mime_type' => $file->getClientMimeType(),
+                    'size_bytes' => $file->getSize() ?: 0,
+                    'uploaded_by' => auth()->id(),
                 ]);
             }
         });

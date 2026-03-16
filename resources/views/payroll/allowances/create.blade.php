@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('New Allowance') }}
@@ -15,24 +15,27 @@
                             <div class="mb-4">
                                 <label class="form-label small fw-bold mb-2">Staff</label>
                                 <select name="teacher_id" class="form-select" required>
+                                    <option value="">Select Staff</option>
                                     @foreach($teachers as $t)
-                                        <option value="{{ $t->id }}">{{ $t->first_name }} {{ $t->last_name }}</option>
+                                        <option value="{{ $t->id }}" {{ (string) old('teacher_id') === (string) $t->id ? 'selected' : '' }}>
+                                            {{ optional($t->user)->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label small fw-bold mb-2">Name</label>
-                                <input type="text" name="name" class="form-control" required>
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" required>
                             </div>
                             <div class="mb-4 d-flex align-items-center">
                                 <div class="form-check">
-                                    <input type="checkbox" name="is_percentage" id="is_percentage" class="form-check-input">
+                                    <input type="checkbox" name="is_percentage" id="is_percentage" class="form-check-input" {{ old('is_percentage') ? 'checked' : '' }}>
                                     <label for="is_percentage" class="form-check-label small fw-bold">Percentage</label>
                                 </div>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label small fw-bold mb-2">Amount / %</label>
-                                <input type="number" step="0.01" name="amount" class="form-control" required>
+                                <input type="number" step="0.01" name="amount" value="{{ old('amount') }}" class="form-control" required>
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mt-4">
@@ -47,7 +50,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 

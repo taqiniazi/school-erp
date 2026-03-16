@@ -70,8 +70,7 @@
                         </div>
                     @endif
 
-                    @php($flashSuccess = session()->pull('success'))
-                    @if($flashSuccess)
+                    @if(!empty($flashSuccess))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ $flashSuccess }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

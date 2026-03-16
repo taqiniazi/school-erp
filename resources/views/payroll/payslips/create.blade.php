@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Generate Payslip') }}
@@ -14,15 +14,18 @@
                         <div class="row row-cols-1 row-cols-md-2 g-3">
                             <div class="mb-4">
                                 <label class="form-label small fw-bold text-dark">Staff</label>
-                                <select name="teacher_id" class="form-select" required>
+                                <select name="teacher_id" class="form-select">
+                                    <option value="">All</option>
                                     @foreach($teachers as $t)
-                                        <option value="{{ $t->id }}">{{ optional($t->user)->name }}</option>
+                                        <option value="{{ $t->id }}" {{ (string) old('teacher_id') === (string) $t->id ? 'selected' : '' }}>
+                                            {{ optional($t->user)->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label small fw-bold text-dark">Pay Month</label>
-                                <input type="month" name="pay_month" class="form-control" required>
+                                <input type="month" name="pay_month" value="{{ old('pay_month') }}" class="form-control" required>
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mt-4">
@@ -37,7 +40,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 

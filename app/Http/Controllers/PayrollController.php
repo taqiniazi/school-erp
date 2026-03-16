@@ -12,7 +12,7 @@ class PayrollController extends Controller
 {
     public function index()
     {
-        $salaries = StaffSalary::with('teacher')->where('is_active', true)->orderBy('teacher_id')->get();
+        $salaries = StaffSalary::with(['teacher.user'])->where('is_active', true)->orderBy('teacher_id')->get();
 
         return view('payroll.salaries.index', compact('salaries'));
     }
@@ -92,7 +92,7 @@ class PayrollController extends Controller
     public function allowances(Request $request)
     {
         $teacherId = $request->get('teacher_id');
-        $query = StaffAllowance::with('teacher')->where('is_active', true);
+        $query = StaffAllowance::with(['teacher.user'])->where('is_active', true);
         if ($teacherId) {
             $query->where('teacher_id', $teacherId);
         }
@@ -178,7 +178,7 @@ class PayrollController extends Controller
     public function deductions(Request $request)
     {
         $teacherId = $request->get('teacher_id');
-        $query = StaffDeduction::with('teacher')->where('is_active', true);
+        $query = StaffDeduction::with(['teacher.user'])->where('is_active', true);
         if ($teacherId) {
             $query->where('teacher_id', $teacherId);
         }

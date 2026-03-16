@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Campus;
 use App\Models\SalaryStructure;
 use App\Models\SchoolClass;
+use App\Models\StaffAllowance;
+use App\Models\StaffDeduction;
+use App\Models\StaffSalary;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\TeacherAllocation;
@@ -35,12 +38,9 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        $salaryStructures = Cache::remember('all_salary_structures', 86400, function () {
-            return SalaryStructure::all();
-        });
         $campuses = Campus::where('is_active', true)->get();
 
-        return view('teachers.create', compact('salaryStructures', 'campuses'));
+        return view('teachers.create', compact('campuses'));
     }
 
     /**
@@ -72,12 +72,36 @@ class TeacherController extends Controller
                 ],
                 'teachers.*.qualification' => ['required', 'string', 'max:255'],
                 'teachers.*.joining_date' => ['required', 'date'],
+                'teachers.*.basic_salary' => ['required', 'numeric', 'min:0'],
+                'teachers.*.mobile_allowance' => ['nullable', 'boolean'],
+                'teachers.*.petrol_allowance' => ['nullable', 'boolean'],
+                'teachers.*.pf' => ['nullable', 'boolean'],
+                'teachers.*.custom_deduction_name' => ['nullable', 'string', 'max:255'],
+                'teachers.*.custom_deduction_is_percentage' => ['nullable', 'boolean'],
+                'teachers.*.custom_deduction_amount' => [
+                    'nullable',
+                    'numeric',
+                    'min:0',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $parts = explode('.', $attribute);
+                        $index = $parts[1] ?? null;
+                        if ($index === null) {
+                            return;
+                        }
+                        $name = data_get($request->input('teachers'), $index.'.custom_deduction_name');
+                        if (! empty($name) && ($value === null || $value === '')) {
+                            $fail('The custom deduction amount field is required when custom deduction name is present.');
+                        }
+                    },
+                ],
                 'teachers.*.address' => ['required', 'string'],
                 'teachers.*.phone' => ['nullable', 'string'],
                 'teachers.*.emergency_contact' => ['nullable', 'string'],
-                'teachers.*.salary_structure_id' => ['nullable', 'exists:salary_structures,id'],
                 'teachers.*.campus_id' => ['nullable', 'exists:campuses,id'],
-                'teachers.*.photo' => ['nullable', 'image', 'max:2048'],
+                'teachers.*.photo' => ['required', 'image', 'max:2048'],
+                'teachers.*.last_degree_certificate' => ['required', 'file', 'max:5120'],
+                'teachers.*.cnic_front' => ['required', 'file', 'max:5120'],
+                'teachers.*.cnic_back' => ['required', 'file', 'max:5120'],
             ]);
 
             $rows = $validated['teachers'];
@@ -108,18 +132,76 @@ class TeacherController extends Controller
                         $path = $request->file("teachers.$idx.photo")->store('teachers', 'public');
                     }
 
-                    Teacher::create([
+                    $teacher = Teacher::create([
                         'user_id' => $user->id,
                         'qualification' => $row['qualification'],
                         'joining_date' => $row['joining_date'],
                         'address' => $row['address'],
                         'phone' => $row['phone'] ?? null,
                         'emergency_contact' => $row['emergency_contact'] ?? null,
-                        'salary_structure_id' => $row['salary_structure_id'] ?? null,
                         'campus_id' => $row['campus_id'] ?? null,
                         'photo_path' => $path,
                         'status' => 'active',
                     ]);
+
+                    $degreeFile = $request->file("teachers.$idx.last_degree_certificate");
+                    $cnicFrontFile = $request->file("teachers.$idx.cnic_front");
+                    $cnicBackFile = $request->file("teachers.$idx.cnic_back");
+
+                    $teacher->update([
+                        'degree_certificate_path' => $degreeFile->store("teacher-documents/{$teacher->id}", 'public'),
+                        'cnic_front_path' => $cnicFrontFile->store("teacher-documents/{$teacher->id}", 'public'),
+                        'cnic_back_path' => $cnicBackFile->store("teacher-documents/{$teacher->id}", 'public'),
+                    ]);
+
+                    StaffSalary::where('teacher_id', $teacher->id)->where('is_active', true)->update(['is_active' => false]);
+                    StaffSalary::create([
+                        'teacher_id' => $teacher->id,
+                        'basic_salary' => $row['basic_salary'],
+                        'effective_from' => $row['joining_date'],
+                        'effective_to' => null,
+                        'is_active' => true,
+                    ]);
+
+                    if (! empty($row['mobile_allowance'])) {
+                        StaffAllowance::create([
+                            'teacher_id' => $teacher->id,
+                            'name' => 'Mobile Allowance',
+                            'is_percentage' => false,
+                            'amount' => 1500,
+                            'is_active' => true,
+                        ]);
+                    }
+
+                    if (! empty($row['petrol_allowance'])) {
+                        StaffAllowance::create([
+                            'teacher_id' => $teacher->id,
+                            'name' => 'Petrol Allowance',
+                            'is_percentage' => false,
+                            'amount' => 10000,
+                            'is_active' => true,
+                        ]);
+                    }
+
+                    if (! empty($row['pf'])) {
+                        StaffDeduction::create([
+                            'teacher_id' => $teacher->id,
+                            'name' => 'PF',
+                            'is_percentage' => true,
+                            'amount' => 8,
+                            'is_active' => true,
+                        ]);
+                    }
+
+                    if (! empty($row['custom_deduction_name']) && array_key_exists('custom_deduction_amount', $row) && $row['custom_deduction_amount'] !== null && $row['custom_deduction_amount'] !== '') {
+                        StaffDeduction::create([
+                            'teacher_id' => $teacher->id,
+                            'name' => $row['custom_deduction_name'],
+                            'is_percentage' => ! empty($row['custom_deduction_is_percentage']),
+                            'amount' => $row['custom_deduction_amount'],
+                            'is_active' => true,
+                        ]);
+                    }
                 }
             });
 
@@ -136,12 +218,21 @@ class TeacherController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'qualification' => 'required|string|max:255',
             'joining_date' => 'required|date',
+            'basic_salary' => 'required|numeric|min:0',
+            'mobile_allowance' => 'nullable|boolean',
+            'petrol_allowance' => 'nullable|boolean',
+            'pf' => 'nullable|boolean',
+            'custom_deduction_name' => 'nullable|string|max:255',
+            'custom_deduction_is_percentage' => 'nullable|boolean',
+            'custom_deduction_amount' => 'nullable|numeric|min:0|required_with:custom_deduction_name',
             'address' => 'required|string',
             'phone' => 'nullable|string',
             'emergency_contact' => 'nullable|string',
-            'salary_structure_id' => 'nullable|exists:salary_structures,id',
             'campus_id' => 'nullable|exists:campuses,id',
-            'photo' => 'nullable|image|max:2048',
+            'photo' => 'required|image|max:2048',
+            'last_degree_certificate' => 'required|file|max:5120',
+            'cnic_front' => 'required|file|max:5120',
+            'cnic_back' => 'required|file|max:5120',
         ]);
 
         DB::transaction(function () use ($validated, $request) {
@@ -158,18 +249,72 @@ class TeacherController extends Controller
                 $path = $request->file('photo')->store('teachers', 'public');
             }
 
-            Teacher::create([
+            $teacher = Teacher::create([
                 'user_id' => $user->id,
                 'qualification' => $validated['qualification'],
                 'joining_date' => $validated['joining_date'],
                 'address' => $validated['address'],
                 'phone' => $validated['phone'],
                 'emergency_contact' => $validated['emergency_contact'],
-                'salary_structure_id' => $validated['salary_structure_id'],
                 'campus_id' => $validated['campus_id'] ?? null,
                 'photo_path' => $path,
                 'status' => 'active',
             ]);
+
+            $teacher->update([
+                'degree_certificate_path' => $request->file('last_degree_certificate')->store("teacher-documents/{$teacher->id}", 'public'),
+                'cnic_front_path' => $request->file('cnic_front')->store("teacher-documents/{$teacher->id}", 'public'),
+                'cnic_back_path' => $request->file('cnic_back')->store("teacher-documents/{$teacher->id}", 'public'),
+            ]);
+
+            StaffSalary::where('teacher_id', $teacher->id)->where('is_active', true)->update(['is_active' => false]);
+            StaffSalary::create([
+                'teacher_id' => $teacher->id,
+                'basic_salary' => $validated['basic_salary'],
+                'effective_from' => $validated['joining_date'],
+                'effective_to' => null,
+                'is_active' => true,
+            ]);
+
+            if ($request->boolean('mobile_allowance')) {
+                StaffAllowance::create([
+                    'teacher_id' => $teacher->id,
+                    'name' => 'Mobile Allowance',
+                    'is_percentage' => false,
+                    'amount' => 1500,
+                    'is_active' => true,
+                ]);
+            }
+
+            if ($request->boolean('petrol_allowance')) {
+                StaffAllowance::create([
+                    'teacher_id' => $teacher->id,
+                    'name' => 'Petrol Allowance',
+                    'is_percentage' => false,
+                    'amount' => 10000,
+                    'is_active' => true,
+                ]);
+            }
+
+            if ($request->boolean('pf')) {
+                StaffDeduction::create([
+                    'teacher_id' => $teacher->id,
+                    'name' => 'PF',
+                    'is_percentage' => true,
+                    'amount' => 8,
+                    'is_active' => true,
+                ]);
+            }
+
+            if (! empty($validated['custom_deduction_name']) && array_key_exists('custom_deduction_amount', $validated) && $validated['custom_deduction_amount'] !== null && $validated['custom_deduction_amount'] !== '') {
+                StaffDeduction::create([
+                    'teacher_id' => $teacher->id,
+                    'name' => $validated['custom_deduction_name'],
+                    'is_percentage' => $request->boolean('custom_deduction_is_percentage'),
+                    'amount' => $validated['custom_deduction_amount'],
+                    'is_active' => true,
+                ]);
+            }
         });
 
         return redirect()->route('teachers.index')->with('success', 'Teacher created successfully.');

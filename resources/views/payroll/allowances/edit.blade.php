@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Edit Allowance') }}
@@ -16,8 +16,9 @@
                             <div class="mb-4">
                                 <label class="form-label small fw-bold mb-2">Staff</label>
                                 <select name="teacher_id" class="form-select" required>
+                                    <option value="">Select Staff</option>
                                     @foreach($teachers as $t)
-                                        <option value="{{ $t->id }}" {{ $allowance->teacher_id == $t->id ? 'selected' : '' }}>{{ $t->first_name }} {{ $t->last_name }}</option>
+                                        <option value="{{ $t->id }}" {{ $allowance->teacher_id == $t->id ? 'selected' : '' }}>{{ optional($t->user)->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -54,7 +55,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 

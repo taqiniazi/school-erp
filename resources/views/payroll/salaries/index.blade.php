@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Staff Salaries') }}
@@ -31,7 +31,7 @@
                             <tbody>
                                 @foreach($salaries as $s)
                                     <tr>
-                                        <td class="p-3 align-middle text-nowrap">{{ $s->teacher->first_name }} {{ $s->teacher->last_name }}</td>
+                                        <td class="p-3 align-middle text-nowrap">{{ optional(optional($s->teacher)->user)->name ?? ('Staff #' . $s->teacher_id) }}</td>
                                         <td class="p-3 align-middle text-nowrap">{{ number_format($s->basic_salary, 2) }}</td>
                                         <td class="p-3 align-middle text-nowrap">{{ $s->effective_from }} @if($s->effective_to) - {{ $s->effective_to }} @endif</td>
                                         <td class="p-3 align-middle text-nowrap text-end">
@@ -52,7 +52,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 

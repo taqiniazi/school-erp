@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Deductions') }}
@@ -16,7 +16,7 @@
                                 <select name="teacher_id" class="form-select form-select-sm">
                                     <option value="">All</option>
                                     @foreach($teachers as $t)
-                                        <option value="{{ $t->id }}" {{ ($teacherId == $t->id) ? 'selected' : '' }}>{{ $t->first_name }} {{ $t->last_name }}</option>
+                                        <option value="{{ $t->id }}" {{ ($teacherId == $t->id) ? 'selected' : '' }}>{{ optional($t->user)->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -43,7 +43,7 @@
                             <tbody>
                                 @foreach($deductions as $d)
                                     <tr>
-                                        <td class="p-3 text-nowrap">{{ $d->teacher->first_name }} {{ $d->teacher->last_name }}</td>
+                                        <td class="p-3 text-nowrap">{{ optional(optional($d->teacher)->user)->name }}</td>
                                         <td class="p-3 text-nowrap">{{ $d->name }}</td>
                                         <td class="p-3 text-nowrap">
                                             {{ $d->is_percentage ? $d->amount.'%' : number_format($d->amount, 2) }}
@@ -71,7 +71,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 

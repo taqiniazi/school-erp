@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿<x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h1 class="h3 fw-bold text-dark mb-0">{{ __('Add New Student') }}</h1>
@@ -29,7 +29,9 @@
                                     'address' => old('address'),
                                     'phone' => old('phone'),
                                     'email' => old('email'),
-                                    'parent_id' => old('parent_id'),
+                                    'parent_name' => old('parent_name'),
+                                    'parent_email' => old('parent_email'),
+                                    'parent_phone_number' => old('parent_phone_number'),
                                     'relation' => old('relation'),
                                 ]];
                             }
@@ -109,13 +111,17 @@
                                             </select>
                                         </div>
                                         <div class="col-12 col-md-4">
-                                            <label class="form-label">Parent</label>
-                                            <select name="students[{{ $index }}][parent_id]" class="form-select">
-                                                <option value="">Select Parent</option>
-                                                @foreach($parents as $parent)
-                                                    <option value="{{ $parent->id }}" {{ (string) data_get($row, 'parent_id') === (string) $parent->id ? 'selected' : '' }}>{{ $parent->name }} ({{ $parent->email }})</option>
-                                                @endforeach
-                                            </select>
+                                            <label class="form-label">Parent Name</label>
+                                            <input type="text" name="students[{{ $index }}][parent_name]" class="form-control" value="{{ data_get($row, 'parent_name') }}" required>
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label">Parent Email</label>
+                                            <input type="email" name="students[{{ $index }}][parent_email]" class="form-control" value="{{ data_get($row, 'parent_email') }}" required>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label">Parent Phone</label>
+                                            <input type="text" name="students[{{ $index }}][parent_phone_number]" class="form-control" value="{{ data_get($row, 'parent_phone_number') }}" required>
                                         </div>
 
                                         <div class="col-12 col-md-4">
@@ -123,23 +129,31 @@
                                             <input type="text" name="students[{{ $index }}][relation]" class="form-control" value="{{ data_get($row, 'relation') }}" placeholder="Guardian">
                                         </div>
                                         <div class="col-12 col-md-4">
-                                            <label class="form-label">Phone</label>
+                                            <label class="form-label">Student Phone</label>
                                             <input type="text" name="students[{{ $index }}][phone]" class="form-control" value="{{ data_get($row, 'phone') }}">
                                         </div>
                                         <div class="col-12 col-md-4">
-                                            <label class="form-label">Email</label>
+                                            <label class="form-label">Student Email</label>
                                             <input type="email" name="students[{{ $index }}][email]" class="form-control" value="{{ data_get($row, 'email') }}">
                                         </div>
 
-                                        <div class="col-12 col-md-8">
+                                        <div class="col-12 col-md-12">
                                             <label class="form-label">Address</label>
                                             <textarea name="students[{{ $index }}][address]" rows="2" class="form-control" required>{{ data_get($row, 'address') }}</textarea>
                                         </div>
                                         <div class="col-12 col-md-3">
                                             <label class="form-label">Photo</label>
-                                            <input type="file" name="students[{{ $index }}][photo]" class="form-control">
+                                            <input type="file" name="students[{{ $index }}][photo]" class="form-control" required>
                                         </div>
-                                        <div class="col-12 col-md-1 text-md-end">
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label">Last Class Certificate</label>
+                                            <input type="file" name="students[{{ $index }}][last_class_certificate]" class="form-control">
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label">B-Form/Domicile</label>
+                                            <input type="file" name="students[{{ $index }}][b_form_domicile]" class="form-control" required>
+                                        </div>
+                                     <div class="col-12 col-md-auto text-md-end">
                                             <button type="button" class="btn btn-outline-danger w-100 remove-student-row">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -277,37 +291,49 @@
                             </select>
                         </div>
                         <div class="col-12 col-md-4">
-                            <label class="form-label">Parent</label>
-                            <select name="students[${idx}][parent_id]" class="form-select">
-                                <option value="">Select Parent</option>
-                                @foreach($parents as $parent)
-                                    <option value="{{ $parent->id }}">{{ $parent->name }} ({{ $parent->email }})</option>
-                                @endforeach
-                            </select>
+                            <label class="form-label">Parent Name</label>
+                            <input type="text" name="students[${idx}][parent_name]" class="form-control" required>
                         </div>
 
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Parent Email</label>
+                            <input type="email" name="students[${idx}][parent_email]" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Parent Phone</label>
+                            <input type="text" name="students[${idx}][parent_phone_number]" class="form-control" required>
+                        </div>
                         <div class="col-12 col-md-4">
                             <label class="form-label">Relation</label>
                             <input type="text" name="students[${idx}][relation]" class="form-control" placeholder="Guardian">
                         </div>
+
                         <div class="col-12 col-md-4">
-                            <label class="form-label">Phone</label>
+                            <label class="form-label">Student Phone</label>
                             <input type="text" name="students[${idx}][phone]" class="form-control">
                         </div>
                         <div class="col-12 col-md-4">
-                            <label class="form-label">Email</label>
+                            <label class="form-label">Student Email</label>
                             <input type="email" name="students[${idx}][email]" class="form-control">
                         </div>
 
-                        <div class="col-12 col-md-8">
+                        <div class="col-12 col-md-12">
                             <label class="form-label">Address</label>
                             <textarea name="students[${idx}][address]" rows="2" class="form-control" required></textarea>
                         </div>
                         <div class="col-12 col-md-3">
                             <label class="form-label">Photo</label>
-                            <input type="file" name="students[${idx}][photo]" class="form-control">
+                            <input type="file" name="students[${idx}][photo]" class="form-control" required>
                         </div>
-                        <div class="col-12 col-md-1 text-md-end">
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Last Class Certificate</label>
+                            <input type="file" name="students[${idx}][last_class_certificate]" class="form-control">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">B-Form/Domicile</label>
+                            <input type="file" name="students[${idx}][b_form_domicile]" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-md-auto text-md-end">
                             <button type="button" class="btn btn-outline-danger w-100 remove-student-row">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -367,4 +393,3 @@
     </script>
     @endpush
 </x-app-layout>
-

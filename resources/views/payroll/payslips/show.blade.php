@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Payslip') }} #{{ $payslip->payslip_no }}
@@ -14,9 +14,15 @@
                             <div class="lead fw-semibold">{{ optional(optional($payslip->teacher)->user)->name }}</div>
                             <div class="small text-secondary">Month: {{ date('Y-m', strtotime($payslip->pay_month)) }}</div>
                         </div>
-                        <div class="d-flex gap-2">
-                            <a href="{{ route('payslips.index') }}" class="btn btn-outline-secondary">Back</a>
-                            <a href="{{ route('payslips.print', $payslip) }}" class="btn btn-success">Download PDF</a>
+                        <div class="d-flex gap-2 align-items-center">
+                            <a href="{{ route('payslips.index') }}" class="btn btn-sm btn-outline-secondary rounded-pill d-inline-flex align-items-center gap-1">
+                                <i class="fas fa-arrow-left"></i>
+                                <span>Back</span>
+                            </a>
+                            <a href="{{ route('payslips.print', $payslip) }}" class="btn btn-sm btn-success rounded-pill d-inline-flex align-items-center gap-1">
+                                <i class="fas fa-download"></i>
+                                <span>Download PDF</span>
+                            </a>
                         </div>
                     </div>
 
@@ -84,7 +90,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 

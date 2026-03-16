@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -52,5 +53,15 @@ class AppServiceProvider extends ServiceProvider
         if (! Collection::hasMacro('lastItem')) {
             Collection::macro('lastItem', fn () => $this->isEmpty() ? null : $this->count());
         }
+
+        View::composer('*', function () {
+            if (app()->bound('view.flash.success')) {
+                return;
+            }
+
+            $flashSuccess = session()->pull('success');
+            app()->instance('view.flash.success', $flashSuccess);
+            View::share('flashSuccess', $flashSuccess);
+        });
     }
 }

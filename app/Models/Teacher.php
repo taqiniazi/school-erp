@@ -23,6 +23,9 @@ class Teacher extends Model
         'emergency_contact',
         'campus_id',
         'photo_path',
+        'degree_certificate_path',
+        'cnic_front_path',
+        'cnic_back_path',
         'status',
     ];
 

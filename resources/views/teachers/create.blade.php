@@ -19,10 +19,16 @@
                         'email' => old('email'),
                         'qualification' => old('qualification'),
                         'joining_date' => old('joining_date'),
+                        'basic_salary' => old('basic_salary'),
+                        'mobile_allowance' => old('mobile_allowance'),
+                        'petrol_allowance' => old('petrol_allowance'),
+                        'pf' => old('pf'),
+                        'custom_deduction_name' => old('custom_deduction_name'),
+                        'custom_deduction_is_percentage' => old('custom_deduction_is_percentage'),
+                        'custom_deduction_amount' => old('custom_deduction_amount'),
                         'address' => old('address'),
                         'phone' => old('phone'),
                         'emergency_contact' => old('emergency_contact'),
-                        'salary_structure_id' => old('salary_structure_id'),
                         'campus_id' => old('campus_id'),
                     ]];
                 }
@@ -75,15 +81,8 @@
                             </div>
 
                             <div class="col-12 col-md-4">
-                                <label class="form-label">Salary Structure</label>
-                                <select class="form-select" name="teachers[{{ $index }}][salary_structure_id]">
-                                    <option value="">Select Salary Structure</option>
-                                    @foreach($salaryStructures as $structure)
-                                        <option value="{{ $structure->id }}" {{ (string) data_get($row, 'salary_structure_id') === (string) $structure->id ? 'selected' : '' }}>
-                                            {{ $structure->grade }} - {{ number_format($structure->basic_salary, 2) }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <label class="form-label">Basic Salary</label>
+                                <input type="number" step="0.01" min="0" class="form-control" name="teachers[{{ $index }}][basic_salary]" value="{{ data_get($row, 'basic_salary') }}" required>
                             </div>
                             <div class="col-12 col-md-4">
                                 <label class="form-label">Phone</label>
@@ -94,13 +93,58 @@
                                 <input type="text" class="form-control" name="teachers[{{ $index }}][emergency_contact]" value="{{ data_get($row, 'emergency_contact') }}">
                             </div>
 
-                            <div class="col-12 col-md-8">
+                            <div class="col-12 col-md-12">
                                 <label class="form-label">Address</label>
                                 <textarea class="form-control" name="teachers[{{ $index }}][address]" rows="2" required>{{ data_get($row, 'address') }}</textarea>
                             </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label d-block">Allowances / PF</label>
+                                <div class="d-flex flex-wrap gap-3">
+                                    <label class="form-check mb-0">
+                                        <input class="form-check-input" type="checkbox" name="teachers[{{ $index }}][mobile_allowance]" value="1" {{ data_get($row, 'mobile_allowance') ? 'checked' : '' }}>
+                                        <span class="form-check-label">Mobile Allowance (1500)</span>
+                                    </label>
+                                    <label class="form-check mb-0">
+                                        <input class="form-check-input" type="checkbox" name="teachers[{{ $index }}][petrol_allowance]" value="1" {{ data_get($row, 'petrol_allowance') ? 'checked' : '' }}>
+                                        <span class="form-check-label">Petrol Allowance (10000)</span>
+                                    </label>
+                                    <label class="form-check mb-0">
+                                        <input class="form-check-input" type="checkbox" name="teachers[{{ $index }}][pf]" value="1" {{ data_get($row, 'pf') ? 'checked' : '' }}>
+                                        <span class="form-check-label">PF (8% of Basic)</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">Custom Deduction Name</label>
+                                <input type="text" class="form-control" name="teachers[{{ $index }}][custom_deduction_name]" value="{{ data_get($row, 'custom_deduction_name') }}">
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Custom Deduction Amount / %</label>
+                                <input type="number" step="0.01" min="0" class="form-control" name="teachers[{{ $index }}][custom_deduction_amount]" value="{{ data_get($row, 'custom_deduction_amount') }}">
+                            </div>
+                            <div class="col-12 col-md-3 d-flex align-items-end">
+                                <label class="form-check mb-0">
+                                    <input class="form-check-input" type="checkbox" name="teachers[{{ $index }}][custom_deduction_is_percentage]" value="1" {{ data_get($row, 'custom_deduction_is_percentage') ? 'checked' : '' }}>
+                                    <span class="form-check-label">Percentage</span>
+                                </label>
+                            </div>
+
                             <div class="col-12 col-md-3">
                                 <label class="form-label">Photo</label>
-                                <input type="file" class="form-control" name="teachers[{{ $index }}][photo]">
+                                <input type="file" class="form-control" name="teachers[{{ $index }}][photo]" required>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Last Degree Certificate</label>
+                                <input type="file" class="form-control" name="teachers[{{ $index }}][last_degree_certificate]" required>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">CNIC Front</label>
+                                <input type="file" class="form-control" name="teachers[{{ $index }}][cnic_front]" required>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">CNIC Back</label>
+                                <input type="file" class="form-control" name="teachers[{{ $index }}][cnic_back]" required>
                             </div>
                             <div class="col-12 col-md-1 text-md-end">
                                 <button type="button" class="btn btn-outline-danger w-100 remove-teacher-row">
@@ -176,13 +220,8 @@
                     </div>
 
                     <div class="col-12 col-md-4">
-                        <label class="form-label">Salary Structure</label>
-                        <select class="form-select" name="teachers[${idx}][salary_structure_id]">
-                            <option value="">Select Salary Structure</option>
-                            @foreach($salaryStructures as $structure)
-                                <option value="{{ $structure->id }}">{{ $structure->grade }} - {{ number_format($structure->basic_salary, 2) }}</option>
-                            @endforeach
-                        </select>
+                        <label class="form-label">Basic Salary</label>
+                        <input type="number" step="0.01" min="0" class="form-control" name="teachers[${idx}][basic_salary]" required>
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label">Phone</label>
@@ -193,13 +232,58 @@
                         <input type="text" class="form-control" name="teachers[${idx}][emergency_contact]">
                     </div>
 
-                    <div class="col-12 col-md-8">
+                    <div class="col-12 col-md-6">
                         <label class="form-label">Address</label>
                         <textarea class="form-control" name="teachers[${idx}][address]" rows="2" required></textarea>
                     </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label d-block">Allowances / PF</label>
+                        <div class="d-flex flex-wrap gap-3">
+                            <label class="form-check mb-0">
+                                <input class="form-check-input" type="checkbox" name="teachers[${idx}][mobile_allowance]" value="1">
+                                <span class="form-check-label">Mobile Allowance (1500)</span>
+                            </label>
+                            <label class="form-check mb-0">
+                                <input class="form-check-input" type="checkbox" name="teachers[${idx}][petrol_allowance]" value="1">
+                                <span class="form-check-label">Petrol Allowance (10000)</span>
+                            </label>
+                            <label class="form-check mb-0">
+                                <input class="form-check-input" type="checkbox" name="teachers[${idx}][pf]" value="1">
+                                <span class="form-check-label">PF (8% of Basic)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Custom Deduction Name</label>
+                        <input type="text" class="form-control" name="teachers[${idx}][custom_deduction_name]">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Custom Deduction Amount / %</label>
+                        <input type="number" step="0.01" min="0" class="form-control" name="teachers[${idx}][custom_deduction_amount]">
+                    </div>
+                    <div class="col-12 col-md-3 d-flex align-items-end">
+                        <label class="form-check mb-0">
+                            <input class="form-check-input" type="checkbox" name="teachers[${idx}][custom_deduction_is_percentage]" value="1">
+                            <span class="form-check-label">Percentage</span>
+                        </label>
+                    </div>
+
                     <div class="col-12 col-md-3">
                         <label class="form-label">Photo</label>
-                        <input type="file" class="form-control" name="teachers[${idx}][photo]">
+                        <input type="file" class="form-control" name="teachers[${idx}][photo]" required>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Last Degree Certificate</label>
+                        <input type="file" class="form-control" name="teachers[${idx}][last_degree_certificate]" required>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">CNIC Front</label>
+                        <input type="file" class="form-control" name="teachers[${idx}][cnic_front]" required>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">CNIC Back</label>
+                        <input type="file" class="form-control" name="teachers[${idx}][cnic_back]" required>
                     </div>
                     <div class="col-12 col-md-1 text-md-end">
                         <button type="button" class="btn btn-outline-danger w-100 remove-teacher-row">
@@ -221,9 +305,10 @@
             const rows = container.querySelectorAll('.teacher-item');
 
             if (rows.length <= 1) {
-                row.querySelectorAll('input[type="text"], input[type="email"], input[type="date"], textarea').forEach((el) => (el.value = ''));
+                row.querySelectorAll('input[type="text"], input[type="email"], input[type="date"], input[type="number"], textarea').forEach((el) => (el.value = ''));
                 row.querySelectorAll('input[type="password"]').forEach((el) => (el.value = ''));
                 row.querySelectorAll('input[type="file"]').forEach((el) => (el.value = ''));
+                row.querySelectorAll('input[type="checkbox"]').forEach((el) => (el.checked = false));
                 row.querySelectorAll('select').forEach((el) => (el.selectedIndex = 0));
                 return;
             }
@@ -234,4 +319,3 @@
     });
 </script>
 @endpush
-

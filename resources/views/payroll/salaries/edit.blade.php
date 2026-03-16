@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Edit Salary Structure') }}
@@ -16,22 +16,25 @@
                             <div class="mb-4">
                                 <label class="form-label small fw-bold mb-2">Staff</label>
                                 <select name="teacher_id" class="form-select" required>
+                                    <option value="">Select Staff</option>
                                     @foreach($teachers as $t)
-                                        <option value="{{ $t->id }}" {{ $salary->teacher_id == $t->id ? 'selected' : '' }}>{{ $t->first_name }} {{ $t->last_name }}</option>
+                                        <option value="{{ $t->id }}" {{ (string) old('teacher_id', $salary->teacher_id) === (string) $t->id ? 'selected' : '' }}>
+                                            {{ $t->user->name ?? ('Staff #' . $t->id) }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label small fw-bold mb-2">Basic Salary</label>
-                                <input type="number" step="0.01" name="basic_salary" value="{{ $salary->basic_salary }}" class="form-control" required>
+                                <input type="number" step="0.01" min="0" name="basic_salary" value="{{ old('basic_salary', $salary->basic_salary) }}" class="form-control" required>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label small fw-bold mb-2">Effective From</label>
-                                <input type="date" name="effective_from" value="{{ $salary->effective_from }}" class="form-control">
+                                <input type="date" name="effective_from" value="{{ old('effective_from', $salary->effective_from) }}" class="form-control">
                             </div>
                             <div class="mb-4">
                                 <label class="form-label small fw-bold mb-2">Effective To</label>
-                                <input type="date" name="effective_to" value="{{ $salary->effective_to }}" class="form-control">
+                                <input type="date" name="effective_to" value="{{ old('effective_to', $salary->effective_to) }}" class="form-control">
                             </div>
                             <div class="mb-4 d-flex align-items-center">
                                 <div class="form-check">
@@ -52,7 +55,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 
