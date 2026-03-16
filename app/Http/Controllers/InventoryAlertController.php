@@ -12,7 +12,7 @@ class InventoryAlertController extends Controller
             ->where('status', 'active')
             ->orderBy('name')
             ->get();
+
         return view('inventory.alerts.low_stock', compact('items'));
     }
 }
-

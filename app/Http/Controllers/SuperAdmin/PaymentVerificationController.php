@@ -25,7 +25,7 @@ class PaymentVerificationController extends Controller
         $payments = SubscriptionPayment::with(['school', 'plan', 'paymentMethod'])
             ->latest()
             ->get();
-            
+
         return view('super-admin.payments.index', compact('payments'));
     }
 

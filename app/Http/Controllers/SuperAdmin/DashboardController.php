@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\School;
 use App\Models\Subscription;
 use App\Models\SubscriptionPayment;
-use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -25,14 +24,17 @@ class DashboardController extends Controller
         // Subscription Stats
         $activeSubs = Subscription::where('status', 'active')->count();
         $trialSubs = Subscription::where('status', 'trialing')->count();
-        
+
         // Revenue Stats
         // MRR calculation based on active subscriptions
         $mrr = Subscription::where('status', 'active')
             ->with('plan')
             ->get()
             ->sum(function ($s) {
-                if (!$s->plan) return 0;
+                if (! $s->plan) {
+                    return 0;
+                }
+
                 // If yearly, divide by 12 for monthly equivalent
                 return $s->plan->billing_cycle === 'yearly' ? $s->plan->price / 12 : $s->plan->price;
             });
@@ -62,21 +64,21 @@ class DashboardController extends Controller
             DB::raw('sum(amount) as total'),
             DB::raw("DATE_FORMAT(created_at,'%Y-%m') as month")
         )
-        ->where('status', 'approved')
-        ->where('created_at', '>=', now()->subMonths(6))
-        ->groupBy('month')
-        ->orderBy('month')
-        ->pluck('total', 'month');
+            ->where('status', 'approved')
+            ->where('created_at', '>=', now()->subMonths(6))
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('total', 'month');
 
         // Chart Data - New Schools (Last 6 months)
         $schoolChart = School::select(
             DB::raw('count(*) as count'),
             DB::raw("DATE_FORMAT(created_at,'%Y-%m') as month")
         )
-        ->where('created_at', '>=', now()->subMonths(6))
-        ->groupBy('month')
-        ->orderBy('month')
-        ->pluck('count', 'month');
+            ->where('created_at', '>=', now()->subMonths(6))
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('count', 'month');
 
         return view('super-admin.dashboard', compact(
             'totalSchools',

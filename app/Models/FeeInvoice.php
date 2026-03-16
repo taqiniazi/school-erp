@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\RecordsActivity;
-use App\Traits\BelongsToSchool;
 
 class FeeInvoice extends Model
 {
-    use HasFactory, RecordsActivity, BelongsToSchool;
+    use BelongsToSchool, HasFactory, RecordsActivity;
 
     protected $fillable = [
         'student_id',
@@ -21,7 +21,7 @@ class FeeInvoice extends Model
         'fine_amount',
         'discount_amount',
         'status',
-        'remarks'
+        'remarks',
     ];
 
     public function student()

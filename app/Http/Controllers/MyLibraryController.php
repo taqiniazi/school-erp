@@ -13,6 +13,7 @@ class MyLibraryController extends Controller
             ->where('user_id', Auth::id())
             ->orderByDesc('created_at')
             ->get();
+
         return view('library/my/index', compact('loans'));
     }
 }

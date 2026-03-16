@@ -8,8 +8,6 @@ use App\Models\LeaveRequest;
 use App\Models\SchoolClass;
 use App\Models\Student;
 use App\Models\Teacher;
-use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Cache;
 
 class AdminDashboardController extends Controller
@@ -18,7 +16,7 @@ class AdminDashboardController extends Controller
     {
         $tenantKey = app(\App\Services\SchoolContext::class)::getSchoolId() ?? 'global';
         $school = auth()->user()->school;
-        
+
         $stats = Cache::remember('admin_dashboard_stats_'.$tenantKey, 1800, function () {
             try {
                 return [
@@ -42,11 +40,11 @@ class AdminDashboardController extends Controller
                 ];
             }
         });
-        
+
         // Subscription Info (Don't cache this as it might change frequently or be critical)
         $subscription = $school ? $school->currentSubscription : null;
         $plan = $subscription ? $subscription->plan : null;
-        
+
         $subscriptionStats = [
             'planName' => $plan ? $plan->name : 'No Plan',
             'status' => $subscription ? $subscription->status : 'Inactive',
@@ -60,7 +58,7 @@ class AdminDashboardController extends Controller
         if (app()->environment('testing')) {
             return response('Admin Dashboard');
         }
-        
+
         return view('admin.dashboard', array_merge($stats, ['subscription' => $subscriptionStats]));
     }
 }

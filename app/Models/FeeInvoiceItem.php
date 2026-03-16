@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\BelongsToSchool;
 
 class FeeInvoiceItem extends Model
 {
-    use HasFactory, BelongsToSchool;
+    use BelongsToSchool, HasFactory;
 
     protected $fillable = [
         'fee_invoice_id',
         'fee_type_id',
         'name',
-        'amount'
+        'amount',
     ];
 
     public function invoice()

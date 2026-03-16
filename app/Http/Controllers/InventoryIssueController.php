@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InventoryItem;
 use App\Models\InventoryIssue;
+use App\Models\InventoryItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,12 +13,14 @@ class InventoryIssueController extends Controller
     public function index()
     {
         $issues = InventoryIssue::with('item')->orderByDesc('issue_date')->get();
+
         return view('inventory.issues.index', compact('issues'));
     }
 
     public function create()
     {
         $items = InventoryItem::where('status', 'active')->orderBy('name')->get();
+
         return view('inventory.issues.create', compact('items'));
     }
 
@@ -34,7 +36,7 @@ class InventoryIssueController extends Controller
 
         DB::transaction(function () use ($request) {
             $item = InventoryItem::lockForUpdate()->findOrFail($request->inventory_item_id);
-            $qty = (int)$request->quantity;
+            $qty = (int) $request->quantity;
             if ($qty > $item->current_stock) {
                 abort(422, 'Insufficient stock.');
             }

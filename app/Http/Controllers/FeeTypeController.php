@@ -13,6 +13,7 @@ class FeeTypeController extends Controller
     public function index()
     {
         $feeTypes = FeeType::all();
+
         return view('fees.types.index', compact('feeTypes'));
     }
 
@@ -53,7 +54,7 @@ class FeeTypeController extends Controller
     public function update(Request $request, FeeType $feeType)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:fee_types,name,' . $feeType->id,
+            'name' => 'required|string|max:255|unique:fee_types,name,'.$feeType->id,
             'description' => 'nullable|string|max:255',
         ]);
 
@@ -68,6 +69,7 @@ class FeeTypeController extends Controller
     public function destroy(FeeType $feeType)
     {
         $feeType->delete();
+
         return redirect()->route('fee-types.index')->with('success', 'Fee Type deleted successfully.');
     }
 }

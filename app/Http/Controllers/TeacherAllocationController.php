@@ -16,7 +16,7 @@ class TeacherAllocationController extends Controller
         $allocations = TeacherAllocation::with(['teacher.user', 'subject', 'schoolClass', 'section'])
             ->latest()
             ->get();
-            
+
         $teachers = Teacher::with('user')->get();
         $classes = SchoolClass::with('sections')->get();
         $subjects = Subject::all();
@@ -42,6 +42,7 @@ class TeacherAllocationController extends Controller
     public function destroy(TeacherAllocation $allocation)
     {
         $allocation->delete();
+
         return redirect()->route('allocations.index')->with('success', 'Allocation removed successfully.');
     }
 }

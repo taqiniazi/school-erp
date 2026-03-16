@@ -9,7 +9,6 @@ use App\Notifications\PaymentStatusUpdated;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 class PaymentCallbackController extends Controller
@@ -20,6 +19,7 @@ class PaymentCallbackController extends Controller
     {
         $this->paymentService = $paymentService;
     }
+
     /**
      * Handle Easypaisa IPN Callback
      */
@@ -39,6 +39,7 @@ class PaymentCallbackController extends Controller
 
         if ($status === '0000') {
             $this->approvePayment($orderRef, 'easypaisa', $request->all());
+
             return response()->json(['status' => 'success', 'message' => 'Payment Processed']);
         }
 
@@ -63,6 +64,7 @@ class PaymentCallbackController extends Controller
 
         if ($responseCode === '000') {
             $this->approvePayment($txnRef, 'jazzcash', $request->all());
+
             return response()->json(['status' => 'success', 'message' => 'Payment Processed']);
         }
 
@@ -78,15 +80,16 @@ class PaymentCallbackController extends Controller
 
         // Validate PayPal IPN (Mock)
         // In production, verify with PayPal's IPN simulator or SDK
-        
+
         $paymentStatus = $request->input('payment_status'); // 'Completed'
         $txnId = $request->input('txn_id');
-        
+
         // Sometimes custom_id or invoice field holds the internal reference
-        // $customId = $request->input('custom'); 
+        // $customId = $request->input('custom');
 
         if ($paymentStatus === 'Completed') {
             $this->approvePayment($txnId, 'paypal', $request->all());
+
             return response()->json(['status' => 'success', 'message' => 'Payment Processed']);
         }
 
@@ -109,12 +112,13 @@ class PaymentCallbackController extends Controller
 
         if ($type === 'checkout.session.completed' || $type === 'payment_intent.succeeded') {
             $data = $payload['data']['object'];
-            
+
             // Assuming we store transaction_reference as payment_intent id or client_reference_id
             $txnId = $data['id'] ?? $data['payment_intent'] ?? null;
-            
+
             if ($txnId) {
                 $this->approvePayment($txnId, 'stripe', $payload);
+
                 return response()->json(['status' => 'success', 'message' => 'Payment Processed']);
             }
         }
@@ -136,8 +140,9 @@ class PaymentCallbackController extends Controller
 
         if (isset($data['current_state']) && $data['current_state'] === 'outgoing_payment_sent') {
             $resourceId = $data['resource']['id']; // Transfer ID
-            
+
             $this->approvePayment($resourceId, 'wise', $request->all());
+
             return response()->json(['status' => 'success', 'message' => 'Payment Processed']);
         }
 
@@ -160,6 +165,7 @@ class PaymentCallbackController extends Controller
         // Using paymentId as transaction reference
         if ($status === 'Approved' || $status === 'Completed') {
             $this->approvePayment($paymentId, 'payoneer', $request->all());
+
             return response()->json(['status' => 'success', 'message' => 'Payment Processed']);
         }
 
@@ -172,12 +178,13 @@ class PaymentCallbackController extends Controller
             ->where('status', 'pending')
             ->first();
 
-        if (!$payment) {
+        if (! $payment) {
             Log::warning("Payment not found or already processed: $transactionReference");
+
             return;
         }
 
-        $note = "Auto-approved via $gateway IPN. " . json_encode($data);
+        $note = "Auto-approved via $gateway IPN. ".json_encode($data);
         $this->paymentService->approvePayment($payment, $note);
 
         // Send Notification

@@ -20,7 +20,7 @@ class SubscriptionController extends Controller
             $search = $request->search;
             $query->whereHas('school', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 

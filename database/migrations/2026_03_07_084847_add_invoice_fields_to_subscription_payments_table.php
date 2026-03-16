@@ -33,7 +33,7 @@ return new class extends Migration
                 'subtotal',
                 'tax_amount',
                 'tax_percentage',
-                'billing_details'
+                'billing_details',
             ]);
         });
     }

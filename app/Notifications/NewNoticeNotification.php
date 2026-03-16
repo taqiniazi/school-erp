@@ -33,7 +33,7 @@ class NewNoticeNotification extends Notification implements ShouldQueue
         $channels = ['mail', 'database'];
 
         // Add SMS channel if user has phone number
-        if (!empty($notifiable->phone_number)) {
+        if (! empty($notifiable->phone_number)) {
             $channels[] = SmsChannel::class;
         }
 
@@ -46,13 +46,13 @@ class NewNoticeNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('New Notice: ' . $this->notice->title)
-                    ->greeting('Hello ' . $notifiable->name . ',')
-                    ->line('A new notice has been posted:')
-                    ->line($this->notice->title)
-                    ->line('Type: ' . ucfirst($this->notice->type))
-                    ->action('View Notice', route('communication.notices.show', $this->notice))
-                    ->line('Thank you for using our School ERP.');
+            ->subject('New Notice: '.$this->notice->title)
+            ->greeting('Hello '.$notifiable->name.',')
+            ->line('A new notice has been posted:')
+            ->line($this->notice->title)
+            ->line('Type: '.ucfirst($this->notice->type))
+            ->action('View Notice', route('communication.notices.show', $this->notice))
+            ->line('Thank you for using our School ERP.');
     }
 
     /**
@@ -75,6 +75,6 @@ class NewNoticeNotification extends Notification implements ShouldQueue
      */
     public function toSms(object $notifiable): string
     {
-        return "New Notice: {$this->notice->title}. View at: " . route('communication.notices.show', $this->notice);
+        return "New Notice: {$this->notice->title}. View at: ".route('communication.notices.show', $this->notice);
     }
 }

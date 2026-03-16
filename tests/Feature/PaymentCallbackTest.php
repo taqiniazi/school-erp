@@ -9,7 +9,6 @@ use App\Models\SubscriptionPayment;
 use App\Models\User;
 use App\Notifications\PaymentStatusUpdated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -18,11 +17,11 @@ class PaymentCallbackTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         // Create role if not exists
-        if (!Role::where('name', 'School Admin')->exists()) {
+        if (! Role::where('name', 'School Admin')->exists()) {
             Role::create(['name' => 'School Admin', 'guard_name' => 'web']);
         }
     }
@@ -128,8 +127,8 @@ class PaymentCallbackTest extends TestCase
                 'object' => [
                     'id' => 'pi_123456789',
                     'amount' => 300000,
-                ]
-            ]
+                ],
+            ],
         ];
 
         $response = $this->postJson(route('api.payment.callback.stripe'), $payload);
@@ -149,7 +148,7 @@ class PaymentCallbackTest extends TestCase
             'data' => [
                 'resource' => ['id' => 'WISE-TXN-999'],
                 'current_state' => 'outgoing_payment_sent',
-            ]
+            ],
         ];
 
         $response = $this->postJson(route('api.payment.callback.wise'), $payload);

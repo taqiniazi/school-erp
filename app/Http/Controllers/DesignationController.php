@@ -13,6 +13,7 @@ class DesignationController extends Controller
     public function index()
     {
         $designations = Designation::orderBy('name')->get();
+
         return view('designations.index', compact('designations'));
     }
 
@@ -62,6 +63,7 @@ class DesignationController extends Controller
         });
 
         $message = count($rows) > 1 ? 'Designations created successfully.' : 'Designation created successfully.';
+
         return redirect()->route('designations.index')->with('success', $message);
     }
 
@@ -96,6 +98,7 @@ class DesignationController extends Controller
     public function destroy(Designation $designation)
     {
         $designation->delete();
+
         return redirect()->route('designations.index')->with('success', 'Designation deleted successfully.');
     }
 }

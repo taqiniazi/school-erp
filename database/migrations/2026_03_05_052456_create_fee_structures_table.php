@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->string('academic_year')->nullable();
             // 1: Monthly, 2: Quarterly, 3: Annually, 0: One-time
-            $table->tinyInteger('frequency')->default(1); 
+            $table->tinyInteger('frequency')->default(1);
             $table->timestamps();
 
             $table->unique(['school_class_id', 'fee_type_id', 'academic_year'], 'unique_fee_structure');

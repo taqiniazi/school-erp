@@ -8,6 +8,7 @@ use App\Models\PayslipItem;
 use App\Models\StaffAllowance;
 use App\Models\StaffDeduction;
 use App\Models\StaffSalary;
+use App\Models\TeacherAttendance;
 use App\Models\Teacher;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -18,26 +19,35 @@ class PayslipController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Payslip::with(['teacher']);
+        $query = Payslip::with(['teacher.user']);
 
         if ($request->filled('teacher_id')) {
             $query->where('teacher_id', $request->teacher_id);
         }
         if ($request->filled('month')) {
             $query->whereMonth('pay_month', date('m', strtotime($request->month)))
-                  ->whereYear('pay_month', date('Y', strtotime($request->month)));
+                ->whereYear('pay_month', date('Y', strtotime($request->month)));
         }
 
         $payslips = $query->orderBy('pay_month', 'desc')->get();
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
 
         return view('payroll.payslips.index', compact('payslips', 'teachers'));
     }
 
     public function create()
     {
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
         $currentYear = FinancialYear::where('is_current', true)->first();
+
         return view('payroll.payslips.create', compact('teachers', 'currentYear'));
     }
 
@@ -54,7 +64,7 @@ class PayslipController extends Controller
 
         // Fetch active salary
         $salary = StaffSalary::where('teacher_id', $teacher->id)->where('is_active', true)->first();
-        if (!$salary) {
+        if (! $salary) {
             return redirect()->back()->withErrors(['error' => 'No active salary found for this staff.']);
         }
 
@@ -74,7 +84,7 @@ class PayslipController extends Controller
             $payslip = Payslip::create([
                 'teacher_id' => $teacher->id,
                 'financial_year_id' => optional($fy)->id,
-                'payslip_no' => 'PAY-' . date('Ym', strtotime($payMonth)) . '-' . $teacher->id . '-' . rand(1000, 9999),
+                'payslip_no' => 'PAY-'.date('Ym', strtotime($payMonth)).'-'.$teacher->id.'-'.rand(1000, 9999),
                 'pay_month' => $payMonth,
                 'basic_salary' => $salary->basic_salary,
                 'generated_by' => Auth::id(),
@@ -113,19 +123,39 @@ class PayslipController extends Controller
             ]);
         });
 
-        return redirect()->route('payroll.payslips.index')->with('success', 'Payslip generated.');
+        return redirect()->route('payslips.index')->with('success', 'Payslip generated.');
     }
 
     public function show(Payslip $payslip)
     {
-        $payslip->load(['teacher', 'items']);
+        $payslip->load(['teacher.user', 'teacher.campus', 'teacher.staffProfile', 'items']);
+
         return view('payroll.payslips.show', compact('payslip'));
     }
 
     public function print(Payslip $payslip)
     {
-        $payslip->load(['teacher', 'items']);
-        $pdf = Pdf::loadView('payroll.payslips.pdf', compact('payslip'));
-        return $pdf->download('payslip_' . $payslip->payslip_no . '.pdf');
+        $payslip->load(['teacher.user', 'teacher.campus', 'teacher.staffProfile', 'items']);
+
+        $nod = null;
+        $teacherUserId = optional($payslip->teacher)->user_id;
+        if ($teacherUserId && $payslip->pay_month) {
+            $nod = TeacherAttendance::where('teacher_id', $teacherUserId)
+                ->whereMonth('date', $payslip->pay_month->month)
+                ->whereYear('date', $payslip->pay_month->year)
+                ->whereIn('status', ['present', 'late', 'half_day', 'leave'])
+                ->count();
+        }
+
+        $pdf = Pdf::loadView('payroll.payslips.pdf', compact('payslip', 'nod'));
+
+        return $pdf->download('payslip_'.$payslip->payslip_no.'.pdf');
+    }
+
+    public function destroy(Payslip $payslip)
+    {
+        $payslip->delete();
+
+        return redirect()->route('payslips.index')->with('success', 'Payslip deleted.');
     }
 }

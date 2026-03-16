@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Campus;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\Student;
 use App\Models\User;
-use App\Models\Campus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
-
-use Illuminate\Support\Facades\Cache;
 
 class StudentController extends Controller
 {
@@ -22,6 +21,7 @@ class StudentController extends Controller
     public function index()
     {
         $students = Student::with(['schoolClass', 'section', 'parents'])->latest()->get();
+
         return view('students.index', compact('students'));
     }
 
@@ -33,7 +33,7 @@ class StudentController extends Controller
         $classes = Cache::remember('all_classes', 3600, function () {
             return SchoolClass::all();
         });
-        
+
         $campuses = Campus::where('is_active', true)->get();
 
         // Assuming 'Parent' role exists as per previous tasks
@@ -41,7 +41,7 @@ class StudentController extends Controller
         $parents = Cache::remember('all_parents_role', 300, function () {
             return User::role('Parent')->get();
         });
-        
+
         return view('students.create', compact('classes', 'parents', 'campuses'));
     }
 
@@ -76,10 +76,10 @@ class StudentController extends Controller
             $rows = $validated['students'];
 
             $plan = $school?->current_plan;
-            if (!$plan) {
+            if (! $plan) {
                 return redirect()->back()->with('error', 'No active plan found for your school. Please contact support.');
             }
-            if (!is_null($plan->max_students)) {
+            if (! is_null($plan->max_students)) {
                 $currentCount = $school->students()->count();
                 if ($currentCount + count($rows) > (int) $plan->max_students) {
                     return redirect()->back()->with('error', 'You have reached the maximum number of students allowed by your current plan. Please upgrade your subscription.');
@@ -125,7 +125,7 @@ class StudentController extends Controller
                         'status' => 'active',
                     ]);
 
-                    if (!empty($row['parent_id'])) {
+                    if (! empty($row['parent_id'])) {
                         $student->parents()->attach($row['parent_id'], [
                             'relation' => $row['relation'] ?? 'Guardian',
                         ]);
@@ -136,7 +136,7 @@ class StudentController extends Controller
             return redirect()->route('students.index')->with('success', 'Students admitted successfully.');
         }
 
-        if (!$school->canAddStudent()) {
+        if (! $school->canAddStudent()) {
             return redirect()->back()->with('error', 'You have reached the maximum number of students allowed by your current plan. Please upgrade your subscription.');
         }
 
@@ -183,9 +183,9 @@ class StudentController extends Controller
                 'status' => 'active',
             ]);
 
-            if (!empty($validated['parent_id'])) {
+            if (! empty($validated['parent_id'])) {
                 $student->parents()->attach($validated['parent_id'], [
-                    'relation' => $validated['relation'] ?? 'Guardian'
+                    'relation' => $validated['relation'] ?? 'Guardian',
                 ]);
             }
         });
@@ -199,6 +199,7 @@ class StudentController extends Controller
     public function show(Student $student)
     {
         $student->load(['schoolClass', 'section', 'parents']);
+
         return view('students.show', compact('student'));
     }
 
@@ -211,6 +212,7 @@ class StudentController extends Controller
         $sections = Section::where('school_class_id', $student->school_class_id)->get();
         $parents = User::role('Parent')->get();
         $campuses = Campus::where('is_active', true)->get();
+
         return view('students.edit', compact('student', 'classes', 'sections', 'parents', 'campuses'));
     }
 
@@ -230,7 +232,7 @@ class StudentController extends Controller
             'campus_id' => 'nullable|exists:campuses,id',
             'address' => 'required|string',
             'phone' => 'nullable|string',
-            'email' => 'nullable|email|unique:students,email,' . $student->id,
+            'email' => 'nullable|email|unique:students,email,'.$student->id,
             'status' => 'required|in:active,graduated,left',
             'photo' => 'nullable|image|max:2048',
         ]);
@@ -257,6 +259,7 @@ class StudentController extends Controller
             Storage::disk('public')->delete($student->photo_path);
         }
         $student->delete();
+
         return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
     }
 

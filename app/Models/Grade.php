@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\BelongsToSchool;
 
 class Grade extends Model
 {
-    use HasFactory, BelongsToSchool;
+    use BelongsToSchool, HasFactory;
 
     protected $fillable = [
         'grade_name',
         'min_percentage',
         'max_percentage',
-        'remark'
+        'remark',
     ];
 }

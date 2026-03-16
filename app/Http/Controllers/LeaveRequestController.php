@@ -13,6 +13,7 @@ class LeaveRequestController extends Controller
     {
         $teacher = Teacher::where('user_id', Auth::id())->first();
         $requests = LeaveRequest::where('teacher_id', optional($teacher)->id)->orderByDesc('id')->get();
+
         return view('hr.leave.my_index', compact('requests'));
     }
 
@@ -42,11 +43,12 @@ class LeaveRequestController extends Controller
         ]);
 
         return redirect()->route('hr.leave.my')->with('success', 'Leave request submitted.');
-        }
+    }
 
     public function index()
     {
         $requests = LeaveRequest::with('teacher')->orderByDesc('id')->get();
+
         return view('hr.leave.index', compact('requests'));
     }
 
@@ -57,6 +59,7 @@ class LeaveRequestController extends Controller
             'approved_by' => Auth::id(),
             'approved_at' => now(),
         ]);
+
         return redirect()->route('hr.leave.index')->with('success', 'Leave approved.');
     }
 
@@ -67,7 +70,7 @@ class LeaveRequestController extends Controller
             'approved_by' => Auth::id(),
             'approved_at' => now(),
         ]);
+
         return redirect()->route('hr.leave.index')->with('success', 'Leave rejected.');
     }
 }
-

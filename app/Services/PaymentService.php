@@ -11,14 +11,14 @@ class PaymentService
     /**
      * Approve a subscription payment and activate the subscription.
      *
-     * @param SubscriptionPayment $payment
-     * @param string|null $note
+     * @param  string|null  $note
      * @return void
      */
     public function approvePayment(SubscriptionPayment $payment, $note = null)
     {
         if ($payment->status === 'approved') {
             Log::info("Payment {$payment->id} is already approved.");
+
             return;
         }
 
@@ -26,7 +26,7 @@ class PaymentService
             // Calculate tax
             $taxPercentage = config('billing.tax_percentage', 0);
             $amount = $payment->amount;
-            
+
             // Assuming the plan price is inclusive of tax, we back-calculate
             // subtotal = amount / (1 + tax_rate)
             $subtotal = $amount / (1 + ($taxPercentage / 100));
@@ -45,7 +45,7 @@ class PaymentService
             ]);
 
             $subscription = $payment->subscription;
-            
+
             // Cancel other active subscriptions for this school
             $payment->school->subscriptions()
                 ->where('id', '!=', $subscription->id)
@@ -64,7 +64,7 @@ class PaymentService
                 'current_period_start' => $start,
                 'current_period_end' => $end,
             ]);
-            
+
             Log::info("Payment {$payment->id} approved and subscription {$subscription->id} activated.");
         });
     }
@@ -75,7 +75,7 @@ class PaymentService
      */
     private function generateInvoiceNumber(SubscriptionPayment $payment)
     {
-        return 'INV-' . now()->format('Ymd') . '-' . str_pad($payment->id, 6, '0', STR_PAD_LEFT);
+        return 'INV-'.now()->format('Ymd').'-'.str_pad($payment->id, 6, '0', STR_PAD_LEFT);
     }
 
     /**

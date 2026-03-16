@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\RecordsActivity;
-use App\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Teacher extends Model
 {
-    use HasFactory, RecordsActivity, BelongsToSchool, SoftDeletes;
-    
+    use BelongsToSchool, HasFactory, RecordsActivity, SoftDeletes;
+
     protected $fillable = [
         'school_id',
         'user_id',
@@ -23,38 +23,43 @@ class Teacher extends Model
         'emergency_contact',
         'campus_id',
         'photo_path',
-        'status'
+        'status',
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function campus()
     {
         return $this->belongsTo(Campus::class);
+    }
+
+    public function staffProfile()
+    {
+        return $this->hasOne(StaffProfile::class);
     }
 
     public function salaryStructure()
     {
         return $this->belongsTo(SalaryStructure::class);
     }
-    
+
     public function allocations()
     {
         return $this->hasMany(TeacherAllocation::class);
     }
-    
+
     public function subjects()
     {
         return $this->belongsToMany(Subject::class, 'teacher_allocations', 'teacher_id', 'subject_id')
-                    ->distinct();
+            ->distinct();
     }
-    
+
     public function classes()
     {
         return $this->belongsToMany(SchoolClass::class, 'teacher_allocations', 'teacher_id', 'school_class_id')
-                    ->distinct();
+            ->distinct();
     }
 }

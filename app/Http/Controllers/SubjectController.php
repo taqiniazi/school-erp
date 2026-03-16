@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Subject;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -16,6 +15,7 @@ class SubjectController extends Controller
     public function index()
     {
         $subjects = Subject::latest()->get();
+
         return view('subjects.index', compact('subjects'));
     }
 
@@ -63,10 +63,11 @@ class SubjectController extends Controller
                 ]);
             }
         });
-        
+
         Cache::forget('all_subjects');
 
         $message = count($rows) > 1 ? 'Subjects created successfully.' : 'Subject created successfully.';
+
         return redirect()->route('subjects.index')->with('success', $message);
     }
 
@@ -92,13 +93,13 @@ class SubjectController extends Controller
     public function update(Request $request, Subject $subject)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:subjects,name,' . $subject->id,
-            'code' => 'required|string|max:255|unique:subjects,code,' . $subject->id,
+            'name' => 'required|string|max:255|unique:subjects,name,'.$subject->id,
+            'code' => 'required|string|max:255|unique:subjects,code,'.$subject->id,
             'type' => 'required|in:theory,practical,both',
         ]);
 
         $subject->update($validated);
-        
+
         Cache::forget('all_subjects');
 
         return redirect()->route('subjects.index')->with('success', 'Subject updated successfully.');
@@ -110,9 +111,9 @@ class SubjectController extends Controller
     public function destroy(Subject $subject)
     {
         $subject->delete();
-        
+
         Cache::forget('all_subjects');
-        
+
         return redirect()->route('subjects.index')->with('success', 'Subject deleted successfully.');
     }
 }

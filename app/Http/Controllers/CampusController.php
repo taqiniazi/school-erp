@@ -13,6 +13,7 @@ class CampusController extends Controller
     public function index()
     {
         $campuses = Campus::get();
+
         return view('campuses.index', compact('campuses'));
     }
 
@@ -31,7 +32,7 @@ class CampusController extends Controller
     {
         // Check Plan Limits
         $school = auth()->user()->school;
-        if (!$school->canAddCampus()) {
+        if (! $school->canAddCampus()) {
             return redirect()->back()->with('error', 'You have reached the maximum number of campuses allowed by your current plan. Please upgrade your subscription.');
         }
 
@@ -84,8 +85,8 @@ class CampusController extends Controller
         ]);
 
         if ($validated['is_main'] ?? false) {
-             // Unset other main campuses if this one is main
-             Campus::where('id', '!=', $campus->id)->where('is_main', true)->update(['is_main' => false]);
+            // Unset other main campuses if this one is main
+            Campus::where('id', '!=', $campus->id)->where('is_main', true)->update(['is_main' => false]);
         }
 
         $campus->update($validated);

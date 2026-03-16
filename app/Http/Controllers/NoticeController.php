@@ -22,14 +22,14 @@ class NoticeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         if ($user->hasRole(['Super Admin', 'School Admin', 'Teacher'])) {
             $notices = Notice::with('creator')->latest()->get();
         } else {
             // Students and Parents see general notices and role-specific ones
             $userRoles = $user->getRoleNames(); // Collection of role names
             $rolesToCheck = $userRoles->push('all')->toArray();
-            
+
             $notices = Notice::with('creator')
                 ->whereIn('audience_role', $rolesToCheck)
                 ->latest()
@@ -131,6 +131,7 @@ class NoticeController extends Controller
     public function destroy(Notice $notice)
     {
         $notice->delete();
+
         return redirect()->route('communication.notices.index')->with('success', 'Notice deleted successfully.');
     }
 }

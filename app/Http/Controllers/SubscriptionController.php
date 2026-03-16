@@ -17,7 +17,7 @@ class SubscriptionController extends Controller
             ->first();
 
         // If no active subscription, redirect to choose plan
-        if (!$subscription) {
+        if (! $subscription) {
             return redirect()->route('billing.choose-plan');
         }
 
@@ -36,9 +36,10 @@ class SubscriptionController extends Controller
     public function upgrade()
     {
         $plans = Plan::where('is_active', true)->orderBy('price')->get();
+
         return view('billing.choose-plan', [
             'plans' => $plans,
-            'school' => auth()->user()->school
+            'school' => auth()->user()->school,
         ]);
     }
 }

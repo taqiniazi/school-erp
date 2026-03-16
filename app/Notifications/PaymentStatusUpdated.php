@@ -40,21 +40,21 @@ class PaymentStatusUpdated extends Notification implements ShouldQueue
         $status = ucfirst($this->payment->status);
         $planName = $this->payment->plan->name;
         $amount = number_format($this->payment->amount, 2);
-        
+
         $message = (new MailMessage)
-                    ->subject("Payment Status Update: {$status}")
-                    ->greeting("Hello {$notifiable->name},")
-                    ->line("Your subscription payment for the **{$planName}** plan has been **{$status}**.")
-                    ->line("Amount: {$amount}")
-                    ->line("Transaction Reference: {$this->payment->transaction_reference}");
+            ->subject("Payment Status Update: {$status}")
+            ->greeting("Hello {$notifiable->name},")
+            ->line("Your subscription payment for the **{$planName}** plan has been **{$status}**.")
+            ->line("Amount: {$amount}")
+            ->line("Transaction Reference: {$this->payment->transaction_reference}");
 
         if ($this->payment->status === 'approved') {
             $message->line('Your subscription is now active. You can access all premium features immediately.')
-                    ->action('View Invoice', route('billing.history'));
+                ->action('View Invoice', route('billing.history'));
         } elseif ($this->payment->status === 'rejected') {
-            $message->line('Reason for rejection: ' . ($this->payment->admin_note ?? 'Not specified'))
-                    ->line('Please contact support or try again.')
-                    ->action('View Payment History', route('billing.history'));
+            $message->line('Reason for rejection: '.($this->payment->admin_note ?? 'Not specified'))
+                ->line('Please contact support or try again.')
+                ->action('View Payment History', route('billing.history'));
         }
 
         return $message->line('Thank you for using our application!');

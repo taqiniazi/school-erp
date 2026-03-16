@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\RecordsActivity;
-use App\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends Model
 {
-    use HasFactory, RecordsActivity, BelongsToSchool, SoftDeletes;
-    
+    use BelongsToSchool, HasFactory, RecordsActivity, SoftDeletes;
+
     protected $fillable = [
         'school_id',
         'user_id',
@@ -29,19 +29,19 @@ class Student extends Model
         'campus_id',
         'status',
         'admission_date',
-        'photo_path'
+        'photo_path',
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function schoolClass()
     {
         return $this->belongsTo(SchoolClass::class);
     }
-    
+
     public function section()
     {
         return $this->belongsTo(Section::class);
@@ -51,12 +51,12 @@ class Student extends Model
     {
         return $this->belongsTo(Campus::class);
     }
-    
+
     public function parents()
     {
         return $this->belongsToMany(User::class, 'student_parent', 'student_id', 'parent_id')
-                    ->withPivot('relation')
-                    ->withTimestamps();
+            ->withPivot('relation')
+            ->withTimestamps();
     }
 
     public function documents()

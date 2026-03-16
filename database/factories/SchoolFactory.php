@@ -13,8 +13,8 @@ class SchoolFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company . ' School',
-            'slug' => Str::slug($this->faker->unique()->company . ' School'),
+            'name' => $this->faker->company.' School',
+            'slug' => Str::slug($this->faker->unique()->company.' School'),
             'address' => $this->faker->address,
             'phone' => $this->faker->phoneNumber,
             'email' => $this->faker->unique()->safeEmail,

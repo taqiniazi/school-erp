@@ -36,7 +36,7 @@ class SendSubscriptionRenewalReminders extends Command
 
         foreach ($daysToCheck as $days) {
             $targetDate = now()->addDays($days)->startOfDay();
-            
+
             $subscriptions = Subscription::where('status', 'active')
                 ->whereDate('current_period_end', $targetDate)
                 ->with(['school', 'plan'])
@@ -53,7 +53,7 @@ class SendSubscriptionRenewalReminders extends Command
                     $count++;
                 }
             }
-            
+
             $this->info("Sent {$count} reminders for subscriptions expiring in {$days} days.");
         }
 

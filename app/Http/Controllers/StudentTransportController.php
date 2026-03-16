@@ -13,6 +13,7 @@ class StudentTransportController extends Controller
     public function index()
     {
         $assignments = StudentTransport::with(['student', 'route', 'vehicle'])->orderByDesc('created_at')->get();
+
         return view('transport.assignments.index', compact('assignments'));
     }
 
@@ -21,6 +22,7 @@ class StudentTransportController extends Controller
         $students = Student::orderBy('first_name')->get();
         $routes = TransportRoute::where('status', 'active')->orderBy('name')->get();
         $vehicles = Vehicle::where('status', 'active')->orderBy('registration_number')->get();
+
         return view('transport.assignments.create', compact('students', 'routes', 'vehicles'));
     }
 
@@ -37,12 +39,13 @@ class StudentTransportController extends Controller
 
         StudentTransport::create($request->only('student_id', 'transport_route_id', 'vehicle_id', 'pickup_point', 'start_date', 'status'));
 
-        return redirect()->route('transport.assignments.index')->with('success', 'Student transport assigned.');
+        return redirect()->route('transport.student-transport.index')->with('success', 'Student transport assigned.');
     }
 
     public function destroy(StudentTransport $studentTransport)
     {
         $studentTransport->delete();
-        return redirect()->route('transport.assignments.index')->with('success', 'Assignment removed.');
+
+        return redirect()->route('transport.student-transport.index')->with('success', 'Assignment removed.');
     }
 }

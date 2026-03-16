@@ -22,7 +22,7 @@ class User extends Authenticatable
     /**
      * Override hasRole to support local role column
      */
-    public function hasRole($roles, string $guard = null): bool
+    public function hasRole($roles, ?string $guard = null): bool
     {
         // Check local role column for Super Admin
         if ($this->role === 'super_admin') {
@@ -36,7 +36,7 @@ class User extends Authenticatable
 
         // Check local role column for School Admin
         if ($this->role === 'school_admin') {
-             if (is_string($roles) && ($roles === 'School Admin' || str_contains($roles, 'School Admin'))) {
+            if (is_string($roles) && ($roles === 'School Admin' || str_contains($roles, 'School Admin'))) {
                 return true;
             }
             if (is_array($roles) && in_array('School Admin', $roles)) {

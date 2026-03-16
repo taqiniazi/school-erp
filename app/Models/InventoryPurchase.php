@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\BelongsToSchool;
 
 class InventoryPurchase extends Model
 {
-    use HasFactory, BelongsToSchool;
+    use BelongsToSchool, HasFactory;
 
     protected $fillable = [
         'inventory_item_id',
@@ -29,4 +29,3 @@ class InventoryPurchase extends Model
         return $this->belongsTo(InventoryItem::class, 'inventory_item_id');
     }
 }
-

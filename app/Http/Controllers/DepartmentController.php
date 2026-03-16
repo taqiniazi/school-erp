@@ -13,6 +13,7 @@ class DepartmentController extends Controller
     public function index()
     {
         $departments = Department::orderBy('name')->get();
+
         return view('departments.index', compact('departments'));
     }
 
@@ -62,6 +63,7 @@ class DepartmentController extends Controller
         });
 
         $message = count($rows) > 1 ? 'Departments created successfully.' : 'Department created successfully.';
+
         return redirect()->route('departments.index')->with('success', $message);
     }
 
@@ -96,6 +98,7 @@ class DepartmentController extends Controller
     public function destroy(Department $department)
     {
         $department->delete();
+
         return redirect()->route('departments.index')->with('success', 'Department deleted successfully.');
     }
 }

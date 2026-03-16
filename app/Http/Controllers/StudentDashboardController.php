@@ -10,7 +10,6 @@ use App\Models\Mark;
 use App\Models\Notice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Cache;
 
 class StudentDashboardController extends Controller
@@ -19,32 +18,32 @@ class StudentDashboardController extends Controller
     {
         $user = Auth::user();
         $student = $user->studentProfile;
-        
-        if (!$student) {
-             // Fallback
-             $student = \App\Models\Student::where('email', $user->email)->first();
+
+        if (! $student) {
+            // Fallback
+            $student = \App\Models\Student::where('email', $user->email)->first();
         }
 
-        if (!$student) {
+        if (! $student) {
             return view('student.dashboard', [
                 'attendancePercentage' => 0,
                 'unpaidInvoices' => 0,
                 'averageMarks' => 0,
                 'upcomingExams' => collect(),
                 'upcomingEvents' => collect(),
-                'recentNotices' => collect()
+                'recentNotices' => collect(),
             ]);
         }
 
         // Cache dashboard data for 15 minutes
-        $data = Cache::remember('student_dashboard_' . $student->id, 900, function () use ($student) {
+        $data = Cache::remember('student_dashboard_'.$student->id, 900, function () use ($student) {
             // KPIs
             $totalAttendance = Attendance::where('student_id', $student->id)->count();
             $presentAttendance = Attendance::where('student_id', $student->id)->where('status', 'present')->count();
             $attendancePercentage = $totalAttendance > 0 ? round(($presentAttendance / $totalAttendance) * 100, 1) : 0;
 
             $unpaidInvoices = FeeInvoice::where('student_id', $student->id)->where('status', 'unpaid')->count();
-            
+
             $averageMarks = Mark::where('student_id', $student->id)->avg('marks_obtained');
             $averageMarks = $averageMarks ? round($averageMarks, 1) : 0;
 
@@ -55,12 +54,12 @@ class StudentDashboardController extends Controller
                 ->with(['exam', 'subject'])
                 ->take(3)
                 ->get();
-                
+
             $upcomingEvents = Event::where('start_date', '>=', now())
                 ->orderBy('start_date')
                 ->take(3)
                 ->get();
-                
+
             $recentNotices = Notice::whereIn('audience_role', ['all', 'Student'])
                 ->latest()
                 ->take(3)
@@ -90,22 +89,22 @@ class StudentDashboardController extends Controller
 
         if ($user->hasRole('Student')) {
             // The relationship in User model is 'studentProfile'
-            $student = $user->studentProfile; 
-            
-            if (!$student) {
+            $student = $user->studentProfile;
+
+            if (! $student) {
                 // Fallback: Try to find by email if relationship not set up or user_id is null
-                 $student = \App\Models\Student::where('email', $user->email)->first();
+                $student = \App\Models\Student::where('email', $user->email)->first();
             }
         } elseif ($user->hasRole('Parent')) {
             $children = $user->students;
-            
+
             if ($children->isEmpty()) {
                 return redirect()->back()->with('error', 'No students linked to your account.');
             }
-            
+
             if ($request->has('student_id')) {
                 $student = $children->where('id', $request->student_id)->first();
-                if (!$student) {
+                if (! $student) {
                     return redirect()->back()->with('error', 'Invalid student selected.');
                 }
             } else {
@@ -113,20 +112,20 @@ class StudentDashboardController extends Controller
             }
         }
 
-        if (!$student) {
+        if (! $student) {
             return redirect()->back()->with('error', 'Student record not found.');
         }
 
         $month = $request->input('month', date('m'));
         $year = $request->input('year', date('Y'));
-        
+
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-        
+
         $attendances = Attendance::where('student_id', $student->id)
             ->whereMonth('date', $month)
             ->whereYear('date', $year)
             ->get()
-            ->keyBy(function($item) {
+            ->keyBy(function ($item) {
                 return $item->date->format('Y-m-d');
             });
 
@@ -143,20 +142,20 @@ class StudentDashboardController extends Controller
         $children = collect();
 
         if ($user->hasRole('Student')) {
-            $student = $user->studentProfile; 
-            if (!$student) {
-                 $student = \App\Models\Student::where('email', $user->email)->first();
+            $student = $user->studentProfile;
+            if (! $student) {
+                $student = \App\Models\Student::where('email', $user->email)->first();
             }
         } elseif ($user->hasRole('Parent')) {
             $children = $user->students;
-            
+
             if ($children->isEmpty()) {
                 return redirect()->back()->with('error', 'No students linked to your account.');
             }
-            
+
             if ($request->has('student_id')) {
                 $student = $children->where('id', $request->student_id)->first();
-                if (!$student) {
+                if (! $student) {
                     return redirect()->back()->with('error', 'Invalid student selected.');
                 }
             } else {
@@ -164,7 +163,7 @@ class StudentDashboardController extends Controller
             }
         }
 
-        if (!$student) {
+        if (! $student) {
             return redirect()->back()->with('error', 'Student record not found.');
         }
 

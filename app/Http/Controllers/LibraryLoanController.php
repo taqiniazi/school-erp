@@ -14,6 +14,7 @@ class LibraryLoanController extends Controller
     public function index()
     {
         $loans = LibraryLoan::with(['book', 'user'])->orderByDesc('created_at')->get();
+
         return view('library.loans.index', compact('loans'));
     }
 
@@ -21,6 +22,7 @@ class LibraryLoanController extends Controller
     {
         $books = LibraryBook::where('status', 'active')->where('copies_available', '>', 0)->orderBy('title')->get();
         $borrowers = User::role(['Student', 'Teacher'])->orderBy('name')->get();
+
         return view('library.loans.create', compact('books', 'borrowers'));
     }
 

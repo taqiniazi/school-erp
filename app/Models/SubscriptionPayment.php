@@ -47,7 +47,7 @@ class SubscriptionPayment extends Model
     {
         return $this->belongsTo(Plan::class);
     }
-    
+
     public function paymentMethod()
     {
         return $this->belongsTo(PaymentMethod::class);

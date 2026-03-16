@@ -30,9 +30,9 @@ class FeePaymentController extends Controller
 
         // Clone query for total calculation
         $totalCollected = $query->sum('amount');
-        
+
         $payments = $query->orderBy('payment_date', 'desc')->get();
-        
+
         return view('fees.payments.index', compact('payments', 'totalCollected'));
     }
 }

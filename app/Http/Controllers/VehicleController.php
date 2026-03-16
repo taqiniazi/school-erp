@@ -12,6 +12,7 @@ class VehicleController extends Controller
     public function index()
     {
         $vehicles = Vehicle::with(['driver', 'route'])->orderBy('registration_number')->get();
+
         return view('transport.vehicles.index', compact('vehicles'));
     }
 
@@ -19,6 +20,7 @@ class VehicleController extends Controller
     {
         $drivers = Driver::orderBy('name')->get();
         $routes = TransportRoute::orderBy('name')->get();
+
         return view('transport.vehicles.create', compact('drivers', 'routes'));
     }
 
@@ -42,13 +44,14 @@ class VehicleController extends Controller
     {
         $drivers = Driver::orderBy('name')->get();
         $routes = TransportRoute::orderBy('name')->get();
+
         return view('transport.vehicles.edit', compact('vehicle', 'drivers', 'routes'));
     }
 
     public function update(Request $request, Vehicle $vehicle)
     {
         $request->validate([
-            'registration_number' => ['required', 'string', 'max:255', 'unique:vehicles,registration_number,' . $vehicle->id],
+            'registration_number' => ['required', 'string', 'max:255', 'unique:vehicles,registration_number,'.$vehicle->id],
             'model' => ['nullable', 'string', 'max:255'],
             'capacity' => ['required', 'integer', 'min:0'],
             'driver_id' => ['nullable', 'exists:drivers,id'],
@@ -64,6 +67,7 @@ class VehicleController extends Controller
     public function destroy(Vehicle $vehicle)
     {
         $vehicle->delete();
+
         return redirect()->route('transport.vehicles.index')->with('success', 'Vehicle deleted.');
     }
 }

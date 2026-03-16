@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('remarks')->nullable();
             $table->foreignId('user_id')->nullable()->constrained(); // Teacher who entered marks
             $table->timestamps();
-            
+
             $table->unique(['student_id', 'exam_schedule_id']);
         });
     }

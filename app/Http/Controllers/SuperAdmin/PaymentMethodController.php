@@ -14,6 +14,7 @@ class PaymentMethodController extends Controller
     public function index()
     {
         $methods = PaymentMethod::latest()->get();
+
         return view('super-admin.payment-methods.index', compact('methods'));
     }
 
@@ -35,7 +36,7 @@ class PaymentMethodController extends Controller
             $keys = $request->account_details_keys;
             $values = $request->account_details_values;
             foreach ($keys as $index => $key) {
-                if (!empty($key) && !empty($values[$index])) {
+                if (! empty($key) && ! empty($values[$index])) {
                     $accountDetails[$key] = $values[$index];
                 }
             }
@@ -80,7 +81,7 @@ class PaymentMethodController extends Controller
             $keys = $request->account_details_keys;
             $values = $request->account_details_values;
             foreach ($keys as $index => $key) {
-                if (!empty($key) && !empty($values[$index])) {
+                if (! empty($key) && ! empty($values[$index])) {
                     $accountDetails[$key] = $values[$index];
                 }
             }
@@ -88,7 +89,7 @@ class PaymentMethodController extends Controller
         $request->merge(['account_details' => $accountDetails]);
 
         $request->validate([
-            'name' => 'required|string|max:255|unique:payment_methods,name,' . $paymentMethod->id,
+            'name' => 'required|string|max:255|unique:payment_methods,name,'.$paymentMethod->id,
             'type' => 'required|in:manual,gateway',
             'instructions' => 'required_if:type,manual|nullable|string',
             'account_details' => 'nullable|array',

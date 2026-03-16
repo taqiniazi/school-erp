@@ -23,16 +23,16 @@ return new class extends Migration
             $table->text('address');
             $table->string('phone')->nullable();
             $table->string('email')->nullable(); // Contact email (might differ from user login)
-            
+
             // Class & Section
             $table->foreignId('school_class_id')->constrained('school_classes');
             $table->foreignId('section_id')->constrained('sections');
-            
+
             // Status
             $table->enum('status', ['active', 'graduated', 'left'])->default('active');
             $table->date('admission_date');
             $table->string('photo_path')->nullable();
-            
+
             $table->timestamps();
         });
     }

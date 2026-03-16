@@ -2,14 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Plan;
-use App\Models\Subscription;
-use App\Models\User;
-use App\Models\Teacher;
-use App\Models\SalaryStructure;
 use App\Models\School;
+use App\Models\Subscription;
 use App\Services\SchoolContext;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -32,6 +29,7 @@ class DatabaseSeeder extends Seeder
             SalaryStructureSeeder::class,
             FeeTypeSeeder::class,
             UserSeeder::class,
+            DummyDataSeeder::class,
         ]);
 
         // Assign Enterprise Plan to Default School

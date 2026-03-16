@@ -95,6 +95,7 @@ class UiController extends Controller
             'unread_count' => $unreadCount,
             'items' => $latest->map(function ($n) {
                 $data = is_array($n->data) ? $n->data : [];
+
                 return [
                     'id' => $n->id,
                     'type' => $n->type,

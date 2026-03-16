@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StaffSalary;
 use App\Models\StaffAllowance;
 use App\Models\StaffDeduction;
+use App\Models\StaffSalary;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 
@@ -13,12 +13,18 @@ class PayrollController extends Controller
     public function index()
     {
         $salaries = StaffSalary::with('teacher')->where('is_active', true)->orderBy('teacher_id')->get();
+
         return view('payroll.salaries.index', compact('salaries'));
     }
 
     public function create()
     {
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
+
         return view('payroll.salaries.create', compact('teachers'));
     }
 
@@ -41,7 +47,12 @@ class PayrollController extends Controller
 
     public function edit(StaffSalary $salary)
     {
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
+
         return view('payroll.salaries.edit', compact('salary', 'teachers'));
     }
 
@@ -55,7 +66,7 @@ class PayrollController extends Controller
             'is_active' => ['nullable', 'boolean'],
         ]);
 
-        if ($request->boolean('is_active') && !$salary->is_active) {
+        if ($request->boolean('is_active') && ! $salary->is_active) {
             StaffSalary::where('teacher_id', $request->teacher_id)->where('is_active', true)->where('id', '!=', $salary->id)->update(['is_active' => false]);
         }
 
@@ -73,6 +84,7 @@ class PayrollController extends Controller
     public function destroy(StaffSalary $salary)
     {
         $salary->delete();
+
         return redirect()->route('payroll.salaries.index')->with('success', 'Salary deleted.');
     }
 
@@ -81,15 +93,27 @@ class PayrollController extends Controller
     {
         $teacherId = $request->get('teacher_id');
         $query = StaffAllowance::with('teacher')->where('is_active', true);
-        if ($teacherId) $query->where('teacher_id', $teacherId);
+        if ($teacherId) {
+            $query->where('teacher_id', $teacherId);
+        }
         $allowances = $query->orderBy('teacher_id')->get();
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
+
         return view('payroll.allowances.index', compact('allowances', 'teachers', 'teacherId'));
     }
 
     public function createAllowance()
     {
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
+
         return view('payroll.allowances.create', compact('teachers'));
     }
 
@@ -108,12 +132,18 @@ class PayrollController extends Controller
             'amount' => $request->amount,
             'is_active' => true,
         ]);
+
         return redirect()->route('payroll.allowances.index')->with('success', 'Allowance saved.');
     }
 
     public function editAllowance(StaffAllowance $allowance)
     {
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
+
         return view('payroll.allowances.edit', compact('allowance', 'teachers'));
     }
 
@@ -133,12 +163,14 @@ class PayrollController extends Controller
             'amount' => $request->amount,
             'is_active' => $request->boolean('is_active'),
         ]);
+
         return redirect()->route('payroll.allowances.index')->with('success', 'Allowance updated.');
     }
 
     public function destroyAllowance(StaffAllowance $allowance)
     {
         $allowance->delete();
+
         return redirect()->route('payroll.allowances.index')->with('success', 'Allowance deleted.');
     }
 
@@ -147,15 +179,27 @@ class PayrollController extends Controller
     {
         $teacherId = $request->get('teacher_id');
         $query = StaffDeduction::with('teacher')->where('is_active', true);
-        if ($teacherId) $query->where('teacher_id', $teacherId);
+        if ($teacherId) {
+            $query->where('teacher_id', $teacherId);
+        }
         $deductions = $query->orderBy('teacher_id')->get();
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
+
         return view('payroll.deductions.index', compact('deductions', 'teachers', 'teacherId'));
     }
 
     public function createDeduction()
     {
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
+
         return view('payroll.deductions.create', compact('teachers'));
     }
 
@@ -174,12 +218,18 @@ class PayrollController extends Controller
             'amount' => $request->amount,
             'is_active' => true,
         ]);
+
         return redirect()->route('payroll.deductions.index')->with('success', 'Deduction saved.');
     }
 
     public function editDeduction(StaffDeduction $deduction)
     {
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
+
         return view('payroll.deductions.edit', compact('deduction', 'teachers'));
     }
 
@@ -199,13 +249,14 @@ class PayrollController extends Controller
             'amount' => $request->amount,
             'is_active' => $request->boolean('is_active'),
         ]);
+
         return redirect()->route('payroll.deductions.index')->with('success', 'Deduction updated.');
     }
 
     public function destroyDeduction(StaffDeduction $deduction)
     {
         $deduction->delete();
+
         return redirect()->route('payroll.deductions.index')->with('success', 'Deduction deleted.');
     }
 }
-

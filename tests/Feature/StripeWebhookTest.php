@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Services\PaymentService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class StripeWebhookTest extends TestCase
@@ -24,14 +23,14 @@ class StripeWebhookTest extends TestCase
         // we might need to bypass the signature check or mock the facade if possible.
         // However, given the code uses \Stripe\Webhook directly, it's hard to mock.
         // A better approach for this test is to test the logic if the event is valid.
-        
+
         // But the controller verifies signature.
         // We can disable signature verification for testing by mocking the method or using a testing secret.
         // For now, let's skip the signature part and focus on the logic if we could bypass it,
         // OR we construct a valid signature using a known secret.
-        
+
         Config::set('services.stripe.webhook_secret', 'whsec_test');
-        
+
         $school = School::factory()->create();
         $user = User::factory()->create(['school_id' => $school->id]);
         $plan = Plan::create([
@@ -42,7 +41,7 @@ class StripeWebhookTest extends TestCase
             'billing_cycle' => 'monthly',
             'features' => json_encode(['modules' => ['all']]),
         ]);
-        
+
         $subscription = Subscription::create([
             'school_id' => $school->id,
             'plan_id' => $plan->id,
@@ -50,7 +49,7 @@ class StripeWebhookTest extends TestCase
             'current_period_start' => null,
             'current_period_end' => null,
         ]);
-        
+
         $payment = SubscriptionPayment::create([
             'school_id' => $school->id,
             'subscription_id' => $subscription->id,
@@ -80,19 +79,19 @@ class StripeWebhookTest extends TestCase
         // Note: Stripe's PHP SDK verification is strict. Constructing a valid signature manually is tricky without the SDK's internal logic.
         // Instead, let's mock the PaymentService and test the controller logic if we assume signature passes?
         // Or we can try to use the SDK to generate the signature if available.
-        
+
         // Let's try to hit the endpoint. If signature fails, it returns 400.
         // We need to match how Stripe SDK verifies.
-        
+
         // Alternative: Test PaymentService directly.
-        $service = new PaymentService();
+        $service = new PaymentService;
         $service->approvePayment($payment, 'Stripe Webhook Test');
-        
+
         $this->assertDatabaseHas('subscription_payments', [
             'id' => $payment->id,
             'status' => 'approved',
         ]);
-        
+
         $this->assertDatabaseHas('subscriptions', [
             'id' => $subscription->id,
             'status' => 'active',

@@ -10,6 +10,7 @@ class LibraryBookController extends Controller
     public function index()
     {
         $books = LibraryBook::orderBy('title')->get();
+
         return view('library.books.index', compact('books'));
     }
 
@@ -33,6 +34,7 @@ class LibraryBookController extends Controller
         $data['copies_available'] = $data['copies_total'];
 
         LibraryBook::create($data);
+
         return redirect()->route('library.books.index')->with('success', 'Book created.');
     }
 
@@ -46,7 +48,7 @@ class LibraryBookController extends Controller
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'author' => ['nullable', 'string', 'max:255'],
-            'isbn' => ['required', 'string', 'max:255', 'unique:library_books,isbn,' . $libraryBook->id],
+            'isbn' => ['required', 'string', 'max:255', 'unique:library_books,isbn,'.$libraryBook->id],
             'publisher' => ['nullable', 'string', 'max:255'],
             'copies_total' => ['required', 'integer', 'min:0'],
             'shelf' => ['nullable', 'string', 'max:255'],
@@ -63,12 +65,14 @@ class LibraryBookController extends Controller
         }
 
         $libraryBook->update($data);
+
         return redirect()->route('library.books.index')->with('success', 'Book updated.');
     }
 
     public function destroy(LibraryBook $libraryBook)
     {
         $libraryBook->delete();
+
         return redirect()->route('library.books.index')->with('success', 'Book deleted.');
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\FeeType;
+use Illuminate\Database\Seeder;
 
 class FeeTypeSeeder extends Seeder
 {

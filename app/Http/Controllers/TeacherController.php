@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Teacher;
-use App\Models\User;
-use App\Models\SalaryStructure;
-use App\Models\Subject;
-use App\Models\SchoolClass;
-use App\Models\Section;
-use App\Models\TeacherAllocation;
 use App\Models\Campus;
+use App\Models\SalaryStructure;
+use App\Models\SchoolClass;
+use App\Models\Subject;
+use App\Models\Teacher;
+use App\Models\TeacherAllocation;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
-
-use Illuminate\Support\Facades\Cache;
 
 class TeacherController extends Controller
 {
@@ -26,8 +24,9 @@ class TeacherController extends Controller
     public function index()
     {
         $teachers = Teacher::with(['user', 'salaryStructure', 'allocations.subject', 'allocations.schoolClass', 'allocations.section'])
-                        ->latest()
-                        ->get();
+            ->latest()
+            ->get();
+
         return view('teachers.index', compact('teachers'));
     }
 
@@ -40,6 +39,7 @@ class TeacherController extends Controller
             return SalaryStructure::all();
         });
         $campuses = Campus::where('is_active', true)->get();
+
         return view('teachers.create', compact('salaryStructures', 'campuses'));
     }
 
@@ -61,8 +61,10 @@ class TeacherController extends Controller
                     function ($attribute, $value, $fail) use ($request) {
                         $parts = explode('.', $attribute);
                         $index = $parts[1] ?? null;
-                        if ($index === null) return;
-                        $password = data_get($request->input('teachers'), $index . '.password');
+                        if ($index === null) {
+                            return;
+                        }
+                        $password = data_get($request->input('teachers'), $index.'.password');
                         if ((string) $value !== (string) $password) {
                             $fail('The password confirmation does not match.');
                         }
@@ -81,10 +83,10 @@ class TeacherController extends Controller
             $rows = $validated['teachers'];
 
             $plan = $school?->current_plan;
-            if (!$plan) {
+            if (! $plan) {
                 return redirect()->back()->with('error', 'No active plan found for your school. Please contact support.');
             }
-            if (!is_null($plan->max_teachers)) {
+            if (! is_null($plan->max_teachers)) {
                 $currentCount = $school->teachers()->count();
                 if ($currentCount + count($rows) > (int) $plan->max_teachers) {
                     return redirect()->back()->with('error', 'You have reached the maximum number of teachers allowed by your current plan. Please upgrade your subscription.');
@@ -124,7 +126,7 @@ class TeacherController extends Controller
             return redirect()->route('teachers.index')->with('success', 'Teachers created successfully.');
         }
 
-        if (!$school->canAddTeacher()) {
+        if (! $school->canAddTeacher()) {
             return redirect()->back()->with('error', 'You have reached the maximum number of teachers allowed by your current plan. Please upgrade your subscription.');
         }
 
@@ -148,7 +150,7 @@ class TeacherController extends Controller
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
             ]);
-            
+
             $user->assignRole('Teacher');
 
             $path = null;
@@ -179,15 +181,15 @@ class TeacherController extends Controller
     public function show(Teacher $teacher)
     {
         $teacher->load(['user', 'salaryStructure', 'allocations.subject', 'allocations.schoolClass', 'allocations.section']);
-        
+
         $subjects = Cache::remember('all_subjects', 3600, function () {
             return Subject::all();
         });
-        
+
         $classes = Cache::remember('all_classes', 3600, function () {
             return SchoolClass::all();
         });
-        
+
         return view('teachers.show', compact('teacher', 'subjects', 'classes'));
     }
 
@@ -199,6 +201,7 @@ class TeacherController extends Controller
         $teacher->load('user');
         $salaryStructures = SalaryStructure::all();
         $campuses = Campus::where('is_active', true)->get();
+
         return view('teachers.edit', compact('teacher', 'salaryStructures', 'campuses'));
     }
 
@@ -248,13 +251,13 @@ class TeacherController extends Controller
         if ($teacher->photo_path) {
             Storage::disk('public')->delete($teacher->photo_path);
         }
-        $teacher->user->delete(); // This cascades to teacher because of foreign key on delete cascade in migration? 
+        $teacher->user->delete(); // This cascades to teacher because of foreign key on delete cascade in migration?
         // Wait, migration said: $table->foreignId('user_id')->constrained()->onDelete('cascade');
         // So deleting user deletes teacher.
         // But if I delete teacher, user remains?
         // Usually we want to delete both or soft delete.
         // Let's delete user.
-        
+
         return redirect()->route('teachers.index')->with('success', 'Teacher deleted successfully.');
     }
 
@@ -269,13 +272,13 @@ class TeacherController extends Controller
                 function ($attribute, $value, $fail) use ($request) {
                     $classId = $request->input('school_class_id');
                     if ($classId) {
-                         $exists = DB::table('school_class_subject')
+                        $exists = DB::table('school_class_subject')
                             ->where('school_class_id', $classId)
                             ->where('subject_id', $value)
                             ->exists();
-                         if (!$exists) {
-                             $fail('The selected subject is not assigned to this class.');
-                         }
+                        if (! $exists) {
+                            $fail('The selected subject is not assigned to this class.');
+                        }
                     }
                 },
             ],
@@ -305,6 +308,7 @@ class TeacherController extends Controller
     public function destroyAllocation(TeacherAllocation $allocation)
     {
         $allocation->delete();
+
         return back()->with('success', 'Assignment removed successfully.');
     }
 }

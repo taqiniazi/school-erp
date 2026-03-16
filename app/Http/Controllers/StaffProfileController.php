@@ -12,19 +12,20 @@ class StaffProfileController extends Controller
     {
         // Eager load teacher AND teacher.user to avoid N+1
         $profiles = StaffProfile::with('teacher.user')->get();
+
         return view('hr.staff.index', compact('profiles'));
     }
 
     public function create()
     {
-        // Fix: Teacher model doesn't have first_name/last_name columns. 
+        // Fix: Teacher model doesn't have first_name/last_name columns.
         // Join with users table to sort by name.
         $teachers = Teacher::select('teachers.*')
             ->join('users', 'teachers.user_id', '=', 'users.id')
             ->orderBy('users.name')
             ->with('user')
             ->get();
-            
+
         return view('hr.staff.create', compact('teachers'));
     }
 
@@ -53,7 +54,7 @@ class StaffProfileController extends Controller
             ->orderBy('users.name')
             ->with('user')
             ->get();
-            
+
         return view('hr.staff.edit', ['profile' => $staffProfile, 'teachers' => $teachers]);
     }
 
@@ -77,7 +78,7 @@ class StaffProfileController extends Controller
     public function destroy(StaffProfile $staffProfile)
     {
         $staffProfile->delete();
+
         return redirect()->route('hr.staff.index')->with('success', 'Staff profile deleted.');
     }
 }
-

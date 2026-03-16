@@ -25,7 +25,7 @@ class PaymentMethod extends Model
     public function getDetailsAttribute()
     {
         $details = $this->instructions;
-        
+
         if ($this->account_details) {
             $details .= "\n\nAccount Details:\n";
             foreach ($this->account_details as $key => $value) {

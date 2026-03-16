@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\RecordsActivity;
-use App\Traits\BelongsToSchool;
 
 class Exam extends Model
 {
-    use HasFactory, RecordsActivity, BelongsToSchool;
+    use BelongsToSchool, HasFactory, RecordsActivity;
 
     protected $fillable = [
         'name',
@@ -17,13 +17,13 @@ class Exam extends Model
         'description',
         'start_date',
         'end_date',
-        'is_published'
+        'is_published',
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
-        'is_published' => 'boolean'
+        'is_published' => 'boolean',
     ];
 
     public function schedules()

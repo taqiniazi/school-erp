@@ -26,7 +26,7 @@ trait RecordsActivity
         // Don't log if not authenticated (except maybe login/logout if handled elsewhere)
         // But for model events, usually we want to know WHO did it.
         // If system action, user_id is null.
-        
+
         $oldValues = null;
         $newValues = null;
 

@@ -7,12 +7,11 @@ use App\Models\FeePayment;
 use App\Models\FeeStructure;
 use App\Models\SchoolClass;
 use App\Models\Student;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class FeeInvoiceController extends Controller
 {
@@ -38,7 +37,7 @@ class FeeInvoiceController extends Controller
         }
 
         $invoices = $query->orderBy('issue_date', 'desc')->get();
-        
+
         $classes = Cache::remember('all_classes', 3600, function () {
             return SchoolClass::all();
         });
@@ -54,6 +53,7 @@ class FeeInvoiceController extends Controller
         $classes = Cache::remember('all_classes', 3600, function () {
             return SchoolClass::all();
         });
+
         return view('fees.invoices.create', compact('classes'));
     }
 
@@ -72,7 +72,7 @@ class FeeInvoiceController extends Controller
         ]);
 
         $class = SchoolClass::findOrFail($request->school_class_id);
-        
+
         if ($request->filled('student_id')) {
             $students = Student::where('id', $request->student_id)->where('school_class_id', $class->id)->get();
         } else {
@@ -110,7 +110,7 @@ class FeeInvoiceController extends Controller
                 // Create Invoice
                 $invoice = FeeInvoice::create([
                     'student_id' => $student->id,
-                    'invoice_no' => 'INV-' . date('Ymd') . '-' . $student->id . '-' . rand(1000, 9999),
+                    'invoice_no' => 'INV-'.date('Ymd').'-'.$student->id.'-'.rand(1000, 9999),
                     'issue_date' => $request->issue_date,
                     'due_date' => $request->due_date,
                     'status' => 'unpaid',
@@ -163,16 +163,16 @@ class FeeInvoiceController extends Controller
             'discount_amount' => $request->discount_amount ?? 0,
             'remarks' => $request->remarks,
         ]);
-        
+
         // Update status based on new amounts
         $totalPayable = ($feeInvoice->total_amount + $feeInvoice->fine_amount) - $feeInvoice->discount_amount;
-        
+
         if ($feeInvoice->paid_amount >= $totalPayable) {
-             $feeInvoice->status = 'paid';
+            $feeInvoice->status = 'paid';
         } elseif ($feeInvoice->paid_amount > 0) {
-             $feeInvoice->status = 'partial';
+            $feeInvoice->status = 'partial';
         } else {
-             $feeInvoice->status = 'unpaid';
+            $feeInvoice->status = 'unpaid';
         }
         $feeInvoice->save();
 
@@ -185,9 +185,10 @@ class FeeInvoiceController extends Controller
     public function destroy(FeeInvoice $feeInvoice)
     {
         if ($feeInvoice->paid_amount > 0) {
-             return redirect()->back()->with('error', 'Cannot delete invoice with payments.');
+            return redirect()->back()->with('error', 'Cannot delete invoice with payments.');
         }
         $feeInvoice->delete();
+
         return redirect()->route('fee-invoices.index')->with('success', 'Invoice deleted successfully.');
     }
 
@@ -197,6 +198,7 @@ class FeeInvoiceController extends Controller
     public function show(FeeInvoice $feeInvoice)
     {
         $feeInvoice->load(['student', 'items', 'payments']);
+
         return view('fees.invoices.show', compact('feeInvoice'));
     }
 
@@ -214,7 +216,7 @@ class FeeInvoiceController extends Controller
     public function pay(Request $request, FeeInvoice $feeInvoice)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:1|max:' . $feeInvoice->balance,
+            'amount' => 'required|numeric|min:1|max:'.$feeInvoice->balance,
             'payment_date' => 'required|date',
             'payment_method' => 'required|string',
             'transaction_reference' => 'nullable|string',
@@ -235,13 +237,13 @@ class FeeInvoiceController extends Controller
 
             // Update Invoice
             $feeInvoice->paid_amount += $request->amount;
-            
+
             if ($feeInvoice->paid_amount >= ($feeInvoice->total_amount + $feeInvoice->fine_amount - $feeInvoice->discount_amount)) {
                 $feeInvoice->status = 'paid';
             } else {
                 $feeInvoice->status = 'partial';
             }
-            
+
             $feeInvoice->save();
         });
 
@@ -255,7 +257,8 @@ class FeeInvoiceController extends Controller
     {
         $feeInvoice->load(['student', 'items', 'payments']);
         $pdf = Pdf::loadView('fees.invoices.pdf', compact('feeInvoice'));
-        return $pdf->download('invoice_' . $feeInvoice->invoice_no . '.pdf');
+
+        return $pdf->download('invoice_'.$feeInvoice->invoice_no.'.pdf');
     }
 
     /**

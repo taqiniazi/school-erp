@@ -2,13 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\School;
 use App\Models\Campus;
-use App\Models\Student;
-use App\Models\Teacher;
 use App\Models\Plan;
+use App\Models\School;
 use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -21,9 +19,9 @@ class CampusManagementTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create roles if not exist
-        if (!Role::where('name', 'School Admin')->exists()) {
+        if (! Role::where('name', 'School Admin')->exists()) {
             Role::create(['name' => 'School Admin', 'guard_name' => 'web']);
         }
     }
@@ -74,12 +72,12 @@ class CampusManagementTest extends TestCase
     public function test_campuses_are_isolated_by_school()
     {
         $this->withoutExceptionHandling();
-        
+
         // Setup School 1
         $school1 = School::factory()->create();
         $admin1 = User::factory()->create(['school_id' => $school1->id]);
         $admin1->assignRole('School Admin');
-        
+
         // Setup School 2
         $school2 = School::factory()->create();
         $admin2 = User::factory()->create(['school_id' => $school2->id]);

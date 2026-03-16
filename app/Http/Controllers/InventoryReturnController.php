@@ -13,12 +13,14 @@ class InventoryReturnController extends Controller
     public function index()
     {
         $returns = InventoryReturn::with('item')->orderByDesc('return_date')->get();
+
         return view('inventory.returns.index', compact('returns'));
     }
 
     public function create()
     {
         $items = InventoryItem::where('status', 'active')->orderBy('name')->get();
+
         return view('inventory.returns.create', compact('items'));
     }
 

@@ -10,10 +10,10 @@ use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\Student;
 use App\Models\Subject;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class MarkController extends Controller
 {
@@ -21,6 +21,7 @@ class MarkController extends Controller
     {
         $exams = Exam::orderBy('start_date', 'desc')->get();
         $classes = SchoolClass::all();
+
         // We will load sections and subjects dynamically via AJAX or just reload page
         return view('marks.index', compact('exams', 'classes'));
     }
@@ -45,7 +46,7 @@ class MarkController extends Controller
             ->where('subject_id', $subject->id)
             ->first();
 
-        if (!$schedule) {
+        if (! $schedule) {
             return redirect()->back()->with('error', 'Exam schedule not found for this subject in this class.');
         }
 
@@ -55,7 +56,7 @@ class MarkController extends Controller
         // Let's assume Student model has `school_class_id` and `section_id` directly or via `student_admissions` table?
         // Let's check Student model.
         // Based on previous memory, Student has `school_class_id` and `section_id`.
-        
+
         $students = Student::where('school_class_id', $class->id)
             ->where('section_id', $section->id)
             ->orderBy('roll_number')
@@ -81,7 +82,7 @@ class MarkController extends Controller
         ]);
 
         $schedule = ExamSchedule::findOrFail($request->exam_schedule_id);
-        
+
         DB::transaction(function () use ($request, $schedule) {
             foreach ($request->marks as $studentId => $markValue) {
                 if ($markValue !== null) {
@@ -116,7 +117,7 @@ class MarkController extends Controller
         // For searching students
         $classes = SchoolClass::all();
         $exams = Exam::where('is_published', true)->orderBy('start_date', 'desc')->get();
-        
+
         return view('marks.report_card_search', compact('classes', 'exams'));
     }
 
@@ -151,7 +152,7 @@ class MarkController extends Controller
             $mark = $marks->get($schedule->id);
             $obtained = $mark ? $mark->marks_obtained : 0;
             $percentage = ($obtained / $schedule->max_marks) * 100;
-            
+
             // Get grade
             $grade = Grade::where('min_percentage', '<=', $percentage)
                 ->where('max_percentage', '>=', $percentage)
@@ -164,21 +165,22 @@ class MarkController extends Controller
                 'obtained' => $obtained,
                 'grade' => $grade ? $grade->grade_name : 'N/A',
                 'remarks' => $mark ? $mark->remarks : '',
-                'is_pass' => $obtained >= $schedule->pass_marks
+                'is_pass' => $obtained >= $schedule->pass_marks,
             ];
 
             $totalMax += $schedule->max_marks;
             $totalObtained += $obtained;
         }
-        
+
         $overallPercentage = $totalMax > 0 ? ($totalObtained / $totalMax) * 100 : 0;
         $overallGrade = Grade::where('min_percentage', '<=', $overallPercentage)
-                ->where('max_percentage', '>=', $overallPercentage)
-                ->first();
+            ->where('max_percentage', '>=', $overallPercentage)
+            ->first();
 
         if ($request->has('export_pdf')) {
             $pdf = Pdf::loadView('marks.report_card_pdf', compact('exam', 'student', 'data', 'totalMax', 'totalObtained', 'overallPercentage', 'overallGrade'));
-            return $pdf->download('report_card_' . $student->roll_number . '.pdf');
+
+            return $pdf->download('report_card_'.$student->roll_number.'.pdf');
         }
 
         return view('marks.report_card', compact('exam', 'student', 'data', 'totalMax', 'totalObtained', 'overallPercentage', 'overallGrade'));
@@ -191,20 +193,20 @@ class MarkController extends Controller
         $children = collect();
 
         if ($user->hasRole('Student')) {
-            $student = $user->studentProfile; 
-            if (!$student) {
-                 $student = \App\Models\Student::where('email', $user->email)->first();
+            $student = $user->studentProfile;
+            if (! $student) {
+                $student = \App\Models\Student::where('email', $user->email)->first();
             }
         } elseif ($user->hasRole('Parent')) {
             $children = $user->students;
-            
+
             if ($children->isEmpty()) {
                 return redirect()->back()->with('error', 'No students linked to your account.');
             }
-            
+
             if ($request->has('student_id')) {
                 $student = $children->where('id', $request->student_id)->first();
-                if (!$student) {
+                if (! $student) {
                     return redirect()->back()->with('error', 'Invalid student selected.');
                 }
             } else {
@@ -212,12 +214,12 @@ class MarkController extends Controller
             }
         }
 
-        if (!$student) {
+        if (! $student) {
             return redirect()->back()->with('error', 'Student record not found.');
         }
 
         $exams = Exam::where('is_published', true)->orderBy('start_date', 'desc')->get();
-        
+
         $exam = null;
         $data = [];
         $totalMax = 0;
@@ -227,7 +229,7 @@ class MarkController extends Controller
 
         if ($request->has('exam_id')) {
             $exam = Exam::where('is_published', true)->findOrFail($request->exam_id);
-            
+
             // Get all schedules for this exam and student's class
             $schedules = ExamSchedule::where('exam_id', $exam->id)
                 ->where('school_class_id', $student->school_class_id)
@@ -244,7 +246,7 @@ class MarkController extends Controller
                 $mark = $marks->get($schedule->id);
                 $obtained = $mark ? $mark->marks_obtained : 0;
                 $percentage = ($obtained / $schedule->max_marks) * 100;
-                
+
                 // Get grade
                 $grade = Grade::where('min_percentage', '<=', $percentage)
                     ->where('max_percentage', '>=', $percentage)
@@ -257,21 +259,22 @@ class MarkController extends Controller
                     'obtained' => $obtained,
                     'grade' => $grade ? $grade->grade_name : 'N/A',
                     'remarks' => $mark ? $mark->remarks : '',
-                    'is_pass' => $obtained >= $schedule->pass_marks
+                    'is_pass' => $obtained >= $schedule->pass_marks,
                 ];
 
                 $totalMax += $schedule->max_marks;
                 $totalObtained += $obtained;
             }
-            
+
             $overallPercentage = $totalMax > 0 ? ($totalObtained / $totalMax) * 100 : 0;
             $overallGrade = Grade::where('min_percentage', '<=', $overallPercentage)
-                    ->where('max_percentage', '>=', $overallPercentage)
-                    ->first();
-                    
+                ->where('max_percentage', '>=', $overallPercentage)
+                ->first();
+
             if ($request->has('export_pdf')) {
                 $pdf = Pdf::loadView('marks.report_card_pdf', compact('exam', 'student', 'data', 'totalMax', 'totalObtained', 'overallPercentage', 'overallGrade'));
-                return $pdf->download('report_card_' . $student->roll_number . '.pdf');
+
+                return $pdf->download('report_card_'.$student->roll_number.'.pdf');
             }
         }
 

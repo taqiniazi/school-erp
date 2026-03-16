@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\FinancialYear;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class FinancialYearController extends Controller
 {
     public function index()
     {
         $years = FinancialYear::orderBy('start_date', 'desc')->get();
+
         return view('accounting.years.index', compact('years'));
     }
 
@@ -79,6 +80,7 @@ class FinancialYearController extends Controller
             FinancialYear::where('is_current', true)->update(['is_current' => false]);
             $financialYear->update(['is_current' => true]);
         });
+
         return redirect()->route('financial-years.index')->with('success', 'Current financial year updated.');
     }
 
@@ -88,7 +90,7 @@ class FinancialYearController extends Controller
             return redirect()->back()->withErrors(['error' => 'Cannot delete the current financial year.']);
         }
         $financialYear->delete();
+
         return redirect()->route('financial-years.index')->with('success', 'Financial year deleted.');
     }
 }
-

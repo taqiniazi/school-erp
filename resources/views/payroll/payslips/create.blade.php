@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Generate Payslip') }}
@@ -9,14 +9,14 @@
         <div class="container-fluid px-4">
             <div class="card shadow-sm border-0 rounded-3">
                 <div class="card-body p-4">
-                    <form action="{{ route('payroll.payslips.store') }}" method="POST">
+                    <form action="{{ route('payslips.store') }}" method="POST">
                         @csrf
                         <div class="row row-cols-1 row-cols-md-2 g-3">
                             <div class="mb-4">
                                 <label class="form-label small fw-bold text-dark">Staff</label>
                                 <select name="teacher_id" class="form-select" required>
                                     @foreach($teachers as $t)
-                                        <option value="{{ $t->id }}">{{ $t->first_name }} {{ $t->last_name }}</option>
+                                        <option value="{{ $t->id }}">{{ optional($t->user)->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -29,7 +29,7 @@
                             <button type="submit" class="btn btn-primary fw-bold px-4">
                                 Generate
                             </button>
-                            <a href="{{ route('payroll.payslips.index') }}" class="btn btn-link text-decoration-none">Cancel</a>
+                            <a href="{{ route('payslips.index') }}" class="btn btn-link text-decoration-none">Cancel</a>
                         </div>
                     </form>
                 </div>
@@ -37,7 +37,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 

@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Student;
-use App\Models\Teacher;
-use App\Models\FeePayment;
 use App\Models\Attendance;
-use App\Models\StaffProfile;
+use App\Models\FeePayment;
 use App\Models\SchoolClass;
+use App\Models\StaffProfile;
+use App\Models\Student;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -28,7 +26,7 @@ class ReportController extends Controller
     {
         $classes = SchoolClass::all();
         $students = collect();
-        
+
         if ($request->has('school_class_id')) {
             $query = Student::with(['schoolClass', 'section']);
             if ($request->school_class_id) {
@@ -43,17 +41,18 @@ class ReportController extends Controller
         if ($request->has('export')) {
             if ($request->export == 'pdf') {
                 $pdf = Pdf::loadView('reports.academic_pdf', compact('students'));
+
                 return $pdf->download('academic_report.pdf');
             } elseif ($request->export == 'excel') {
-                return $this->exportCsv($students, ['Admission No', 'Name', 'Class', 'Section', 'Roll No', 'Gender', 'DOB'], function($student) {
+                return $this->exportCsv($students, ['Admission No', 'Name', 'Class', 'Section', 'Roll No', 'Gender', 'DOB'], function ($student) {
                     return [
                         $student->admission_number,
-                        $student->first_name . ' ' . $student->last_name,
+                        $student->first_name.' '.$student->last_name,
                         $student->schoolClass->name ?? 'N/A',
                         $student->section->name ?? 'N/A',
                         $student->roll_number,
                         ucfirst($student->gender),
-                        $student->dob
+                        $student->dob,
                     ];
                 }, 'academic_report.csv');
             }
@@ -69,7 +68,7 @@ class ReportController extends Controller
     {
         $startDate = $request->input('start_date', Carbon::now()->startOfMonth()->format('Y-m-d'));
         $endDate = $request->input('end_date', Carbon::now()->endOfMonth()->format('Y-m-d'));
-        
+
         $query = FeePayment::with(['feeInvoice.student.schoolClass'])
             ->whereBetween('payment_date', [$startDate, $endDate]);
 
@@ -79,18 +78,20 @@ class ReportController extends Controller
         if ($request->has('export')) {
             if ($request->export == 'pdf') {
                 $pdf = Pdf::loadView('reports.financial_pdf', compact('payments', 'startDate', 'endDate', 'totalCollection'));
+
                 return $pdf->download('financial_report.pdf');
             } elseif ($request->export == 'excel') {
-                 return $this->exportCsv($payments, ['Payment ID', 'Student', 'Class', 'Amount', 'Date', 'Method', 'Transaction ID'], function($payment) {
+                return $this->exportCsv($payments, ['Payment ID', 'Student', 'Class', 'Amount', 'Date', 'Method', 'Transaction ID'], function ($payment) {
                     $student = $payment->feeInvoice->student;
+
                     return [
                         $payment->id,
-                        $student ? $student->first_name . ' ' . $student->last_name : 'N/A',
+                        $student ? $student->first_name.' '.$student->last_name : 'N/A',
                         $student && $student->schoolClass ? $student->schoolClass->name : 'N/A',
                         $payment->amount,
                         $payment->payment_date,
                         ucfirst($payment->payment_method),
-                        $payment->transaction_id
+                        $payment->transaction_id,
                     ];
                 }, 'financial_report.csv');
             }
@@ -132,13 +133,13 @@ class ReportController extends Controller
                 $presentCount = $studentAttendance->where('status', 'present')->count();
                 $absentCount = $studentAttendance->where('status', 'absent')->count();
                 $lateCount = $studentAttendance->where('status', 'late')->count();
-                
+
                 $attendances->push([
                     'student' => $student,
                     'present' => $presentCount,
                     'absent' => $absentCount,
                     'late' => $lateCount,
-                    'percentage' => $daysInMonth > 0 ? round(($presentCount / $daysInMonth) * 100, 1) : 0
+                    'percentage' => $daysInMonth > 0 ? round(($presentCount / $daysInMonth) * 100, 1) : 0,
                 ]);
             }
         }
@@ -146,16 +147,17 @@ class ReportController extends Controller
         if ($request->has('export')) {
             if ($request->export == 'pdf') {
                 $pdf = Pdf::loadView('reports.attendance_pdf', compact('attendances', 'month', 'year'));
+
                 return $pdf->download('attendance_report.pdf');
             } elseif ($request->export == 'excel') {
-                return $this->exportCsv($attendances, ['Admission No', 'Name', 'Present', 'Absent', 'Late', 'Percentage'], function($record) {
+                return $this->exportCsv($attendances, ['Admission No', 'Name', 'Present', 'Absent', 'Late', 'Percentage'], function ($record) {
                     return [
                         $record['student']->admission_number,
-                        $record['student']->first_name . ' ' . $record['student']->last_name,
+                        $record['student']->first_name.' '.$record['student']->last_name,
                         $record['present'],
                         $record['absent'],
                         $record['late'],
-                        $record['percentage'] . '%'
+                        $record['percentage'].'%',
                     ];
                 }, 'attendance_report.csv');
             }
@@ -174,10 +176,12 @@ class ReportController extends Controller
         if ($request->has('export')) {
             if ($request->export == 'pdf') {
                 $pdf = Pdf::loadView('reports.hr_pdf', compact('staff'));
+
                 return $pdf->download('hr_report.pdf');
             } elseif ($request->export == 'excel') {
-                return $this->exportCsv($staff, ['Staff ID', 'Name', 'Department', 'Designation', 'Phone', 'Email', 'Status'], function($person) {
+                return $this->exportCsv($staff, ['Staff ID', 'Name', 'Department', 'Designation', 'Phone', 'Email', 'Status'], function ($person) {
                     $user = $person->teacher->user ?? null;
+
                     return [
                         $person->id,
                         $user ? $user->name : 'N/A',
@@ -185,7 +189,7 @@ class ReportController extends Controller
                         $person->designation,
                         $person->phone,
                         $user ? $user->email : 'N/A',
-                        ucfirst($person->status)
+                        ucfirst($person->status),
                     ];
                 }, 'hr_report.csv');
             }
@@ -197,20 +201,20 @@ class ReportController extends Controller
     private function exportCsv($collection, $headers, $callback, $filename)
     {
         $headers_response = [
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
+            'Content-type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=$filename",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
         ];
 
         $columns = $headers;
 
-        $callback_func = function() use ($collection, $columns, $callback) {
+        $callback_func = function () use ($collection, $columns, $callback) {
             $file = fopen('php://output', 'w');
             fputcsv($file, $columns);
 
-            foreach($collection as $item) {
+            foreach ($collection as $item) {
                 fputcsv($file, $callback($item));
             }
             fclose($file);

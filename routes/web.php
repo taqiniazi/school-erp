@@ -2,17 +2,21 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Billing\SubscriptionSelectionController;
-use App\Http\Controllers\ParentDashboardController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ExamTypeController;
 use App\Http\Controllers\GuardianController;
+use App\Http\Controllers\LessonPlanController;
+use App\Http\Controllers\LibraryCategoryController;
+use App\Http\Controllers\LibraryReportController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\ParentDashboardController;
+use App\Http\Controllers\PayslipController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\SectionController;
-use App\Http\Controllers\LessonPlanController;
-use App\Http\Controllers\StudentDocumentController;
-use App\Http\Controllers\StudentPromotionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentDashboardController;
+use App\Http\Controllers\StudentDocumentController;
+use App\Http\Controllers\StudentPromotionController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherDashboardController;
 use App\Http\Controllers\TimetableController;
@@ -66,11 +70,11 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         Route::get('payment/history', [\App\Http\Controllers\Billing\PaymentController::class, 'history'])->name('payment.history');
         Route::get('payment/{plan}', [\App\Http\Controllers\Billing\PaymentController::class, 'create'])->name('payment.create');
         Route::post('payment/{plan}', [\App\Http\Controllers\Billing\PaymentController::class, 'store'])->name('payment.store');
-        
+
         // Online Payment Routes
         Route::post('payment/{plan}/stripe', [\App\Http\Controllers\Billing\PaymentController::class, 'payWithStripe'])->name('payment.stripe');
         Route::post('payment/{plan}/paypal', [\App\Http\Controllers\Billing\PaymentController::class, 'payWithPaypal'])->name('payment.paypal');
-        
+
         // Payment Callbacks (User Redirects)
         Route::get('payment/stripe/callback', [\App\Http\Controllers\Billing\PaymentController::class, 'stripeCallback'])->name('payment.stripe.callback');
         Route::get('payment/paypal/callback', [\App\Http\Controllers\Billing\PaymentController::class, 'paypalCallback'])->name('payment.paypal.callback');
@@ -96,9 +100,9 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         Route::get('dashboard', [\App\Http\Controllers\SuperAdmin\DashboardController::class, 'index'])->name('dashboard');
         Route::get('payments', [\App\Http\Controllers\SuperAdmin\PaymentVerificationController::class, 'index'])->name('payments.index');
         Route::put('payments/{payment}', [\App\Http\Controllers\SuperAdmin\PaymentVerificationController::class, 'update'])->name('payments.update');
-        
+
         Route::resource('plans', \App\Http\Controllers\SuperAdmin\PlanController::class);
-        
+
         // Payment Methods Management
         Route::resource('payment-methods', \App\Http\Controllers\SuperAdmin\PaymentMethodController::class);
 
@@ -118,7 +122,7 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
     Route::middleware(['role:Teacher'])->group(function () {
         Route::get('/teacher/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
         Route::get('/teacher/my-attendance', [App\Http\Controllers\TeacherAttendanceController::class, 'myAttendance'])->name('teacher.my-attendance');
-        
+
         // Teacher Leave Management
         Route::prefix('hr/leave')->name('hr.leave.')->group(function () {
             Route::get('my', [App\Http\Controllers\LeaveRequestController::class, 'myIndex'])->name('my');
@@ -146,6 +150,7 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
     Route::middleware(['role:Super Admin|School Admin|Teacher'])->group(function () {
         Route::get('attendance', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance.index');
         Route::get('attendance/create', [App\Http\Controllers\AttendanceController::class, 'create'])->name('attendance.create');
+        Route::get('attendance/report', [App\Http\Controllers\AttendanceController::class, 'report'])->name('attendance.report');
         Route::post('attendance', [App\Http\Controllers\AttendanceController::class, 'store'])->name('attendance.store');
     });
 
@@ -191,31 +196,31 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
 
             if ($q !== '') {
                 $query->where(function ($w) use ($q) {
-                    $w->where('admission_number', 'like', '%' . $q . '%')
-                        ->orWhere('first_name', 'like', '%' . $q . '%')
-                        ->orWhere('last_name', 'like', '%' . $q . '%')
-                        ->orWhere('email', 'like', '%' . $q . '%')
-                        ->orWhere('phone', 'like', '%' . $q . '%');
+                    $w->where('admission_number', 'like', '%'.$q.'%')
+                        ->orWhere('first_name', 'like', '%'.$q.'%')
+                        ->orWhere('last_name', 'like', '%'.$q.'%')
+                        ->orWhere('email', 'like', '%'.$q.'%')
+                        ->orWhere('phone', 'like', '%'.$q.'%');
                 });
             }
 
-            if (!empty($schoolClassId)) {
+            if (! empty($schoolClassId)) {
                 $query->where('school_class_id', $schoolClassId);
             }
 
-            if (!empty($sectionId)) {
+            if (! empty($sectionId)) {
                 $query->where('section_id', $sectionId);
             }
 
-            if (!empty($status)) {
+            if (! empty($status)) {
                 $query->where('status', $status);
             }
 
-            if (!empty($from)) {
+            if (! empty($from)) {
                 $query->whereDate('admission_date', '>=', $from);
             }
 
-            if (!empty($to)) {
+            if (! empty($to)) {
                 $query->whereDate('admission_date', '<=', $to);
             }
 
@@ -223,7 +228,7 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
 
             $classes = \App\Models\SchoolClass::orderBy('numeric_value')->orderBy('name')->get();
             $sections = [];
-            if (!empty($schoolClassId)) {
+            if (! empty($schoolClassId)) {
                 $sections = \App\Models\Section::where('school_class_id', $schoolClassId)->orderBy('name')->get();
             }
 
@@ -268,17 +273,18 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         Route::put('lesson-plans/{lessonPlan}', [LessonPlanController::class, 'update'])->name('lesson-plans.update');
         Route::delete('lesson-plans/{lessonPlan}', [LessonPlanController::class, 'destroy'])->name('lesson-plans.destroy');
 
-        Route::get('exam-types', function () {
-            return view('exam-types.index');
-        })->name('exam-types.index');
+        Route::resource('exam-types', ExamTypeController::class)->except(['show']);
 
         Route::get('discounts', function () {
             return view('discounts.index');
         })->name('discounts.index');
 
-        Route::get('payslips', function () {
-            return view('payslips.index');
-        })->name('payslips.index');
+        Route::get('payslips', [PayslipController::class, 'index'])->name('payslips.index');
+        Route::get('payslips/create', [PayslipController::class, 'create'])->name('payslips.create');
+        Route::post('payslips', [PayslipController::class, 'store'])->name('payslips.store');
+        Route::get('payslips/{payslip}', [PayslipController::class, 'show'])->name('payslips.show');
+        Route::get('payslips/{payslip}/print', [PayslipController::class, 'print'])->name('payslips.print');
+        Route::delete('payslips/{payslip}', [PayslipController::class, 'destroy'])->name('payslips.destroy');
 
         Route::prefix('settings')->name('settings.')->group(function () {
             Route::get('general', function () {
@@ -299,7 +305,7 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
 
         // Teachers (Staff)
         Route::resource('teachers', App\Http\Controllers\TeacherController::class);
-        
+
         // Students
         Route::resource('students', StudentController::class);
 
@@ -321,9 +327,7 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
             Route::resource('issues', App\Http\Controllers\InventoryIssueController::class);
             Route::resource('returns', App\Http\Controllers\InventoryReturnController::class);
             Route::get('alerts/low-stock', [App\Http\Controllers\InventoryAlertController::class, 'lowStock'])->name('alerts.low_stock');
-            Route::get('suppliers', function () {
-                return view('inventory.suppliers.index');
-            })->name('suppliers.index');
+            Route::resource('suppliers', App\Http\Controllers\InventorySupplierController::class)->except(['show']);
         });
 
         // Library
@@ -331,12 +335,8 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
             Route::resource('books', App\Http\Controllers\LibraryBookController::class);
             Route::resource('loans', App\Http\Controllers\LibraryLoanController::class);
             Route::post('loans/{libraryLoan}/return', [\App\Http\Controllers\LibraryLoanController::class, 'returnBook'])->name('loans.return');
-            Route::get('categories', function () {
-                return view('library.categories.index');
-            })->name('categories.index');
-            Route::get('reports', function () {
-                return view('library.reports.index');
-            })->name('reports.index');
+            Route::resource('categories', LibraryCategoryController::class)->except(['show']);
+            Route::get('reports', [LibraryReportController::class, 'index'])->name('reports.index');
         });
 
         // Examinations
@@ -367,9 +367,10 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
             Route::resource('vehicles', App\Http\Controllers\VehicleController::class);
             Route::resource('routes', App\Http\Controllers\TransportRouteController::class);
             Route::resource('drivers', App\Http\Controllers\DriverController::class);
-            Route::get('student-transport', function () {
-                return view('transport.student-transport.index');
-            })->name('student-transport.index');
+            Route::get('student-transport', [App\Http\Controllers\StudentTransportController::class, 'index'])->name('student-transport.index');
+            Route::get('student-transport/create', [App\Http\Controllers\StudentTransportController::class, 'create'])->name('student-transport.create');
+            Route::post('student-transport', [App\Http\Controllers\StudentTransportController::class, 'store'])->name('student-transport.store');
+            Route::delete('student-transport/{studentTransport}', [App\Http\Controllers\StudentTransportController::class, 'destroy'])->name('student-transport.destroy');
         });
         Route::resource('fee-types', App\Http\Controllers\FeeTypeController::class);
         Route::resource('fee-structures', App\Http\Controllers\FeeStructureController::class);
@@ -400,7 +401,7 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         // HR
         Route::prefix('hr')->name('hr.')->group(function () {
             Route::resource('staff', App\Http\Controllers\StaffProfileController::class);
-            
+
             // Leave Management (Admin)
             Route::post('leave/{leaveRequest}/approve', [App\Http\Controllers\LeaveRequestController::class, 'approve'])->name('leave.approve');
             Route::post('leave/{leaveRequest}/reject', [App\Http\Controllers\LeaveRequestController::class, 'reject'])->name('leave.reject');
@@ -417,11 +418,13 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
                 $user = auth()->user();
                 $notifications = $user->notifications()->latest()->get();
                 $unreadCount = $user->unreadNotifications()->count();
+
                 return view('communication.notifications.index', compact('notifications', 'unreadCount'));
             })->name('notifications.index');
-            Route::get('email-sms', function () {
-                return view('communication.email-sms.index');
-            })->name('email-sms.index');
+            Route::get('email-sms', [App\Http\Controllers\EmailSmsController::class, 'index'])->name('email-sms.index');
+            Route::get('email-sms/create', [App\Http\Controllers\EmailSmsController::class, 'create'])->name('email-sms.create');
+            Route::post('email-sms', [App\Http\Controllers\EmailSmsController::class, 'store'])->name('email-sms.store');
+            Route::get('email-sms/{emailSmsLog}', [App\Http\Controllers\EmailSmsController::class, 'show'])->name('email-sms.show');
         });
     });
 
@@ -429,7 +432,7 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        
+
         Route::get('library/my', [App\Http\Controllers\MyLibraryController::class, 'index'])->name('library.my');
     });
 });

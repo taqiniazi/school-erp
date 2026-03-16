@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (!Schema::hasTable('staff_salaries')) {
+        if (! Schema::hasTable('staff_salaries')) {
             Schema::create('staff_salaries', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('teacher_id');
@@ -29,4 +29,3 @@ return new class extends Migration
         Schema::dropIfExists('staff_salaries');
     }
 };
-

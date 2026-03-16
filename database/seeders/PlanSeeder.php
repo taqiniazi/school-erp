@@ -29,8 +29,8 @@ class PlanSeeder extends Seeder
                     '1 Campus',
                     '10 GB Storage',
                     'Core Modules (Academic, Attendance, Fees)',
-                    'Email Support'
-                ]
+                    'Email Support',
+                ],
             ],
             [
                 'name' => 'Premium',
@@ -48,8 +48,8 @@ class PlanSeeder extends Seeder
                     'Up to 3 Campuses',
                     '50 GB Storage',
                     'All Standard Modules + HR, Payroll, Library, Transport',
-                    'Priority Email Support'
-                ]
+                    'Priority Email Support',
+                ],
             ],
             [
                 'name' => 'Enterprise',
@@ -69,8 +69,8 @@ class PlanSeeder extends Seeder
                     'All Modules Included',
                     'Dedicated Account Manager',
                     '24/7 Phone Support',
-                    'Custom Integrations'
-                ]
+                    'Custom Integrations',
+                ],
             ],
             // Yearly Plans (10% discount approx)
             [
@@ -90,8 +90,8 @@ class PlanSeeder extends Seeder
                     '10 GB Storage',
                     'Core Modules (Academic, Attendance, Fees)',
                     'Email Support',
-                    '2 Months Free'
-                ]
+                    '2 Months Free',
+                ],
             ],
             [
                 'name' => 'Premium Yearly',
@@ -110,8 +110,8 @@ class PlanSeeder extends Seeder
                     '50 GB Storage',
                     'All Standard Modules + HR, Payroll, Library, Transport',
                     'Priority Email Support',
-                    '2 Months Free'
-                ]
+                    '2 Months Free',
+                ],
             ],
             [
                 'name' => 'Enterprise Yearly',
@@ -132,8 +132,8 @@ class PlanSeeder extends Seeder
                     'Dedicated Account Manager',
                     '24/7 Phone Support',
                     'Custom Integrations',
-                    '2 Months Free'
-                ]
+                    '2 Months Free',
+                ],
             ],
         ];
 

@@ -56,7 +56,7 @@ class AddSchoolIdToTables extends Migration
         foreach ($tables as $table) {
             if (Schema::hasTable($table)) {
                 // Check if column exists first to avoid errors on re-run
-                if (!Schema::hasColumn($table, 'school_id')) {
+                if (! Schema::hasColumn($table, 'school_id')) {
                     Schema::table($table, function (Blueprint $table) {
                         $table->foreignId('school_id')->nullable()->after('id')->constrained('schools')->onDelete('cascade');
                     });

@@ -10,9 +10,9 @@ use App\Models\SubscriptionPayment;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Stripe\Stripe;
-use Stripe\Checkout\Session as StripeSession;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
+use Stripe\Checkout\Session as StripeSession;
+use Stripe\Stripe;
 
 class PaymentController extends Controller
 {
@@ -46,7 +46,7 @@ class PaymentController extends Controller
 
         $school = $request->user()->school;
         $paymentMethod = PaymentMethod::findOrFail($request->payment_method_id);
-        
+
         // Handle File Upload
         $path = $request->file('proof_file')->store('payment_proofs', 'public');
 
@@ -86,14 +86,14 @@ class PaymentController extends Controller
     {
         return view('billing.pending');
     }
-    
+
     public function history()
     {
         $payments = SubscriptionPayment::with('plan')
             ->where('school_id', auth()->user()->school_id)
             ->latest()
             ->get();
-            
+
         return view('billing.history', compact('payments'));
     }
 
@@ -110,7 +110,7 @@ class PaymentController extends Controller
                 'price_data' => [
                     'currency' => 'pkr',
                     'product_data' => [
-                        'name' => $plan->name . ' Plan (' . ucfirst($plan->billing_cycle) . ')',
+                        'name' => $plan->name.' Plan ('.ucfirst($plan->billing_cycle).')',
                     ],
                     'unit_amount' => $plan->price * 100, // Amount in cents
                 ],
@@ -120,7 +120,7 @@ class PaymentController extends Controller
                 'payment_id' => $payment->id,
             ],
             'mode' => 'payment',
-            'success_url' => route('billing.payment.stripe.callback') . '?session_id={CHECKOUT_SESSION_ID}&payment_id=' . $payment->id,
+            'success_url' => route('billing.payment.stripe.callback').'?session_id={CHECKOUT_SESSION_ID}&payment_id='.$payment->id,
             'cancel_url' => route('billing.payment.create', $plan->id),
         ]);
 
@@ -132,7 +132,7 @@ class PaymentController extends Controller
         $sessionId = $request->get('session_id');
         $paymentId = $request->get('payment_id');
 
-        if (!$sessionId || !$paymentId) {
+        if (! $sessionId || ! $paymentId) {
             abort(404);
         }
 
@@ -147,6 +147,7 @@ class PaymentController extends Controller
 
         if ($session->payment_status === 'paid') {
             $this->paymentService->approvePayment($payment, "Stripe Session ID: $sessionId");
+
             return redirect()->route('billing.payment.history')->with('success', 'Payment successful! Invoice generated.');
         }
 
@@ -163,20 +164,20 @@ class PaymentController extends Controller
         $payment = $this->createPendingPayment($plan, 'PayPal');
 
         $response = $provider->createOrder([
-            "intent" => "CAPTURE",
-            "application_context" => [
-                "return_url" => route('billing.payment.paypal.callback', ['payment_id' => $payment->id]),
-                "cancel_url" => route('billing.payment.paypal.cancel'),
+            'intent' => 'CAPTURE',
+            'application_context' => [
+                'return_url' => route('billing.payment.paypal.callback', ['payment_id' => $payment->id]),
+                'cancel_url' => route('billing.payment.paypal.cancel'),
             ],
-            "purchase_units" => [
+            'purchase_units' => [
                 0 => [
-                    "custom_id" => $payment->id, // Pass payment ID for webhook tracking
-                    "amount" => [
-                        "currency_code" => "USD", // PayPal might not support PKR directly in sandbox, adjust as needed
-                        "value" => number_format($plan->price / 280, 2, '.', '') // Rough conversion if needed, or use USD plan price
-                    ]
-                ]
-            ]
+                    'custom_id' => $payment->id, // Pass payment ID for webhook tracking
+                    'amount' => [
+                        'currency_code' => 'USD', // PayPal might not support PKR directly in sandbox, adjust as needed
+                        'value' => number_format($plan->price / 280, 2, '.', ''), // Rough conversion if needed, or use USD plan price
+                    ],
+                ],
+            ],
         ]);
 
         if (isset($response['id']) && $response['status'] == 'CREATED') {
@@ -195,13 +196,14 @@ class PaymentController extends Controller
         $provider = new PayPalClient;
         $provider->setApiCredentials(config('paypal'));
         $provider->getAccessToken();
-        
+
         $response = $provider->capturePaymentOrder($request['token']);
         $paymentId = $request->get('payment_id');
         $payment = SubscriptionPayment::findOrFail($paymentId);
 
         if (isset($response['status']) && $response['status'] == 'COMPLETED') {
-            $this->paymentService->approvePayment($payment, "PayPal Order ID: " . $response['id']);
+            $this->paymentService->approvePayment($payment, 'PayPal Order ID: '.$response['id']);
+
             return redirect()->route('billing.payment.history')->with('success', 'Payment successful! Invoice generated.');
         }
 
@@ -223,10 +225,10 @@ class PaymentController extends Controller
             $event = \Stripe\Webhook::constructEvent(
                 $payload, $sig_header, $endpoint_secret
             );
-        } catch(\UnexpectedValueException $e) {
+        } catch (\UnexpectedValueException $e) {
             // Invalid payload
             return response()->json(['error' => 'Invalid payload'], 400);
-        } catch(\Stripe\Exception\SignatureVerificationException $e) {
+        } catch (\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
             return response()->json(['error' => 'Invalid signature'], 400);
         }
@@ -234,13 +236,13 @@ class PaymentController extends Controller
         // Handle the event
         if ($event->type == 'checkout.session.completed') {
             $session = $event->data->object;
-            
+
             $paymentId = $session->metadata->payment_id ?? null;
-            
+
             if ($paymentId) {
                 $payment = SubscriptionPayment::find($paymentId);
                 if ($payment) {
-                    $this->paymentService->approvePayment($payment, "Stripe Webhook: " . $session->id);
+                    $this->paymentService->approvePayment($payment, 'Stripe Webhook: '.$session->id);
                 }
             }
         }
@@ -253,31 +255,31 @@ class PaymentController extends Controller
         // For PayPal Webhooks, we should verify the signature.
         // This usually requires headers like PAYPAL-TRANSMISSION-ID, PAYPAL-TRANSMISSION-TIME, etc.
         // and verifying against the webhook ID and certificate URL.
-        
+
         // Since we are using srmklive/laravel-paypal, let's see if we can use it or just do a basic check for now.
         // A full implementation requires matching the webhook ID from config.
-        
+
         $payload = $request->all();
-        
+
         if (isset($payload['event_type']) && $payload['event_type'] == 'PAYMENT.CAPTURE.COMPLETED') {
             $resource = $payload['resource'];
-            
+
             // In the createOrder (payWithPaypal), we set the return URL with payment_id.
             // But the webhook payload doesn't necessarily carry that custom parameter in the top level.
             // However, the 'custom_id' field in the purchase_unit can be used to store payment_id.
-            // Let's check if we set custom_id in payWithPaypal. 
+            // Let's check if we set custom_id in payWithPaypal.
             // We didn't. We should update payWithPaypal to include 'custom_id' => $payment->id.
-            
+
             $customId = $resource['custom_id'] ?? null;
-            
+
             if ($customId) {
                 $payment = SubscriptionPayment::find($customId);
                 if ($payment && $payment->status !== 'approved') {
-                    $this->paymentService->approvePayment($payment, "PayPal Webhook: " . $payload['id']);
+                    $this->paymentService->approvePayment($payment, 'PayPal Webhook: '.$payload['id']);
                 }
             }
         }
-        
+
         return response()->json(['status' => 'success']);
     }
 
@@ -289,7 +291,7 @@ class PaymentController extends Controller
             // Cancel any previous pending subscriptions
             Subscription::where('school_id', $school->id)
                 ->where('status', 'pending_approval')
-                ->delete(); 
+                ->delete();
 
             // Create new pending subscription
             $subscription = Subscription::create([

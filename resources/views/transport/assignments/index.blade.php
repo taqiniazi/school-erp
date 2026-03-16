@@ -1,8 +1,8 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h1 class="h3 fw-bold text-dark mb-0">{{ __('Student Transport Assignments') }}</h1>
-            <a href="{{ route('transport.assignments.create') }}" class="btn btn-primary">New Assignment</a>
+            <a href="{{ route('transport.student-transport.create') }}" class="btn btn-primary">New Assignment</a>
         </div>
     </x-slot>
     <div class="py-5">
@@ -34,7 +34,7 @@
                                         <td class="p-3 align-middle">{{ optional($a->start_date)->format('Y-m-d') }}</td>
                                         <td class="p-3 align-middle">{{ ucfirst($a->status) }}</td>
                                         <td class="p-3 align-middle text-end">
-                                            <form action="{{ route('transport.assignments.destroy', $a) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('transport.student-transport.destroy', $a) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this assignment?')">Remove</button>
@@ -50,6 +50,5 @@
         </div>
     </div>
 </x-app-layout>
-
 
 

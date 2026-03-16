@@ -2,21 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\RecordsActivity;
-use App\Traits\BelongsToSchool;
 
 class Mark extends Model
 {
-    use HasFactory, RecordsActivity, BelongsToSchool;
+    use BelongsToSchool, HasFactory, RecordsActivity;
 
     protected $fillable = [
         'student_id',
         'exam_schedule_id',
         'marks_obtained',
         'remarks',
-        'user_id'
+        'user_id',
     ];
 
     public function student()

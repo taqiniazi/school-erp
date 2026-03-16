@@ -50,10 +50,10 @@ class AccountingReportController extends Controller
             ->get()
             ->map(function ($row) {
                 $row->net = $row->income - $row->expense;
+
                 return $row;
             });
 
         return view('accounting.reports.profit_loss', compact('years', 'selectedYear', 'totalIncome', 'totalExpense', 'net', 'monthly'));
     }
 }
-

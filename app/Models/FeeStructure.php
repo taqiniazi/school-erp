@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\BelongsToSchool;
 
 class FeeStructure extends Model
 {
-    use HasFactory, BelongsToSchool;
+    use BelongsToSchool, HasFactory;
 
     protected $fillable = [
-        'school_class_id', 
-        'fee_type_id', 
-        'amount', 
-        'academic_year', 
-        'frequency'
+        'school_class_id',
+        'fee_type_id',
+        'amount',
+        'academic_year',
+        'frequency',
     ];
 
     public function schoolClass()

@@ -48,10 +48,10 @@ return new class extends Migration
         Schema::table('events', function (Blueprint $table) {
             $table->index('start_date');
         });
-        
+
         // Attendances
         Schema::table('attendances', function (Blueprint $table) {
-             $table->index('status');
+            $table->index('status');
         });
     }
 
@@ -90,9 +90,9 @@ return new class extends Migration
         Schema::table('events', function (Blueprint $table) {
             $table->dropIndex(['start_date']);
         });
-        
+
         Schema::table('attendances', function (Blueprint $table) {
-             $table->dropIndex(['status']);
+            $table->dropIndex(['status']);
         });
     }
 };

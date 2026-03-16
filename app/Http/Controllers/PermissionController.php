@@ -19,7 +19,7 @@ class PermissionController extends Controller
 
         $query = Permission::query()->where('guard_name', 'web');
         if ($q !== '') {
-            $query->where('name', 'like', '%' . $q . '%');
+            $query->where('name', 'like', '%'.$q.'%');
         }
 
         $permissions = $query->orderBy('name')->get();
@@ -79,6 +79,7 @@ class PermissionController extends Controller
     public function destroy(Permission $permission)
     {
         $permission->delete();
+
         return redirect()->route('permissions.index')->with('success', 'Permission deleted successfully.');
     }
 }

@@ -14,6 +14,7 @@ class ExamController extends Controller
     public function index()
     {
         $exams = Exam::orderBy('start_date', 'desc')->get();
+
         return view('exams.index', compact('exams'));
     }
 
@@ -58,6 +59,7 @@ class ExamController extends Controller
     public function destroy(Exam $exam)
     {
         $exam->delete();
+
         return redirect()->route('exams.index')->with('success', 'Exam deleted successfully.');
     }
 
@@ -66,6 +68,7 @@ class ExamController extends Controller
         $exam->load('schedules.schoolClass', 'schedules.subject');
         $classes = SchoolClass::all();
         $subjects = Subject::all();
+
         return view('exams.schedules', compact('exam', 'classes', 'subjects'));
     }
 
@@ -83,8 +86,10 @@ class ExamController extends Controller
                     function ($attribute, $value, $fail) use ($request) {
                         $parts = explode('.', $attribute);
                         $index = $parts[1] ?? null;
-                        if ($index === null) return;
-                        $start = data_get($request->input('schedules'), $index . '.start_time');
+                        if ($index === null) {
+                            return;
+                        }
+                        $start = data_get($request->input('schedules'), $index.'.start_time');
                         if ($start && $value && strtotime($value) <= strtotime($start)) {
                             $fail('End time must be after start time.');
                         }
@@ -98,8 +103,10 @@ class ExamController extends Controller
                     function ($attribute, $value, $fail) use ($request) {
                         $parts = explode('.', $attribute);
                         $index = $parts[1] ?? null;
-                        if ($index === null) return;
-                        $max = data_get($request->input('schedules'), $index . '.max_marks');
+                        if ($index === null) {
+                            return;
+                        }
+                        $max = data_get($request->input('schedules'), $index.'.max_marks');
                         if (is_numeric($max) && is_numeric($value) && (int) $value > (int) $max) {
                             $fail('Pass marks must be less than or equal to max marks.');
                         }
@@ -111,7 +118,7 @@ class ExamController extends Controller
 
             $pairCounts = [];
             foreach ($rows as $row) {
-                $key = $row['school_class_id'] . ':' . $row['subject_id'];
+                $key = $row['school_class_id'].':'.$row['subject_id'];
                 $pairCounts[$key] = ($pairCounts[$key] ?? 0) + 1;
             }
             $duplicateKey = collect($pairCounts)->first(fn ($count) => $count > 1);
@@ -125,11 +132,11 @@ class ExamController extends Controller
                 ->whereIn('school_class_id', $classIds)
                 ->whereIn('subject_id', $subjectIds)
                 ->get(['school_class_id', 'subject_id'])
-                ->map(fn ($s) => $s->school_class_id . ':' . $s->subject_id)
+                ->map(fn ($s) => $s->school_class_id.':'.$s->subject_id)
                 ->flip();
 
             foreach ($rows as $row) {
-                $key = $row['school_class_id'] . ':' . $row['subject_id'];
+                $key = $row['school_class_id'].':'.$row['subject_id'];
                 if ($existingPairs->has($key)) {
                     return redirect()->back()->with('error', 'Schedule for one or more class/subject pairs already exists.');
                 }
@@ -189,18 +196,21 @@ class ExamController extends Controller
     public function deleteSchedule(ExamSchedule $schedule)
     {
         $schedule->delete();
+
         return redirect()->back()->with('success', 'Schedule removed successfully.');
     }
-    
+
     public function publish(Exam $exam)
     {
         $exam->update(['is_published' => true]);
+
         return redirect()->back()->with('success', 'Exam results published successfully.');
     }
-    
+
     public function unpublish(Exam $exam)
     {
         $exam->update(['is_published' => false]);
+
         return redirect()->back()->with('success', 'Exam results unpublished successfully.');
     }
 }

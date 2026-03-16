@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\SchoolClass;
 use App\Models\Section;
+use Illuminate\Database\Seeder;
 
 class SchoolClassSeeder extends Seeder
 {
@@ -27,7 +26,7 @@ class SchoolClassSeeder extends Seeder
                 ['name' => $classData['name']],
                 $classData
             );
-            
+
             Section::firstOrCreate(['name' => 'A', 'school_class_id' => $class->id]);
             Section::firstOrCreate(['name' => 'B', 'school_class_id' => $class->id]);
         }

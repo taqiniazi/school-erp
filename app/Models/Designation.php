@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Designation extends Model
 {
-    use HasFactory, BelongsToSchool;
+    use BelongsToSchool, HasFactory;
 
     protected $fillable = [
         'name',
@@ -20,4 +20,3 @@ class Designation extends Model
         'is_active' => 'boolean',
     ];
 }
-

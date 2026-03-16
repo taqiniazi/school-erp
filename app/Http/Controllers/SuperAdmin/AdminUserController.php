@@ -94,11 +94,12 @@ class AdminUserController extends Controller
     public function edit(User $adminUser)
     {
         // Ensure the user is actually a School Admin
-        if (!$adminUser->hasRole('School Admin')) {
-             return redirect()->route('super-admin.admin-users.index')->with('error', 'User is not a School Admin.');
+        if (! $adminUser->hasRole('School Admin')) {
+            return redirect()->route('super-admin.admin-users.index')->with('error', 'User is not a School Admin.');
         }
 
         $adminUser->load('school');
+
         return view('super-admin.admin-users.edit', compact('adminUser'));
     }
 
@@ -133,7 +134,7 @@ class AdminUserController extends Controller
                 'phone_number' => $data['phone_number'],
             ];
 
-            if (!empty($data['password'])) {
+            if (! empty($data['password'])) {
                 $userData['password'] = Hash::make($data['password']);
             }
 
@@ -153,14 +154,14 @@ class AdminUserController extends Controller
         DB::transaction(function () use ($adminUser) {
             // Delete School (and cascading delete users/students etc if set up, otherwise just soft delete or keep)
             // For now, we'll just delete the user and their school.
-            
+
             $school = $adminUser->school;
-            
+
             $adminUser->delete();
-            
+
             if ($school) {
                 // Ideally, we should soft delete or deactivate the school instead of hard delete to preserve data integrity
-                // But per requirement "delete", we will delete the school record. 
+                // But per requirement "delete", we will delete the school record.
                 // In a real app, this should be a soft delete.
                 $school->delete();
             }

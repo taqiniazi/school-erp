@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\BelongsToSchool;
 
 class LibraryLoan extends Model
 {
-    use HasFactory, BelongsToSchool;
+    use BelongsToSchool, HasFactory;
 
     protected $fillable = [
         'library_book_id',
@@ -47,12 +47,12 @@ class LibraryLoan extends Model
         if ($today->gt($this->due_date)) {
             return $today->diffInDays($this->due_date);
         }
+
         return 0;
     }
 
     public function currentAccruedFine(): float
     {
-        return $this->currentOverdueDays() * (float)$this->per_day_fine;
+        return $this->currentOverdueDays() * (float) $this->per_day_fine;
     }
 }
-

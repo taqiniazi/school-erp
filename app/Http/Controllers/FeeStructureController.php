@@ -6,7 +6,6 @@ use App\Models\FeeStructure;
 use App\Models\FeeType;
 use App\Models\SchoolClass;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class FeeStructureController extends Controller
 {
@@ -19,6 +18,7 @@ class FeeStructureController extends Controller
             ->orderBy('school_class_id')
             ->orderBy('fee_type_id')
             ->get();
+
         return view('fees.structures.index', compact('feeStructures'));
     }
 
@@ -29,6 +29,7 @@ class FeeStructureController extends Controller
     {
         $classes = SchoolClass::orderBy('numeric_value')->get();
         $feeTypes = FeeType::all();
+
         return view('fees.structures.create', compact('classes', 'feeTypes'));
     }
 
@@ -67,6 +68,7 @@ class FeeStructureController extends Controller
     {
         $classes = SchoolClass::orderBy('numeric_value')->get();
         $feeTypes = FeeType::all();
+
         return view('fees.structures.edit', compact('feeStructure', 'classes', 'feeTypes'));
     }
 
@@ -105,6 +107,7 @@ class FeeStructureController extends Controller
     public function destroy(FeeStructure $feeStructure)
     {
         $feeStructure->delete();
+
         return redirect()->route('fee-structures.index')->with('success', 'Fee Structure deleted successfully.');
     }
 }

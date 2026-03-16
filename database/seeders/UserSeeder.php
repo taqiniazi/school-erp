@@ -3,14 +3,15 @@
 namespace Database\Seeders;
 
 use App\Models\Campus;
+use App\Models\SalaryStructure;
 use App\Models\School;
+use App\Services\SchoolContext;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\Student;
 use App\Models\SuperAdmin;
 use App\Models\Teacher;
 use App\Models\User;
-use App\Models\SalaryStructure;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -24,12 +25,12 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $school = School::first(); // Assuming school is already created by DatabaseSeeder
-        
-        if (!$school) {
+
+        if (! $school) {
             $school = School::create([
                 'name' => 'Hawak School',
                 'slug' => 'hawak-school',
-                'is_active' => true
+                'is_active' => true,
             ]);
         }
 
@@ -73,8 +74,10 @@ class UserSeeder extends Seeder
             ->get()
             ->groupBy('school_class_id');
 
-        // Super Admin
-        $superAdmin = User::firstOrCreate(
+        // Super Admin (disable school context to avoid tenant scope and auto-assign)
+        $prevSchoolId = SchoolContext::getSchoolId();
+        SchoolContext::setSchoolId(null);
+        $superAdmin = User::withoutGlobalScope('school')->firstOrCreate(
             ['email' => 'superadmin@school.com'],
             [
                 'name' => 'Super Admin',
@@ -83,14 +86,12 @@ class UserSeeder extends Seeder
                 'school_id' => null,
             ]
         );
-        if ($superAdmin->school_id !== null) {
-            $superAdmin->school_id = null;
-            $superAdmin->save();
-        }
+        $superAdmin->school_id = null;
+        $superAdmin->save();
         $superAdmin->syncRoles('Super Admin');
         SuperAdmin::firstOrCreate(['user_id' => $superAdmin->id]);
 
-        $superAdmin2 = User::firstOrCreate(
+        $superAdmin2 = User::withoutGlobalScope('school')->firstOrCreate(
             ['email' => 'superadmin2@school.com'],
             [
                 'name' => 'Super Admin 2',
@@ -99,12 +100,14 @@ class UserSeeder extends Seeder
                 'school_id' => null,
             ]
         );
-        if ($superAdmin2->school_id !== null) {
-            $superAdmin2->school_id = null;
-            $superAdmin2->save();
-        }
+        $superAdmin2->school_id = null;
+        $superAdmin2->save();
         $superAdmin2->syncRoles('Super Admin');
         SuperAdmin::firstOrCreate(['user_id' => $superAdmin2->id]);
+        // Restore previous school context
+        if ($prevSchoolId !== null) {
+            SchoolContext::setSchoolId($prevSchoolId);
+        }
 
         // School Admin
         $admin = User::firstOrCreate(

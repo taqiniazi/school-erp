@@ -13,6 +13,7 @@ class SubscriptionRenewalReminder extends Notification implements ShouldQueue
     use Queueable;
 
     public $subscription;
+
     public $daysLeft;
 
     /**
@@ -42,12 +43,12 @@ class SubscriptionRenewalReminder extends Notification implements ShouldQueue
         $renewUrl = route('billing.choose-plan');
 
         return (new MailMessage)
-                    ->subject('Subscription Renewal Reminder - ' . $this->subscription->school->name)
-                    ->greeting('Hello ' . $notifiable->name . ',')
-                    ->line("Your school's subscription for the '{$this->subscription->plan->name}' plan will expire in {$this->daysLeft} days.")
-                    ->line('To ensure uninterrupted access to the School ERP, please renew your subscription.')
-                    ->action('Renew Subscription', $renewUrl)
-                    ->line('Thank you for choosing our School ERP!');
+            ->subject('Subscription Renewal Reminder - '.$this->subscription->school->name)
+            ->greeting('Hello '.$notifiable->name.',')
+            ->line("Your school's subscription for the '{$this->subscription->plan->name}' plan will expire in {$this->daysLeft} days.")
+            ->line('To ensure uninterrupted access to the School ERP, please renew your subscription.')
+            ->action('Renew Subscription', $renewUrl)
+            ->line('Thank you for choosing our School ERP!');
     }
 
     /**

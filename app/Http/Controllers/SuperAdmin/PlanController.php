@@ -11,12 +11,14 @@ class PlanController extends Controller
     public function index()
     {
         $plans = Plan::get();
+
         return view('super-admin.plans.index', compact('plans'));
     }
 
     public function create()
     {
         $modules = $this->getAvailableModules();
+
         return view('super-admin.plans.create', compact('modules'));
     }
 
@@ -37,16 +39,16 @@ class PlanController extends Controller
         ]);
 
         if ($request->filled('features')) {
-             // Split by newline and filter empty lines
-             $features = preg_split('/\r\n|\r|\n/', $request->features);
-             $data['features'] = array_values(array_filter(array_map('trim', $features)));
+            // Split by newline and filter empty lines
+            $features = preg_split('/\r\n|\r|\n/', $request->features);
+            $data['features'] = array_values(array_filter(array_map('trim', $features)));
         } else {
             $data['features'] = [];
         }
-        
+
         $data['allowed_modules'] = $request->input('allowed_modules', []);
         $data['is_active'] = $request->boolean('is_active');
-        
+
         Plan::create($data);
 
         return redirect()->route('super-admin.plans.index')->with('success', 'Plan created successfully.');
@@ -55,6 +57,7 @@ class PlanController extends Controller
     public function edit(Plan $plan)
     {
         $modules = $this->getAvailableModules();
+
         return view('super-admin.plans.edit', compact('plan', 'modules'));
     }
 
@@ -75,16 +78,16 @@ class PlanController extends Controller
         ]);
 
         if ($request->filled('features')) {
-             // Split by newline and filter empty lines
-             $features = preg_split('/\r\n|\r|\n/', $request->features);
-             $data['features'] = array_values(array_filter(array_map('trim', $features)));
+            // Split by newline and filter empty lines
+            $features = preg_split('/\r\n|\r|\n/', $request->features);
+            $data['features'] = array_values(array_filter(array_map('trim', $features)));
         } else {
             $data['features'] = [];
         }
 
         $data['allowed_modules'] = $request->input('allowed_modules', []);
         $data['is_active'] = $request->boolean('is_active');
-        
+
         $plan->update($data);
 
         return redirect()->route('super-admin.plans.index')->with('success', 'Plan updated successfully.');
@@ -92,9 +95,10 @@ class PlanController extends Controller
 
     public function destroy(Plan $plan)
     {
-        // Check for subscriptions before deleting? 
+        // Check for subscriptions before deleting?
         // For now, just delete (or soft delete if model supports it, but migration didn't show soft deletes)
         $plan->delete();
+
         return redirect()->route('super-admin.plans.index')->with('success', 'Plan deleted successfully.');
     }
 

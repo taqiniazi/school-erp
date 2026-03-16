@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\RecordsActivity;
-use App\Traits\BelongsToSchool;
 
 class StaffProfile extends Model
 {
-    use HasFactory, RecordsActivity, BelongsToSchool;
+    use BelongsToSchool, HasFactory, RecordsActivity;
 
     protected $fillable = [
         'teacher_id',
@@ -30,4 +30,3 @@ class StaffProfile extends Model
         return $this->belongsTo(Teacher::class);
     }
 }
-

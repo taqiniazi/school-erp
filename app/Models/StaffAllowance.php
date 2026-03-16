@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\BelongsToSchool;
 
 class StaffAllowance extends Model
 {
-    use HasFactory, BelongsToSchool;
+    use BelongsToSchool, HasFactory;
 
     protected $fillable = [
         'teacher_id',
@@ -29,4 +29,3 @@ class StaffAllowance extends Model
         return $this->belongsTo(Teacher::class);
     }
 }
-

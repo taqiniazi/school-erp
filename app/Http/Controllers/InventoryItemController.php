@@ -10,6 +10,7 @@ class InventoryItemController extends Controller
     public function index()
     {
         $items = InventoryItem::orderBy('name')->get();
+
         return view('inventory.items.index', compact('items'));
     }
 
@@ -51,7 +52,7 @@ class InventoryItemController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'sku' => ['required', 'string', 'max:255', 'unique:inventory_items,sku,' . $inventoryItem->id],
+            'sku' => ['required', 'string', 'max:255', 'unique:inventory_items,sku,'.$inventoryItem->id],
             'unit' => ['nullable', 'string', 'max:50'],
             'reorder_level' => ['required', 'integer', 'min:0'],
             'status' => ['required', 'in:active,inactive'],
@@ -71,6 +72,7 @@ class InventoryItemController extends Controller
     public function destroy(InventoryItem $inventoryItem)
     {
         $inventoryItem->delete();
+
         return redirect()->route('inventory.items.index')->with('success', 'Item deleted.');
     }
 }

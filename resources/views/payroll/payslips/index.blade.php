@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Payslips') }}
@@ -16,7 +16,7 @@
                                 <select name="teacher_id" class="form-select form-select-sm">
                                     <option value="">All</option>
                                     @foreach($teachers as $t)
-                                        <option value="{{ $t->id }}" {{ request('teacher_id') == $t->id ? 'selected' : '' }}>{{ $t->first_name }} {{ $t->last_name }}</option>
+                                        <option value="{{ $t->id }}" {{ request('teacher_id') == $t->id ? 'selected' : '' }}>{{ optional($t->user)->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -26,7 +26,7 @@
                             </div>
                             <button class="btn btn-sm btn-light border">Filter</button>
                         </form>
-                        <a href="{{ route('payroll.payslips.create') }}" class="btn btn-primary">Generate</a>
+                        <a href="{{ route('payslips.create') }}" class="btn btn-primary">Generate</a>
                     </div>
 
                     @if(session('success'))
@@ -50,12 +50,17 @@
                                 @foreach($payslips as $p)
                                     <tr>
                                         <td class="p-3 align-middle text-nowrap">{{ $p->payslip_no }}</td>
-                                        <td class="p-3 align-middle text-nowrap">{{ $p->teacher->first_name }} {{ $p->teacher->last_name }}</td>
+                                        <td class="p-3 align-middle text-nowrap">{{ optional(optional($p->teacher)->user)->name }}</td>
                                         <td class="p-3 align-middle text-nowrap">{{ date('Y-m', strtotime($p->pay_month)) }}</td>
                                         <td class="p-3 align-middle text-nowrap">{{ number_format($p->net_salary, 2) }}</td>
                                         <td class="p-3 align-middle text-nowrap text-end">
-                                            <a href="{{ route('payroll.payslips.show', $p) }}" class="btn btn-sm btn-outline-info me-2">View</a>
-                                            <a href="{{ route('payroll.payslips.print', $p) }}" class="btn btn-sm btn-outline-success">PDF</a>
+                                            <a href="{{ route('payslips.show', $p) }}" class="btn btn-sm btn-outline-info me-2">View</a>
+                                            <a href="{{ route('payslips.print', $p) }}" class="btn btn-sm btn-outline-success me-2">PDF</a>
+                                            <form action="{{ route('payslips.destroy', $p) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this payslip?')">Delete</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -67,7 +72,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 

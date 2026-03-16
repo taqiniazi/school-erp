@@ -12,6 +12,7 @@ class GradeController extends Controller
     public function index()
     {
         $grades = Grade::orderBy('max_percentage', 'desc')->get();
+
         return view('grades.index', compact('grades'));
     }
 
@@ -38,7 +39,7 @@ class GradeController extends Controller
                         if ($index === null) {
                             return;
                         }
-                        $min = data_get($request->input('grades'), $index . '.min_percentage');
+                        $min = data_get($request->input('grades'), $index.'.min_percentage');
                         if (is_numeric($min) && is_numeric($value) && (int) $value < (int) $min) {
                             $fail('The max percentage must be greater than or equal to the min percentage.');
                         }
@@ -83,7 +84,7 @@ class GradeController extends Controller
     public function update(Request $request, Grade $grade)
     {
         $request->validate([
-            'grade_name' => 'required|string|max:10|unique:grades,grade_name,' . $grade->id,
+            'grade_name' => 'required|string|max:10|unique:grades,grade_name,'.$grade->id,
             'min_percentage' => 'required|integer|min:0|max:100',
             'max_percentage' => 'required|integer|min:0|max:100|gte:min_percentage',
             'remark' => 'nullable|string|max:255',
@@ -97,6 +98,7 @@ class GradeController extends Controller
     public function destroy(Grade $grade)
     {
         $grade->delete();
+
         return redirect()->route('grades.index')->with('success', 'Grade deleted successfully.');
     }
 }

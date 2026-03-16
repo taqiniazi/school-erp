@@ -12,7 +12,7 @@ trait BelongsToSchool
     {
         static::addGlobalScope('school', function (Builder $builder) {
             if (SchoolContext::check()) {
-                $builder->where($builder->getModel()->getTable() . '.school_id', SchoolContext::getSchoolId());
+                $builder->where($builder->getModel()->getTable().'.school_id', SchoolContext::getSchoolId());
             }
         });
 

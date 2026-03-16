@@ -6,10 +6,10 @@ use App\Models\Attendance;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\Student;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class AttendanceController extends Controller
 {
@@ -19,17 +19,17 @@ class AttendanceController extends Controller
     public function index(Request $request)
     {
         $classes = SchoolClass::all();
-        
+
         $selectedClass = $request->input('school_class_id');
         $selectedSection = $request->input('section_id');
         $date = $request->input('date', date('Y-m-d'));
-        
+
         $attendances = [];
         $sections = [];
-        
+
         if ($selectedClass) {
             $sections = Section::where('school_class_id', $selectedClass)->get();
-            
+
             if ($selectedSection) {
                 $attendances = Attendance::with('student')
                     ->where('school_class_id', $selectedClass)
@@ -38,7 +38,7 @@ class AttendanceController extends Controller
                     ->get();
             }
         }
-        
+
         return view('attendance.index', compact('classes', 'sections', 'attendances', 'selectedClass', 'selectedSection', 'date'));
     }
 
@@ -50,18 +50,18 @@ class AttendanceController extends Controller
         $classes = Cache::remember('all_classes', 3600, function () {
             return SchoolClass::all();
         });
-        
+
         $selectedClass = $request->input('school_class_id');
         $selectedSection = $request->input('section_id');
         $date = $request->input('date', date('Y-m-d'));
-        
+
         $students = [];
         $sections = [];
         $existingAttendance = [];
-        
+
         if ($selectedClass) {
             $sections = Section::where('school_class_id', $selectedClass)->get();
-            
+
             if ($selectedSection) {
                 $students = Student::where('school_class_id', $selectedClass)
                     ->where('section_id', $selectedSection)
@@ -69,7 +69,7 @@ class AttendanceController extends Controller
                     ->orderBy('roll_number') // Assuming roll_number is string/int
                     ->orderBy('first_name')
                     ->get();
-                    
+
                 $existingAttendance = Attendance::where('school_class_id', $selectedClass)
                     ->where('section_id', $selectedSection)
                     ->whereDate('date', $date)
@@ -77,7 +77,7 @@ class AttendanceController extends Controller
                     ->keyBy('student_id');
             }
         }
-        
+
         return view('attendance.create', compact('classes', 'sections', 'students', 'existingAttendance', 'selectedClass', 'selectedSection', 'date'));
     }
 
@@ -94,11 +94,11 @@ class AttendanceController extends Controller
             'attendances.*.student_id' => 'required|exists:students,id',
             'attendances.*.status' => 'required|in:present,absent,late,half_day,holiday',
         ]);
-        
+
         $date = $request->input('date');
         $classId = $request->input('school_class_id');
         $sectionId = $request->input('section_id');
-        
+
         DB::transaction(function () use ($request, $date, $classId, $sectionId) {
             foreach ($request->input('attendances') as $studentId => $data) {
                 Attendance::updateOrCreate(
@@ -117,11 +117,11 @@ class AttendanceController extends Controller
                 );
             }
         });
-        
+
         return redirect()->route('attendance.index', [
             'school_class_id' => $classId,
             'section_id' => $sectionId,
-            'date' => $date
+            'date' => $date,
         ])->with('success', 'Attendance recorded successfully.');
     }
 
@@ -135,21 +135,21 @@ class AttendanceController extends Controller
         $selectedSection = $request->input('section_id');
         $month = $request->input('month', date('m'));
         $year = $request->input('year', date('Y'));
-        
+
         $sections = [];
         $attendances = [];
         $students = [];
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-        
+
         if ($selectedClass) {
             $sections = Section::where('school_class_id', $selectedClass)->get();
-            
+
             if ($selectedSection) {
                 $students = Student::where('school_class_id', $selectedClass)
                     ->where('section_id', $selectedSection)
                     ->orderBy('roll_number')
                     ->get();
-                    
+
                 $attendances = Attendance::where('school_class_id', $selectedClass)
                     ->where('section_id', $selectedSection)
                     ->whereMonth('date', $month)
@@ -158,14 +158,15 @@ class AttendanceController extends Controller
                     ->groupBy('student_id');
             }
         }
-        
+
         if ($request->has('export_pdf') && $selectedClass && $selectedSection) {
             $className = SchoolClass::find($selectedClass)->name;
             $sectionName = Section::find($selectedSection)->name;
-            
+
             $pdf = Pdf::loadView('attendance.pdf', compact('students', 'attendances', 'month', 'year', 'daysInMonth', 'className', 'sectionName'))
-                    ->setPaper('a4', 'landscape');
-            return $pdf->download('student_attendance_report_' . $year . '_' . $month . '.pdf');
+                ->setPaper('a4', 'landscape');
+
+            return $pdf->download('student_attendance_report_'.$year.'_'.$month.'.pdf');
         }
 
         return view('attendance.report', compact('classes', 'sections', 'students', 'attendances', 'selectedClass', 'selectedSection', 'month', 'year', 'daysInMonth'));

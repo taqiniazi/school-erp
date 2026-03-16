@@ -18,6 +18,6 @@ class SchoolContext
 
     public static function check()
     {
-        return !is_null(self::$schoolId);
+        return ! is_null(self::$schoolId);
     }
 }

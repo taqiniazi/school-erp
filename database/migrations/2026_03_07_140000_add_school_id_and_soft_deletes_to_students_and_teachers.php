@@ -12,19 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('students', function (Blueprint $table) {
-            if (!Schema::hasColumn('students', 'school_id')) {
+            if (! Schema::hasColumn('students', 'school_id')) {
                 $table->foreignId('school_id')->nullable()->after('id')->constrained('schools')->onDelete('cascade');
             }
-            if (!Schema::hasColumn('students', 'deleted_at')) {
+            if (! Schema::hasColumn('students', 'deleted_at')) {
                 $table->softDeletes();
             }
         });
 
         Schema::table('teachers', function (Blueprint $table) {
-            if (!Schema::hasColumn('teachers', 'school_id')) {
+            if (! Schema::hasColumn('teachers', 'school_id')) {
                 $table->foreignId('school_id')->nullable()->after('id')->constrained('schools')->onDelete('cascade');
             }
-            if (!Schema::hasColumn('teachers', 'deleted_at')) {
+            if (! Schema::hasColumn('teachers', 'deleted_at')) {
                 $table->softDeletes();
             }
         });

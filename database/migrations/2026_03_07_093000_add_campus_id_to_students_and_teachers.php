@@ -18,9 +18,9 @@ return new class extends Migration
         Schema::table('teachers', function (Blueprint $table) {
             $table->foreignId('campus_id')->nullable()->constrained()->onDelete('set null');
         });
-        
+
         Schema::table('sections', function (Blueprint $table) {
-             $table->foreignId('campus_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('campus_id')->nullable()->constrained()->onDelete('set null');
         });
     }
 
@@ -38,7 +38,7 @@ return new class extends Migration
             $table->dropForeign(['campus_id']);
             $table->dropColumn('campus_id');
         });
-        
+
         Schema::table('sections', function (Blueprint $table) {
             $table->dropForeign(['campus_id']);
             $table->dropColumn('campus_id');

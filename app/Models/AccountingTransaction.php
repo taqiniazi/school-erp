@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\BelongsToSchool;
 
 class AccountingTransaction extends Model
 {
-    use HasFactory, BelongsToSchool;
+    use BelongsToSchool, HasFactory;
 
     protected $fillable = [
         'financial_year_id',
@@ -36,4 +36,3 @@ class AccountingTransaction extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 }
-

@@ -4,25 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\FeeInvoice;
 use App\Models\Notice;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class ParentDashboardController extends Controller
 {
     public function index()
     {
         $user = Auth::user();
-        
+
         // Cache dashboard data for 15 minutes
-        $data = Cache::remember('parent_dashboard_' . $user->id, 900, function () use ($user) {
+        $data = Cache::remember('parent_dashboard_'.$user->id, 900, function () use ($user) {
             $children = $user->students()->with(['schoolClass', 'section'])->get(); // Eager load class and section
 
             // KPIs
             $childrenCount = $children->count();
-            
+
             $outstandingFees = 0;
             if ($childrenCount > 0) {
                 $childrenIds = $children->pluck('id');
@@ -36,7 +34,7 @@ class ParentDashboardController extends Controller
                 ->latest()
                 ->take(5)
                 ->get();
-                
+
             return compact(
                 'children',
                 'childrenCount',

@@ -4,15 +4,16 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
     public function index()
     {
         $roles = Role::where('guard_name', 'web')->latest()->get();
+
         return view('super-admin.roles.index', compact('roles'));
     }
 
@@ -22,8 +23,9 @@ class RoleController extends Controller
             ->where('guard_name', 'web')
             ->get()
             ->groupBy(function ($permission) {
-            return explode('.', $permission->name)[0];
-        });
+                return explode('.', $permission->name)[0];
+            });
+
         return view('super-admin.roles.create', compact('permissions'));
     }
 
@@ -56,9 +58,10 @@ class RoleController extends Controller
             ->where('guard_name', 'web')
             ->get()
             ->groupBy(function ($permission) {
-            return explode('.', $permission->name)[0];
-        });
+                return explode('.', $permission->name)[0];
+            });
         $rolePermissions = $role->permissions->pluck('id')->toArray();
+
         return view('super-admin.roles.edit', compact('role', 'permissions', 'rolePermissions'));
     }
 
@@ -90,6 +93,7 @@ class RoleController extends Controller
         }
 
         $role->delete();
+
         return redirect()->route('super-admin.roles.index')->with('success', 'Role deleted successfully.');
     }
 }

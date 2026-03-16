@@ -14,7 +14,7 @@ class CampusFactory extends Factory
     {
         return [
             'school_id' => School::factory(),
-            'name' => $this->faker->city . ' Campus',
+            'name' => $this->faker->city.' Campus',
             'address' => $this->faker->address,
             'phone' => $this->faker->phoneNumber,
             'email' => $this->faker->unique()->safeEmail,

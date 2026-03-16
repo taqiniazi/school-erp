@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Department extends Model
 {
-    use HasFactory, BelongsToSchool;
+    use BelongsToSchool, HasFactory;
 
     protected $fillable = [
         'name',
@@ -20,4 +20,3 @@ class Department extends Model
         'is_active' => 'boolean',
     ];
 }
-

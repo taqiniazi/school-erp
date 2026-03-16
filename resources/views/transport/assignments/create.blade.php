@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('Assign Student to Transport') }}
@@ -8,7 +8,7 @@
         <div class="container-fluid px-4">
             <div class="card shadow-sm border-0 rounded-3">
                 <div class="card-body p-4">
-                    <form method="POST" action="{{ route('transport.assignments.store') }}">
+                    <form method="POST" action="{{ route('transport.student-transport.store') }}">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label">Student</label>
@@ -52,7 +52,7 @@
                         </div>
                         <div>
                             <button class="btn btn-primary">Assign</button>
-                            <a href="{{ route('transport.assignments.index') }}" class="btn btn-secondary ms-2">Cancel</a>
+                            <a href="{{ route('transport.student-transport.index') }}" class="btn btn-secondary ms-2">Cancel</a>
                         </div>
                     </form>
                 </div>
@@ -60,7 +60,6 @@
         </div>
     </div>
 </x-app-layout>
-
 
 
 

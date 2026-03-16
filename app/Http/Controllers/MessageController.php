@@ -46,7 +46,7 @@ class MessageController extends Controller
         if ($user->hasRole(['Super Admin', 'School Admin'])) {
             $recipients = User::where('id', '!=', $user->id)->get();
         } elseif ($user->hasRole('Teacher')) {
-            // In a real app, filter by students' parents. 
+            // In a real app, filter by students' parents.
             // For now, allow messaging all parents and admins.
             $recipients = User::role(['Parent', 'School Admin', 'Super Admin'])->where('id', '!=', $user->id)->get();
         } elseif ($user->hasRole('Parent')) {
@@ -107,8 +107,9 @@ class MessageController extends Controller
         if ($message->recipient_id !== Auth::id() && $message->sender_id !== Auth::id()) {
             abort(403);
         }
-        
+
         $message->delete();
+
         return redirect()->back()->with('success', 'Message deleted.');
     }
 }

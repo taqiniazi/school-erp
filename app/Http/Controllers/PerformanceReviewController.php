@@ -12,12 +12,18 @@ class PerformanceReviewController extends Controller
     public function index()
     {
         $reviews = PerformanceReview::with('teacher')->orderByDesc('review_date')->get();
+
         return view('hr.performance.index', compact('reviews'));
     }
 
     public function create()
     {
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
+
         return view('hr.performance.create', compact('teachers'));
     }
 
@@ -43,7 +49,12 @@ class PerformanceReviewController extends Controller
 
     public function edit(PerformanceReview $performanceReview)
     {
-        $teachers = Teacher::orderBy('first_name')->orderBy('last_name')->get();
+        $teachers = Teacher::select('teachers.*')
+            ->join('users', 'teachers.user_id', '=', 'users.id')
+            ->orderBy('users.name')
+            ->with('user')
+            ->get();
+
         return view('hr.performance.edit', ['review' => $performanceReview, 'teachers' => $teachers]);
     }
 
@@ -69,6 +80,7 @@ class PerformanceReviewController extends Controller
     public function destroy(PerformanceReview $performanceReview)
     {
         $performanceReview->delete();
+
         return redirect()->route('hr.performance.index')->with('success', 'Review deleted.');
     }
 }

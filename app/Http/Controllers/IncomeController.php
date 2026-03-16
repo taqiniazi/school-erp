@@ -33,6 +33,7 @@ class IncomeController extends Controller
     {
         $years = FinancialYear::orderBy('start_date', 'desc')->get();
         $currentYear = FinancialYear::where('is_current', true)->first();
+
         return view('accounting.income.create', compact('years', 'currentYear'));
     }
 
@@ -48,7 +49,7 @@ class IncomeController extends Controller
         ]);
 
         $year = FinancialYear::findOrFail($request->financial_year_id);
-        if (!($request->date >= $year->start_date && $request->date <= $year->end_date)) {
+        if (! ($request->date >= $year->start_date && $request->date <= $year->end_date)) {
             return redirect()->back()->withErrors(['error' => 'Date must be within the selected financial year.'])->withInput();
         }
 
@@ -69,6 +70,7 @@ class IncomeController extends Controller
     public function edit(AccountingTransaction $income)
     {
         $years = FinancialYear::orderBy('start_date', 'desc')->get();
+
         return view('accounting.income.edit', compact('income', 'years'));
     }
 
@@ -84,7 +86,7 @@ class IncomeController extends Controller
         ]);
 
         $year = FinancialYear::findOrFail($request->financial_year_id);
-        if (!($request->date >= $year->start_date && $request->date <= $year->end_date)) {
+        if (! ($request->date >= $year->start_date && $request->date <= $year->end_date)) {
             return redirect()->back()->withErrors(['error' => 'Date must be within the selected financial year.'])->withInput();
         }
 
@@ -103,6 +105,7 @@ class IncomeController extends Controller
     public function destroy(AccountingTransaction $income)
     {
         $income->delete();
+
         return redirect()->route('accounting.income.index')->with('success', 'Income deleted.');
     }
 }

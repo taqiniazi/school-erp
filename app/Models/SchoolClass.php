@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\RecordsActivity;
-use App\Traits\BelongsToSchool;
 
 class SchoolClass extends Model
 {
-    use HasFactory, RecordsActivity, BelongsToSchool;
-    
+    use BelongsToSchool, HasFactory, RecordsActivity;
+
     protected $fillable = ['name', 'numeric_value'];
-    
+
     public function sections()
     {
         return $this->hasMany(Section::class);

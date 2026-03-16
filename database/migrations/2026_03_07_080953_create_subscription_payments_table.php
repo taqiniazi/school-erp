@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('status')->default('pending'); // pending, approved, rejected
             $table->text('admin_note')->nullable();
             $table->timestamps();
-            
+
             $table->index(['school_id', 'status']);
         });
     }

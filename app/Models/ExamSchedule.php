@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToSchool;
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\RecordsActivity;
-use App\Traits\BelongsToSchool;
 
 class ExamSchedule extends Model
 {
-    use HasFactory, RecordsActivity, BelongsToSchool;
+    use BelongsToSchool, HasFactory, RecordsActivity;
 
     protected $fillable = [
         'exam_id',
@@ -19,7 +19,7 @@ class ExamSchedule extends Model
         'start_time',
         'end_time',
         'max_marks',
-        'pass_marks'
+        'pass_marks',
     ];
 
     protected $casts = [
