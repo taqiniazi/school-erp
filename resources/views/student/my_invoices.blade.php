@@ -1,4 +1,4 @@
-﻿﻿x-app-layout>
+﻿﻿<x-app-layout>
     <x-slot name="header">
         {{ __('My Invoices') }}
     </x-slot>

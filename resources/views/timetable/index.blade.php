@@ -116,4 +116,38 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const classSelect = document.getElementById('tt_school_class_id');
+                const sectionSelect = document.getElementById('tt_section_id');
+                if (!classSelect || !sectionSelect) return;
+
+                const selectedSection = @json($sectionId);
+
+                async function loadSections(classId, selected = null) {
+                    sectionSelect.innerHTML = '<option value="">All Sections</option>';
+                    if (!classId) return;
+
+                    try {
+                        const res = await fetch(`/classes/${classId}/sections`);
+                        if (!res.ok) return;
+                        const items = await res.json();
+                        items.forEach((s) => {
+                            const opt = document.createElement('option');
+                            opt.value = s.id;
+                            opt.textContent = s.name;
+                            if (selected && String(selected) === String(s.id)) opt.selected = true;
+                            sectionSelect.appendChild(opt);
+                        });
+                    } catch (e) {
+                    }
+                }
+
+                classSelect.addEventListener('change', () => loadSections(classSelect.value));
+                if (classSelect.value) loadSections(classSelect.value, selectedSection);
+            });
+        </script>
+    @endpush
 </x-app-layout>
