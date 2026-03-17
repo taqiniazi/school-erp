@@ -14,15 +14,10 @@
     <div class="container-fluid px-4 py-4">
         <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
             <div class="card-header bg-white py-3 border-bottom border-light d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0 text-primary fw-bold"><i class="fas fa-chalkboard me-2"></i>Class List</h5>
-                <div class="d-flex gap-2">
-                    <div class="input-group input-group-sm" style="width: 250px;">
-                        <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" class="form-control bg-light border-start-0" placeholder="Search classes..." aria-label="Search">
-                    </div>
-                </div>
+                <h5 class="card-title mb-0 fw-bold"><i class="fas fa-chalkboard me-2"></i>Class List</h5>
+               
             </div>
-            <div class="card-body p-0">
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">

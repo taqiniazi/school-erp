@@ -1,4 +1,4 @@
-﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h1 class="h3 fw-bold text-dark mb-0">Teacher Allocations</h1>
@@ -170,79 +170,88 @@
             </form>
         </div>
     </div>
-</x-app-layout>
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('vendor/multiple-select/multiple-select.min.css') }}">
-@endpush
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('vendor/multiple-select/multiple-select.min.css') }}">
+    @endpush
 
-@push('scripts')
-    <script src="{{ asset('vendor/multiple-select/multiple-select.min.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const createModal = document.getElementById('createAllocationModal');
-            function initMultiSelect() {
-                if (!window.jQuery || !jQuery.fn || !jQuery.fn.multipleSelect) return;
-                const $ = jQuery;
+    @push('scripts')
+        <script src="{{ asset('vendor/multiple-select/multiple-select.min.js') }}"></script>
+        <script>
+            (function () {
+                function initMultiSelect() {
+                    if (!window.jQuery || !jQuery.fn || !jQuery.fn.multipleSelect) return;
 
-                const $class = $('#school_class_ids');
-                const $section = $('#section_ids');
-                const $subject = $('#subject_ids');
-                if (!$class.length || !$section.length || !$subject.length) return;
+                    var $ = jQuery;
 
-                const options = {
-                    filter: true,
-                    selectAll: true,
-                    width: '100%',
-                    container: '#createAllocationModal',
-                };
+                    function ensure(selector, placeholder) {
+                        var $el = $(selector);
+                        if (!$el.length) return;
+                        if ($el.data('multipleSelect')) return;
 
-                if (!$class.data('multipleSelect')) {
-                    $class.multipleSelect({ ...options, placeholder: 'Select Class' });
-                }
-                if (!$section.data('multipleSelect')) {
-                    $section.multipleSelect({ ...options, placeholder: 'Select Section' });
-                }
-                if (!$subject.data('multipleSelect')) {
-                    $subject.multipleSelect({ ...options, placeholder: 'Select Subject' });
-                }
-            }
-
-            if (createModal) {
-                createModal.addEventListener('shown.bs.modal', function () {
-                    initMultiSelect();
-                    if (window.jQuery && jQuery.fn && jQuery.fn.multipleSelect) {
-                        jQuery('#school_class_ids, #section_ids, #subject_ids').multipleSelect('refresh');
+                        $el.multipleSelect({
+                            filter: true,
+                            selectAll: true,
+                            width: '100%',
+                            placeholder: placeholder,
+                        });
                     }
-                });
-            }
 
-            const modal = document.getElementById('editAllocationModal');
-            if (!modal) return;
+                    ensure('#school_class_ids', 'Select Class');
+                    ensure('#section_ids', 'Select Section');
+                    ensure('#subject_ids', 'Select Subject');
+                }
 
-            modal.addEventListener('show.bs.modal', function (event) {
-                const trigger = event.relatedTarget;
-                if (!trigger) return;
+                function refreshMultiSelect() {
+                    if (!window.jQuery || !jQuery.fn || !jQuery.fn.multipleSelect) return;
+                    jQuery('#school_class_ids, #section_ids, #subject_ids').multipleSelect('refresh');
+                }
 
-                const allocationId = trigger.getAttribute('data-allocation-id');
-                const teacherId = trigger.getAttribute('data-teacher-id');
-                const classId = trigger.getAttribute('data-school-class-id');
-                const sectionId = trigger.getAttribute('data-section-id');
-                const subjectId = trigger.getAttribute('data-subject-id');
+                function boot() {
+                    initMultiSelect();
 
-                const form = modal.querySelector('form');
-                form.action = `{{ url('allocations') }}/${allocationId}`;
+                    var createModal = document.getElementById('createAllocationModal');
+                    if (createModal) {
+                        createModal.addEventListener('shown.bs.modal', function () {
+                            initMultiSelect();
+                            refreshMultiSelect();
+                        });
+                    }
 
-                const teacherSelect = modal.querySelector('#edit_teacher_id');
-                const classSelect = modal.querySelector('#edit_school_class_id');
-                const sectionSelect = modal.querySelector('#edit_section_id');
-                const subjectSelect = modal.querySelector('#edit_subject_id');
+                    var modal = document.getElementById('editAllocationModal');
+                    if (!modal) return;
 
-                if (teacherSelect) teacherSelect.value = teacherId || '';
-                if (classSelect) classSelect.value = classId || '';
-                if (sectionSelect) sectionSelect.value = sectionId || '';
-                if (subjectSelect) subjectSelect.value = subjectId || '';
-            });
-        });
-    </script>
-@endpush
+                    modal.addEventListener('show.bs.modal', function (event) {
+                        var trigger = event.relatedTarget;
+                        if (!trigger) return;
+
+                        var allocationId = trigger.getAttribute('data-allocation-id');
+                        var teacherId = trigger.getAttribute('data-teacher-id');
+                        var classId = trigger.getAttribute('data-school-class-id');
+                        var sectionId = trigger.getAttribute('data-section-id');
+                        var subjectId = trigger.getAttribute('data-subject-id');
+
+                        var form = modal.querySelector('form');
+                        form.action = `{{ url('allocations') }}/${allocationId}`;
+
+                        var teacherSelect = modal.querySelector('#edit_teacher_id');
+                        var classSelect = modal.querySelector('#edit_school_class_id');
+                        var sectionSelect = modal.querySelector('#edit_section_id');
+                        var subjectSelect = modal.querySelector('#edit_subject_id');
+
+                        if (teacherSelect) teacherSelect.value = teacherId || '';
+                        if (classSelect) classSelect.value = classId || '';
+                        if (sectionSelect) sectionSelect.value = sectionId || '';
+                        if (subjectSelect) subjectSelect.value = subjectId || '';
+                    });
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', boot);
+                } else {
+                    boot();
+                }
+            })();
+        </script>
+    @endpush
+</x-app-layout>

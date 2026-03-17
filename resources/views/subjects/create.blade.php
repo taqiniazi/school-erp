@@ -65,71 +65,70 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('subjects_container');
+            const addBtn = document.getElementById('add_subject_row');
 
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const container = document.getElementById('subjects_container');
-        const addBtn = document.getElementById('add_subject_row');
-
-        function renumberItems() {
-            const items = container.querySelectorAll('.subject-item');
-            items.forEach((item, idx) => {
-                item.querySelectorAll('[name]').forEach((el) => {
-                    el.name = el.name.replace(/subjects\[\d+\]/, `subjects[${idx}]`);
+            function renumberItems() {
+                const items = container.querySelectorAll('.subject-item');
+                items.forEach((item, idx) => {
+                    item.querySelectorAll('[name]').forEach((el) => {
+                        el.name = el.name.replace(/subjects\[\d+\]/, `subjects[${idx}]`);
+                    });
                 });
-            });
-        }
-
-        function addItem() {
-            const idx = container.querySelectorAll('.subject-item').length;
-            const div = document.createElement('div');
-            div.className = 'subject-item border rounded p-3 mb-3';
-            div.innerHTML = `
-                <div class="row g-3 align-items-end">
-                    <div class="col-12 col-md-3">
-                        <label class="form-label">Code</label>
-                        <input type="text" name="subjects[${idx}][code]" class="form-control" required>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <label class="form-label">Name</label>
-                        <input type="text" name="subjects[${idx}][name]" class="form-control" required>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <label class="form-label">Type</label>
-                        <select name="subjects[${idx}][type]" class="form-select" required>
-                            <option value="theory" selected>Theory</option>
-                            <option value="practical">Practical</option>
-                            <option value="both">Both</option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-md-1 text-md-end">
-                        <button type="button" class="btn btn-outline-danger w-100 remove-subject-item">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(div);
-        }
-
-        addBtn.addEventListener('click', addItem);
-
-        container.addEventListener('click', function (e) {
-            const btn = e.target.closest('.remove-subject-item');
-            if (!btn) return;
-            const items = container.querySelectorAll('.subject-item');
-            const item = btn.closest('.subject-item');
-            if (items.length <= 1) {
-                item.querySelectorAll('input[type="text"]').forEach((input) => input.value = '');
-                const select = item.querySelector('select');
-                if (select) select.value = 'theory';
-                return;
             }
-            item.remove();
-            renumberItems();
+
+            function addItem() {
+                const idx = container.querySelectorAll('.subject-item').length;
+                const div = document.createElement('div');
+                div.className = 'subject-item border rounded p-3 mb-3';
+                div.innerHTML = `
+                    <div class="row g-3 align-items-end">
+                        <div class="col-12 col-md-3">
+                            <label class="form-label">Code</label>
+                            <input type="text" name="subjects[${idx}][code]" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Name</label>
+                            <input type="text" name="subjects[${idx}][name]" class="form-control" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label">Type</label>
+                            <select name="subjects[${idx}][type]" class="form-select" required>
+                                <option value="theory" selected>Theory</option>
+                                <option value="practical">Practical</option>
+                                <option value="both">Both</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-1 text-md-end">
+                            <button type="button" class="btn btn-outline-danger w-100 remove-subject-item">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+
+            addBtn.addEventListener('click', addItem);
+
+            container.addEventListener('click', function (e) {
+                const btn = e.target.closest('.remove-subject-item');
+                if (!btn) return;
+                const items = container.querySelectorAll('.subject-item');
+                const item = btn.closest('.subject-item');
+                if (items.length <= 1) {
+                    item.querySelectorAll('input[type="text"]').forEach((input) => input.value = '');
+                    const select = item.querySelector('select');
+                    if (select) select.value = 'theory';
+                    return;
+                }
+                item.remove();
+                renumberItems();
+            });
         });
-    });
-</script>
-@endpush
+    </script>
+    @endpush
+</x-app-layout>
