@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h1 class="h3 fw-bold text-dark mb-0">Teacher Allocations</h1>
@@ -82,7 +82,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="school_class_ids" class="form-label">Class</label>
-                            <select name="school_class_ids[]" id="school_class_ids" class="form-select" multiple required>
+                            <select name="school_class_ids[]" id="school_class_ids" class="" multiple required>
                                 @foreach($classes as $class)
                                     <option value="{{ $class->id }}">{{ $class->name }}</option>
                                 @endforeach
@@ -90,7 +90,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="section_ids" class="form-label">Section</label>
-                            <select name="section_ids[]" id="section_ids" class="form-select" multiple required>
+                            <select name="section_ids[]" id="section_ids" class="" multiple required>
                                 @foreach($sections as $section)
                                     <option value="{{ $section->id }}">{{ $section->name }} (Class: {{ $section->schoolClass->name ?? 'N/A' }})</option>
                                 @endforeach
@@ -98,7 +98,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="subject_ids" class="form-label">Subject</label>
-                            <select name="subject_ids[]" id="subject_ids" class="form-select" multiple required>
+                            <select name="subject_ids[]" id="subject_ids" class="" multiple required>
                                 @foreach($subjects as $subject)
                                     <option value="{{ $subject->id }}">{{ $subject->name }} ({{ $subject->code }})</option>
                                 @endforeach
@@ -173,6 +173,34 @@
 
     @push('styles')
         <link rel="stylesheet" href="{{ asset('vendor/multiple-select/multiple-select.min.css') }}">
+        <style>
+            
+            .ms-parent { width: 100% !important; }
+            .ms-choice {
+                height: calc(2.5rem + 2px) !important;
+                line-height: calc(2.5rem - 2px) !important;
+                border-color: #ced4da !important;
+                border-radius: .375rem !important;
+                padding: 0 .75rem !important;
+                background-color: #fff !important;
+            }
+            .ms-choice > span { color: #212529; }
+            .ms-choice > span.placeholder { color: transparent !important; }
+            .ms-choice > div.icon-caret { right: .75rem !important; }
+            .ms-drop {
+                min-width: 100% !important;
+                border-color: #ced4da !important;
+                border-radius: .375rem !important;
+                box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+            }
+            .ms-search input {
+                border-color: #ced4da !important;
+                border-radius: .375rem !important;
+                padding: .375rem .75rem !important;
+                font-size: .9rem;
+            }
+            .ms-drop ul > li:hover { background-color: #f8f9fa; }
+        </style>
     @endpush
 
     @push('scripts')
