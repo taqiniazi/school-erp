@@ -29,7 +29,7 @@
                         </div>
 
                         <div class="message-content mb-5">
-                            {!! nl2br(e($message->content)) !!}
+                            {!! $message->content !!}
                         </div>
 
                         <div class="d-flex gap-2 border-top pt-3">
@@ -48,6 +48,5 @@
         </div>
     </div>
 </x-app-layout>
-
 
 

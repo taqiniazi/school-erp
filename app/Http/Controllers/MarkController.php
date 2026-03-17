@@ -218,7 +218,26 @@ class MarkController extends Controller
             return redirect()->back()->with('error', 'Student record not found.');
         }
 
-        $exams = Exam::where('is_published', true)->orderBy('start_date', 'desc')->get();
+        $examsQuery = Exam::query()
+            ->where('is_published', true)
+            ->whereHas('schedules', function ($q) use ($student) {
+                $q->where('school_class_id', $student->school_class_id)
+                    ->whereHas('marks', function ($mq) use ($student) {
+                        $mq->where('student_id', $student->id);
+                    });
+            })
+            ->orderBy('start_date', 'desc');
+
+        $exams = $examsQuery->get();
+        $hasUnpublishedResults = Exam::query()
+            ->where('is_published', false)
+            ->whereHas('schedules', function ($q) use ($student) {
+                $q->where('school_class_id', $student->school_class_id)
+                    ->whereHas('marks', function ($mq) use ($student) {
+                        $mq->where('student_id', $student->id);
+                    });
+            })
+            ->exists();
 
         $exam = null;
         $data = [];
@@ -228,7 +247,9 @@ class MarkController extends Controller
         $overallGrade = null;
 
         if ($request->has('exam_id')) {
-            $exam = Exam::where('is_published', true)->findOrFail($request->exam_id);
+            $exam = (clone $examsQuery)
+                ->where('id', $request->exam_id)
+                ->firstOrFail();
 
             // Get all schedules for this exam and student's class
             $schedules = ExamSchedule::where('exam_id', $exam->id)
@@ -278,6 +299,6 @@ class MarkController extends Controller
             }
         }
 
-        return view('marks.my_report_card', compact('exams', 'exam', 'student', 'children', 'data', 'totalMax', 'totalObtained', 'overallPercentage', 'overallGrade'));
+        return view('marks.my_report_card', compact('exams', 'exam', 'student', 'children', 'data', 'totalMax', 'totalObtained', 'overallPercentage', 'overallGrade', 'hasUnpublishedResults'));
     }
 }

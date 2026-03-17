@@ -27,7 +27,7 @@
     
     <!-- School Management -->
     <li>
-        <a href="#schoolSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') || request()->routeIs('departments.*') || request()->routeIs('designations.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') || request()->routeIs('departments.*') || request()->routeIs('designations.*') ? '' : 'collapsed' }}">
+        <a href="#schoolSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') || request()->routeIs('departments.*') || request()->routeIs('designations.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') || request()->routeIs('departments.*') || request()->routeIs('designations.*') ? 'active' : '' }} {{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') || request()->routeIs('departments.*') || request()->routeIs('designations.*') ? '' : 'collapsed' }}">
             <i class="fas fa-university"></i> School Management
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('super-admin.schools.*') || request()->routeIs('campuses.*') || request()->routeIs('departments.*') || request()->routeIs('designations.*') ? 'show' : '' }}" id="schoolSubmenu" data-bs-parent="#sidebarAccordion">
@@ -52,7 +52,7 @@
 
     <!-- User Management -->
     <li>
-        <a href="#userSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('permissions.*') || request()->routeIs('admin.audit-logs.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('permissions.*') || request()->routeIs('admin.audit-logs.*') ? '' : 'collapsed' }}">
+        <a href="#userSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('permissions.*') || request()->routeIs('admin.audit-logs.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('permissions.*') || request()->routeIs('admin.audit-logs.*') ? 'active' : '' }} {{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('permissions.*') || request()->routeIs('admin.audit-logs.*') ? '' : 'collapsed' }}">
             <i class="fas fa-users-cog"></i> User Management
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('super-admin.admin-users.*') || request()->routeIs('super-admin.roles.*') || request()->routeIs('permissions.*') || request()->routeIs('admin.audit-logs.*') ? 'show' : '' }}" id="userSubmenu" data-bs-parent="#sidebarAccordion">
@@ -75,7 +75,7 @@
 
     <!-- Student Management -->
     <li>
-        <a href="#studentSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('students.*') || request()->routeIs('admissions.*') || request()->routeIs('guardians.*') || request()->routeIs('student-promotions.*') || request()->routeIs('student-documents.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('students.*') || request()->routeIs('admissions.*') || request()->routeIs('guardians.*') || request()->routeIs('student-promotions.*') || request()->routeIs('student-documents.*') ? '' : 'collapsed' }}">
+        <a href="#studentSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('students.*') || request()->routeIs('admissions.*') || request()->routeIs('guardians.*') || request()->routeIs('student-promotions.*') || request()->routeIs('student-documents.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('students.*') || request()->routeIs('admissions.*') || request()->routeIs('guardians.*') || request()->routeIs('student-promotions.*') || request()->routeIs('student-documents.*') ? 'active' : '' }} {{ request()->routeIs('students.*') || request()->routeIs('admissions.*') || request()->routeIs('guardians.*') || request()->routeIs('student-promotions.*') || request()->routeIs('student-documents.*') ? '' : 'collapsed' }}">
             <i class="fas fa-user-graduate"></i> Student Management
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('students.*') || request()->routeIs('admissions.*') || request()->routeIs('guardians.*') || request()->routeIs('student-promotions.*') || request()->routeIs('student-documents.*') ? 'show' : '' }}" id="studentSubmenu" data-bs-parent="#sidebarAccordion">
@@ -99,7 +99,7 @@
 
     <!-- Teacher Management -->
     <li>
-        <a href="#teacherSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('teachers.*') || request()->routeIs('allocations.*') || request()->routeIs('teacher-attendance.index') || request()->routeIs('hr.leave.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('teachers.*') || request()->routeIs('allocations.*') || request()->routeIs('teacher-attendance.index') || request()->routeIs('hr.leave.*') ? '' : 'collapsed' }}">
+        <a href="#teacherSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('teachers.*') || request()->routeIs('allocations.*') || request()->routeIs('teacher-attendance.index') || request()->routeIs('hr.leave.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('teachers.*') || request()->routeIs('allocations.*') || request()->routeIs('teacher-attendance.index') || request()->routeIs('hr.leave.*') ? 'active' : '' }} {{ request()->routeIs('teachers.*') || request()->routeIs('allocations.*') || request()->routeIs('teacher-attendance.index') || request()->routeIs('hr.leave.*') ? '' : 'collapsed' }}">
             <i class="fas fa-chalkboard-teacher"></i> Teacher Management
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('teachers.*') || request()->routeIs('allocations.*') || request()->routeIs('teacher-attendance.index') || request()->routeIs('hr.leave.*') ? 'show' : '' }}" id="teacherSubmenu" data-bs-parent="#sidebarAccordion">
@@ -120,7 +120,7 @@
 
     <!-- Academic Management -->
     <li>
-        <a href="#academicSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') || request()->routeIs('sections.*') || request()->routeIs('timetable.*') || request()->routeIs('lesson-plans.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') || request()->routeIs('sections.*') || request()->routeIs('timetable.*') || request()->routeIs('lesson-plans.*') ? '' : 'collapsed' }}">
+        <a href="#academicSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') || request()->routeIs('sections.*') || request()->routeIs('timetable.*') || request()->routeIs('lesson-plans.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') || request()->routeIs('sections.*') || request()->routeIs('timetable.*') || request()->routeIs('lesson-plans.*') ? 'active' : '' }} {{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') || request()->routeIs('sections.*') || request()->routeIs('timetable.*') || request()->routeIs('lesson-plans.*') ? '' : 'collapsed' }}">
             <i class="fas fa-book-open"></i> Academic Management
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('classes.*') || request()->routeIs('subjects.*') || request()->routeIs('sections.*') || request()->routeIs('timetable.*') || request()->routeIs('lesson-plans.*') ? 'show' : '' }}" id="academicSubmenu" data-bs-parent="#sidebarAccordion">
@@ -144,7 +144,7 @@
 
     <!-- Attendance -->
     <li>
-        <a href="#attendanceSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('attendance.*') || request()->routeIs('reports.attendance') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('attendance.*') || request()->routeIs('reports.attendance') ? '' : 'collapsed' }}">
+        <a href="#attendanceSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('attendance.*') || request()->routeIs('reports.attendance') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('attendance.*') || request()->routeIs('reports.attendance') ? 'active' : '' }} {{ request()->routeIs('attendance.*') || request()->routeIs('reports.attendance') ? '' : 'collapsed' }}">
             <i class="fas fa-calendar-check"></i> Attendance
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('attendance.*') || request()->routeIs('reports.attendance') ? 'show' : '' }}" id="attendanceSubmenu" data-bs-parent="#sidebarAccordion">
@@ -167,7 +167,7 @@
 
     <!-- Examinations -->
     <li>
-        <a href="#examSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('exam-types.*') || request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('exam-types.*') || request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? '' : 'collapsed' }}">
+        <a href="#examSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('exam-types.*') || request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('exam-types.*') || request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? 'active' : '' }} {{ request()->routeIs('exam-types.*') || request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? '' : 'collapsed' }}">
             <i class="fas fa-edit"></i> Examinations
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('exam-types.*') || request()->routeIs('exams.*') || request()->routeIs('grades.*') || request()->routeIs('marks.*') ? 'show' : '' }}" id="examSubmenu" data-bs-parent="#sidebarAccordion">
@@ -191,7 +191,7 @@
 
     <!-- Fee Management -->
     <li>
-        <a href="#feeSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') || request()->routeIs('discounts.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') || request()->routeIs('discounts.*') ? '' : 'collapsed' }}">
+        <a href="#feeSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') || request()->routeIs('discounts.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') || request()->routeIs('discounts.*') ? 'active' : '' }} {{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') || request()->routeIs('discounts.*') ? '' : 'collapsed' }}">
             <i class="fas fa-money-check-alt"></i> Fee Management
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('fee-structures.*') || request()->routeIs('fee-invoices.*') || request()->routeIs('fee-payments.*') || request()->routeIs('fee-types.*') || request()->routeIs('discounts.*') ? 'show' : '' }}" id="feeSubmenu" data-bs-parent="#sidebarAccordion">
@@ -218,7 +218,7 @@
 
     <!-- HR & Payroll -->
     <li>
-        <a href="#hrSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') || request()->routeIs('departments.*') || request()->routeIs('payslips.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') || request()->routeIs('departments.*') || request()->routeIs('payslips.*') ? '' : 'collapsed' }}">
+        <a href="#hrSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') || request()->routeIs('departments.*') || request()->routeIs('payslips.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') || request()->routeIs('departments.*') || request()->routeIs('payslips.*') ? 'active' : '' }} {{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') || request()->routeIs('departments.*') || request()->routeIs('payslips.*') ? '' : 'collapsed' }}">
             <i class="fas fa-user-tie"></i> HR & Payroll
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('hr.staff.*') || request()->routeIs('payroll.*') || request()->routeIs('departments.*') || request()->routeIs('payslips.*') ? 'show' : '' }}" id="hrSubmenu" data-bs-parent="#sidebarAccordion">
@@ -242,7 +242,7 @@
 
     <!-- Library -->
     <li>
-        <a href="#librarySubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('library.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('library.*') ? '' : 'collapsed' }}">
+        <a href="#librarySubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('library.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('library.*') ? 'active' : '' }} {{ request()->routeIs('library.*') ? '' : 'collapsed' }}">
             <i class="fas fa-book-reader"></i> Library
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('library.*') ? 'show' : '' }}" id="librarySubmenu" data-bs-parent="#sidebarAccordion">
@@ -266,7 +266,7 @@
 
     <!-- Transport -->
     <li>
-        <a href="#transportSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('transport.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('transport.*') ? '' : 'collapsed' }}">
+        <a href="#transportSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('transport.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('transport.*') ? 'active' : '' }} {{ request()->routeIs('transport.*') ? '' : 'collapsed' }}">
             <i class="fas fa-bus"></i> Transport
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('transport.*') ? 'show' : '' }}" id="transportSubmenu" data-bs-parent="#sidebarAccordion">
@@ -287,7 +287,7 @@
 
     <!-- Inventory -->
     <li>
-        <a href="#inventorySubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('inventory.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('inventory.*') ? '' : 'collapsed' }}">
+        <a href="#inventorySubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('inventory.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('inventory.*') ? 'active' : '' }} {{ request()->routeIs('inventory.*') ? '' : 'collapsed' }}">
             <i class="fas fa-boxes"></i> Inventory
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('inventory.*') ? 'show' : '' }}" id="inventorySubmenu" data-bs-parent="#sidebarAccordion">
@@ -308,7 +308,7 @@
 
     <!-- Communication -->
     <li>
-        <a href="#communicationSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('communication.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('communication.*') ? '' : 'collapsed' }}">
+        <a href="#communicationSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('communication.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('communication.*') ? 'active' : '' }} {{ request()->routeIs('communication.*') ? '' : 'collapsed' }}">
             <i class="fas fa-bullhorn"></i> Communication
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('communication.*') ? 'show' : '' }}" id="communicationSubmenu" data-bs-parent="#sidebarAccordion">
@@ -329,7 +329,7 @@
 
     <!-- Subscription -->
     <li>
-        <a href="#subscriptionSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('super-admin.plans.*') || request()->routeIs('super-admin.subscriptions.*') || request()->routeIs('admin.subscription.*') || request()->routeIs('super-admin.payments.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('super-admin.plans.*') || request()->routeIs('super-admin.subscriptions.*') || request()->routeIs('admin.subscription.*') || request()->routeIs('super-admin.payments.*') ? '' : 'collapsed' }}">
+        <a href="#subscriptionSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('super-admin.plans.*') || request()->routeIs('super-admin.subscriptions.*') || request()->routeIs('admin.subscription.*') || request()->routeIs('super-admin.payments.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('super-admin.plans.*') || request()->routeIs('super-admin.subscriptions.*') || request()->routeIs('admin.subscription.*') || request()->routeIs('super-admin.payments.*') ? 'active' : '' }} {{ request()->routeIs('super-admin.plans.*') || request()->routeIs('super-admin.subscriptions.*') || request()->routeIs('admin.subscription.*') || request()->routeIs('super-admin.payments.*') ? '' : 'collapsed' }}">
             <i class="fas fa-crown"></i> Subscription
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('super-admin.plans.*') || request()->routeIs('super-admin.subscriptions.*') || request()->routeIs('admin.subscription.*') || request()->routeIs('super-admin.payments.*') ? 'show' : '' }}" id="subscriptionSubmenu" data-bs-parent="#sidebarAccordion">
@@ -368,7 +368,7 @@
 
     <!-- Reports -->
     <li>
-        <a href="#reportsSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('reports.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('reports.*') ? '' : 'collapsed' }}">
+        <a href="#reportsSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('reports.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('reports.*') ? 'active' : '' }} {{ request()->routeIs('reports.*') ? '' : 'collapsed' }}">
             <i class="fas fa-chart-line"></i> Reports
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('reports.*') ? 'show' : '' }}" id="reportsSubmenu" data-bs-parent="#sidebarAccordion">
@@ -392,7 +392,7 @@
 
     <!-- System Settings -->
     <li>
-        <a href="#settingsSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('settings.*') || request()->routeIs('super-admin.payment-methods.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('settings.*') || request()->routeIs('super-admin.payment-methods.*') ? '' : 'collapsed' }}">
+        <a href="#settingsSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('settings.*') || request()->routeIs('super-admin.payment-methods.*') ? 'true' : 'false' }}" class="dropdown-toggle {{ request()->routeIs('settings.*') || request()->routeIs('super-admin.payment-methods.*') ? 'active' : '' }} {{ request()->routeIs('settings.*') || request()->routeIs('super-admin.payment-methods.*') ? '' : 'collapsed' }}">
             <i class="fas fa-cogs"></i> System Settings
         </a>
         <ul class="collapse list-unstyled {{ request()->routeIs('settings.*') || request()->routeIs('super-admin.payment-methods.*') ? 'show' : '' }}" id="settingsSubmenu" data-bs-parent="#sidebarAccordion">

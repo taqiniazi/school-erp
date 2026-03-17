@@ -35,4 +35,9 @@ class FeePaymentController extends Controller
 
         return view('fees.payments.index', compact('payments', 'totalCollected'));
     }
+
+    public function history(Request $request)
+    {
+        return $this->index($request);
+    }
 }

@@ -1,4 +1,4 @@
-﻿﻿<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h1 class="h3 fw-bold text-dark mb-0">My Report Card</h1>
@@ -102,7 +102,11 @@
                 </div>
             </div>
         @elseif($exams->isEmpty())
-            <div class="alert alert-info">No published exams available yet.</div>
+            @if(! empty($hasUnpublishedResults))
+                <div class="alert alert-info">Report card is not published yet. Please contact the school.</div>
+            @else
+                <div class="alert alert-info">No report card available yet.</div>
+            @endif
         @else
             <div class="alert alert-info">Please select an exam to view the report card.</div>
         @endif
@@ -110,4 +114,3 @@
         </div>
     </div>
 </x-app-layout>
-

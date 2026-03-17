@@ -26,6 +26,11 @@ class FeePayment extends Model
         return $this->belongsTo(FeeInvoice::class, 'fee_invoice_id');
     }
 
+    public function feeInvoice()
+    {
+        return $this->belongsTo(FeeInvoice::class, 'fee_invoice_id');
+    }
+
     public function collectedBy()
     {
         return $this->belongsTo(User::class, 'collected_by');

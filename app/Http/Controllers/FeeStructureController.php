@@ -38,7 +38,7 @@ class FeeStructureController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'school_class_id' => 'required|exists:school_classes,id',
             'fee_type_id' => 'required|exists:fee_types,id',
             'amount' => 'required|numeric|min:0',
@@ -47,16 +47,16 @@ class FeeStructureController extends Controller
         ]);
 
         // Check for duplicate
-        $exists = FeeStructure::where('school_class_id', $request->school_class_id)
-            ->where('fee_type_id', $request->fee_type_id)
-            ->where('academic_year', $request->academic_year)
+        $exists = FeeStructure::where('school_class_id', $data['school_class_id'])
+            ->where('fee_type_id', $data['fee_type_id'])
+            ->where('academic_year', $data['academic_year'])
             ->exists();
 
         if ($exists) {
-            return redirect()->back()->withErrors(['error' => 'Fee structure for this class, fee type and year already exists.']);
+            return redirect()->back()->withErrors(['error' => 'Fee structure for this class, fee type and year already exists.'])->withInput();
         }
 
-        FeeStructure::create($request->all());
+        FeeStructure::create($data);
 
         return redirect()->route('fee-structures.index')->with('success', 'Fee Structure added successfully.');
     }
@@ -77,7 +77,7 @@ class FeeStructureController extends Controller
      */
     public function update(Request $request, FeeStructure $feeStructure)
     {
-        $request->validate([
+        $data = $request->validate([
             'school_class_id' => 'required|exists:school_classes,id',
             'fee_type_id' => 'required|exists:fee_types,id',
             'amount' => 'required|numeric|min:0',
@@ -86,17 +86,17 @@ class FeeStructureController extends Controller
         ]);
 
         // Check for duplicate (excluding current)
-        $exists = FeeStructure::where('school_class_id', $request->school_class_id)
-            ->where('fee_type_id', $request->fee_type_id)
-            ->where('academic_year', $request->academic_year)
+        $exists = FeeStructure::where('school_class_id', $data['school_class_id'])
+            ->where('fee_type_id', $data['fee_type_id'])
+            ->where('academic_year', $data['academic_year'])
             ->where('id', '!=', $feeStructure->id)
             ->exists();
 
         if ($exists) {
-            return redirect()->back()->withErrors(['error' => 'Fee structure already exists.']);
+            return redirect()->back()->withErrors(['error' => 'Fee structure already exists.'])->withInput();
         }
 
-        $feeStructure->update($request->all());
+        $feeStructure->update($data);
 
         return redirect()->route('fee-structures.index')->with('success', 'Fee Structure updated successfully.');
     }

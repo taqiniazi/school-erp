@@ -287,9 +287,7 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
 
         Route::resource('exam-types', ExamTypeController::class)->except(['show']);
 
-        Route::get('discounts', function () {
-            return view('discounts.index');
-        })->name('discounts.index');
+        Route::resource('discounts', \App\Http\Controllers\DiscountController::class)->except(['show']);
 
         Route::get('payslips', [PayslipController::class, 'index'])->name('payslips.index');
         Route::get('payslips/create', [PayslipController::class, 'create'])->name('payslips.create');
@@ -299,17 +297,17 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         Route::delete('payslips/{payslip}', [PayslipController::class, 'destroy'])->name('payslips.destroy');
 
         Route::prefix('settings')->name('settings.')->group(function () {
-            Route::get('general', function () {
-                return view('settings.general');
-            })->name('general');
+            Route::get('general', [\App\Http\Controllers\SettingsController::class, 'general'])->name('general');
+            Route::post('general', [\App\Http\Controllers\SettingsController::class, 'updateGeneral'])->name('general.update');
 
-            Route::get('email', function () {
-                return view('settings.email');
-            })->name('email');
+            Route::get('email', [\App\Http\Controllers\SettingsController::class, 'email'])->name('email');
+            Route::post('email', [\App\Http\Controllers\SettingsController::class, 'updateEmail'])->name('email.update');
+            Route::post('email/test', [\App\Http\Controllers\SettingsController::class, 'sendTestEmail'])->name('email.test');
 
-            Route::get('backup', function () {
-                return view('settings.backup');
-            })->name('backup');
+            Route::get('backup', [\App\Http\Controllers\SettingsController::class, 'backup'])->name('backup');
+            Route::post('backup', [\App\Http\Controllers\SettingsController::class, 'createBackup'])->name('backup.create');
+            Route::get('backup/{backupFile}', [\App\Http\Controllers\SettingsController::class, 'downloadBackup'])->name('backup.download');
+            Route::delete('backup/{backupFile}', [\App\Http\Controllers\SettingsController::class, 'deleteBackup'])->name('backup.delete');
         });
 
         // Campuses
@@ -396,7 +394,12 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         Route::put('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'update'])->name('fee-invoices.update');
         Route::get('fee-invoices', [App\Http\Controllers\FeeInvoiceController::class, 'index'])->name('fee-invoices.index');
         Route::get('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'show'])->name('fee-invoices.show');
-        Route::post('fee-invoices/{feeInvoice}/pay', [App\Http\Controllers\FeePaymentController::class, 'store'])->name('fee-payments.store');
+        Route::delete('fee-invoices/{feeInvoice}', [App\Http\Controllers\FeeInvoiceController::class, 'destroy'])->name('fee-invoices.destroy');
+        Route::get('fee-invoices/{feeInvoice}/collect', [App\Http\Controllers\FeeInvoiceController::class, 'collect'])->name('fee-invoices.collect');
+        Route::post('fee-invoices/{feeInvoice}/pay', [App\Http\Controllers\FeeInvoiceController::class, 'pay'])->name('fee-invoices.pay');
+        Route::get('fee-invoices/{feeInvoice}/print', [App\Http\Controllers\FeeInvoiceController::class, 'print'])->name('fee-invoices.print');
+
+        Route::get('fee-payments', [App\Http\Controllers\FeePaymentController::class, 'index'])->name('fee-payments.index');
         Route::get('fee-payments/history', [App\Http\Controllers\FeePaymentController::class, 'history'])->name('fee-payments.history');
 
         // Reports
@@ -429,7 +432,7 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
             Route::resource('notices', App\Http\Controllers\NoticeController::class);
             Route::resource('events', App\Http\Controllers\EventController::class);
             Route::get('messages/sent', [App\Http\Controllers\MessageController::class, 'sent'])->name('messages.sent');
-            Route::resource('messages', App\Http\Controllers\MessageController::class)->except(['edit', 'update', 'destroy']);
+            Route::resource('messages', App\Http\Controllers\MessageController::class)->except(['edit', 'update']);
             Route::get('notifications', function () {
                 $user = auth()->user();
                 $notifications = $user->notifications()->latest()->get();

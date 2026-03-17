@@ -2,9 +2,9 @@
     <div class="container-fluid py-4">
         <div class="card shadow">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 fw-bold">{{ __('Invoice Details') }} - {{ $feeInvoice->invoice_no }}</h6>
+                <h6 class="m-0 fw-bold text-white">{{ __('Invoice Details') }} - {{ $feeInvoice->invoice_no }}</h6>
                 <div>
-                     <a href="{{ route('fee-invoices.print', $feeInvoice->id) }}" class="btn btn-secondary btn-sm me-2">
+                     <a href="{{ route('fee-invoices.print', $feeInvoice->id) }}" class="btn btn-danger btn-sm me-2">
                         <i class="fas fa-file-pdf me-1"></i> Download PDF
                     </a>
                     @if(Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('School Admin'))

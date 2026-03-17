@@ -49,8 +49,8 @@ class StudentDashboardController extends Controller
 
             // Alerts
             $upcomingExams = ExamSchedule::where('school_class_id', $student->school_class_id)
-                ->where('date', '>=', now())
-                ->orderBy('date')
+                ->where('exam_date', '>=', now()->toDateString())
+                ->orderBy('exam_date')
                 ->with(['exam', 'subject'])
                 ->take(3)
                 ->get();

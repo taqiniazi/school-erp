@@ -20,7 +20,13 @@ class School extends Model
         'tax_id',
         'website',
         'logo_path',
+        'settings',
         'is_active',
+    ];
+
+    protected $casts = [
+        'settings' => 'array',
+        'is_active' => 'boolean',
     ];
 
     public function users()
