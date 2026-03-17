@@ -76,24 +76,6 @@ class TeacherController extends Controller
                 'teachers.*.mobile_allowance' => ['nullable', 'boolean'],
                 'teachers.*.petrol_allowance' => ['nullable', 'boolean'],
                 'teachers.*.pf' => ['nullable', 'boolean'],
-                'teachers.*.custom_deduction_name' => ['nullable', 'string', 'max:255'],
-                'teachers.*.custom_deduction_is_percentage' => ['nullable', 'boolean'],
-                'teachers.*.custom_deduction_amount' => [
-                    'nullable',
-                    'numeric',
-                    'min:0',
-                    function ($attribute, $value, $fail) use ($request) {
-                        $parts = explode('.', $attribute);
-                        $index = $parts[1] ?? null;
-                        if ($index === null) {
-                            return;
-                        }
-                        $name = data_get($request->input('teachers'), $index.'.custom_deduction_name');
-                        if (! empty($name) && ($value === null || $value === '')) {
-                            $fail('The custom deduction amount field is required when custom deduction name is present.');
-                        }
-                    },
-                ],
                 'teachers.*.address' => ['required', 'string'],
                 'teachers.*.phone' => ['nullable', 'string'],
                 'teachers.*.emergency_contact' => ['nullable', 'string'],
@@ -192,16 +174,6 @@ class TeacherController extends Controller
                             'is_active' => true,
                         ]);
                     }
-
-                    if (! empty($row['custom_deduction_name']) && array_key_exists('custom_deduction_amount', $row) && $row['custom_deduction_amount'] !== null && $row['custom_deduction_amount'] !== '') {
-                        StaffDeduction::create([
-                            'teacher_id' => $teacher->id,
-                            'name' => $row['custom_deduction_name'],
-                            'is_percentage' => ! empty($row['custom_deduction_is_percentage']),
-                            'amount' => $row['custom_deduction_amount'],
-                            'is_active' => true,
-                        ]);
-                    }
                 }
             });
 
@@ -222,9 +194,6 @@ class TeacherController extends Controller
             'mobile_allowance' => 'nullable|boolean',
             'petrol_allowance' => 'nullable|boolean',
             'pf' => 'nullable|boolean',
-            'custom_deduction_name' => 'nullable|string|max:255',
-            'custom_deduction_is_percentage' => 'nullable|boolean',
-            'custom_deduction_amount' => 'nullable|numeric|min:0|required_with:custom_deduction_name',
             'address' => 'required|string',
             'phone' => 'nullable|string',
             'emergency_contact' => 'nullable|string',
@@ -302,16 +271,6 @@ class TeacherController extends Controller
                     'name' => 'PF',
                     'is_percentage' => true,
                     'amount' => 8,
-                    'is_active' => true,
-                ]);
-            }
-
-            if (! empty($validated['custom_deduction_name']) && array_key_exists('custom_deduction_amount', $validated) && $validated['custom_deduction_amount'] !== null && $validated['custom_deduction_amount'] !== '') {
-                StaffDeduction::create([
-                    'teacher_id' => $teacher->id,
-                    'name' => $validated['custom_deduction_name'],
-                    'is_percentage' => $request->boolean('custom_deduction_is_percentage'),
-                    'amount' => $validated['custom_deduction_amount'],
                     'is_active' => true,
                 ]);
             }

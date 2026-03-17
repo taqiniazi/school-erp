@@ -62,6 +62,7 @@
                                     <th class="p-3 text-center small fw-medium text-secondary text-uppercase">P</th>
                                     <th class="p-3 text-center small fw-medium text-secondary text-uppercase">A</th>
                                     <th class="p-3 text-center small fw-medium text-secondary text-uppercase">L</th>
+                                    <th class="p-3 text-center small fw-medium text-secondary text-uppercase">LV</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,6 +72,7 @@
                                         $presentCount = $studentAttendances->where('status', 'present')->count();
                                         $absentCount = $studentAttendances->where('status', 'absent')->count();
                                         $lateCount = $studentAttendances->where('status', 'late')->count();
+                                        $leaveCount = $studentAttendances->where('status', 'leave')->count();
                                     @endphp
                                     <tr>
                                         <td class="p-3 text-nowrap">{{ $student->roll_number }}</td>
@@ -85,12 +87,14 @@
                                                     'late' => 'text-warning fw-bold',
                                                     'half_day' => 'text-info fw-bold',
                                                     'holiday' => 'text-secondary fw-bold',
+                                                    'leave' => 'text-primary fw-bold',
                                                     default => 'text-muted'
                                                 };
                                                 $display = match($status) {
                                                     'present' => 'P',
                                                     'absent' => 'A',
                                                     'late' => 'L',
+                                                    'leave' => 'LV',
                                                     'half_day' => 'HD',
                                                     'holiday' => 'H',
                                                     default => '-'
@@ -101,6 +105,7 @@
                                         <td class="p-3 text-center fw-bold text-success">{{ $presentCount }}</td>
                                         <td class="p-3 text-center fw-bold text-danger">{{ $absentCount }}</td>
                                         <td class="p-3 text-center fw-bold text-warning">{{ $lateCount }}</td>
+                                        <td class="p-3 text-center fw-bold text-primary">{{ $leaveCount }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -113,4 +118,3 @@
         </div>
     </div>
 </x-app-layout>
-

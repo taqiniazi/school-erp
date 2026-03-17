@@ -126,8 +126,8 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         // Teacher Leave Management
         Route::prefix('hr/leave')->name('hr.leave.')->group(function () {
             Route::get('my', [App\Http\Controllers\LeaveRequestController::class, 'myIndex'])->name('my');
-            Route::get('create', [App\Http\Controllers\LeaveRequestController::class, 'create'])->name('create');
-            Route::post('store', [App\Http\Controllers\LeaveRequestController::class, 'store'])->name('store');
+            Route::get('request', [App\Http\Controllers\LeaveRequestController::class, 'create'])->name('request.create');
+            Route::post('request', [App\Http\Controllers\LeaveRequestController::class, 'store'])->name('request.store');
         });
     });
 
@@ -137,6 +137,12 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
 
     Route::middleware(['role:Parent'])->group(function () {
         Route::get('/parent/dashboard', [ParentDashboardController::class, 'index'])->name('parent.dashboard');
+
+        Route::prefix('parent/leaves')->name('parent.leaves.')->group(function () {
+            Route::get('/', [App\Http\Controllers\StudentLeaveRequestController::class, 'indexForParent'])->name('index');
+            Route::get('create', [App\Http\Controllers\StudentLeaveRequestController::class, 'createForParent'])->name('create');
+            Route::post('/', [App\Http\Controllers\StudentLeaveRequestController::class, 'storeForParent'])->name('store');
+        });
     });
 
     // Shared Student/Parent Resources
@@ -152,6 +158,12 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         Route::get('attendance/create', [App\Http\Controllers\AttendanceController::class, 'create'])->name('attendance.create');
         Route::get('attendance/report', [App\Http\Controllers\AttendanceController::class, 'report'])->name('attendance.report');
         Route::post('attendance', [App\Http\Controllers\AttendanceController::class, 'store'])->name('attendance.store');
+
+        Route::prefix('student-leaves')->name('student-leaves.')->group(function () {
+            Route::get('/', [App\Http\Controllers\StudentLeaveRequestController::class, 'indexForApprover'])->name('index');
+            Route::post('{studentLeaveRequest}/approve', [App\Http\Controllers\StudentLeaveRequestController::class, 'approve'])->name('approve');
+            Route::post('{studentLeaveRequest}/reject', [App\Http\Controllers\StudentLeaveRequestController::class, 'reject'])->name('reject');
+        });
     });
 
     // Academic Management (Accessible by Admin)
@@ -306,12 +318,16 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         // Teachers (Staff)
         Route::resource('teachers', App\Http\Controllers\TeacherController::class);
 
+        Route::post('teachers/{teacher}/allocations', [App\Http\Controllers\TeacherController::class, 'storeAllocation'])->name('teachers.allocations.store');
+        Route::delete('teachers/allocations/{allocation}', [App\Http\Controllers\TeacherController::class, 'destroyAllocation'])->name('teachers.allocations.destroy');
+
         // Students
         Route::resource('students', StudentController::class);
 
         // Teacher Allocation
         Route::get('allocations', [App\Http\Controllers\TeacherAllocationController::class, 'index'])->name('allocations.index');
         Route::post('allocations', [App\Http\Controllers\TeacherAllocationController::class, 'store'])->name('allocations.store');
+        Route::put('allocations/{allocation}', [App\Http\Controllers\TeacherAllocationController::class, 'update'])->name('allocations.update');
         Route::delete('allocations/{allocation}', [App\Http\Controllers\TeacherAllocationController::class, 'destroy'])->name('allocations.destroy');
 
         // Teacher Attendance

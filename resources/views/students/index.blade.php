@@ -14,21 +14,21 @@
     <div class="container-fluid px-4 py-4">
         <!-- Main Content Card -->
         <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-            <div class="card-header bg-white py-3 border-bottom border-light d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0 text-primary fw-bold"><i class="fas fa-user-graduate me-2"></i>Student List</h5>
-                <div class="d-flex gap-2">
-                    <div class="input-group input-group-sm" style="width: 250px;">
+            <div class="card-header bg-white py-3 border-bottom border-light d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h5 class="card-title mb-0 text-primary fw-bold d-flex align-items-center">
+                    <i class="fas fa-user-graduate me-2"></i>Student List
+                </h5>
+                <div class="d-flex gap-2 flex-wrap justify-content-end">
+                    <div class="input-group input-group-sm" style="width: 290px;">
                         <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" class="form-control bg-light border-start-0" placeholder="Search students..." aria-label="Search">
+                        <input type="text" class="form-control bg-light border-start-0" placeholder="Search by name, admission no, email..." aria-label="Search students" data-dt-target="studentsTable">
                     </div>
-                    <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-filter me-1"></i> Filter</button>
-                    <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-file-export me-1"></i> Export</button>
                 </div>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light">
+                    <table id="studentsTable" class="table table-hover align-middle mb-0" data-dt-dom="rt&lt;'d-flex justify-content-between align-items-center px-4 py-3 border-top'ip&gt;" data-dt-length-change="false">
+                        <thead class="table-light">
                             <tr>
                                 <th class="px-4 py-3 text-uppercase text-secondary small fw-bold border-0">Admission No</th>
                                 <th class="px-4 py-3 text-uppercase text-secondary small fw-bold border-0">Student Name</th>
@@ -46,8 +46,8 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="d-flex align-items-center">
-                                        <div class="avatar-circle bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px;">
-                                            {{ substr($student->first_name, 0, 1) }}
+                                        <div class="avatar-circle bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3 fw-semibold" style="width: 36px; height: 36px;">
+                                            {{ strtoupper(substr((string) $student->first_name, 0, 1)) }}
                                         </div>
                                         <div>
                                             <div class="fw-bold text-dark">{{ $student->first_name }} {{ $student->last_name }}</div>

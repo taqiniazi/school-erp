@@ -1,4 +1,4 @@
-﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h1 class="h3 fw-bold text-dark mb-0">Attendance History</h1>
@@ -58,7 +58,7 @@
                                 <td class="p-3 text-nowrap">{{ $attendance->student->roll_number }}</td>
                                 <td class="p-3 text-nowrap">{{ $attendance->student->first_name }} {{ $attendance->student->last_name }}</td>
                                 <td class="p-3 text-nowrap">
-                                    <span class="badge bg-{{ $attendance->status === 'present' ? 'success' : ($attendance->status === 'absent' ? 'danger' : ($attendance->status === 'late' ? 'warning' : 'info')) }}">
+                                    <span class="badge bg-{{ $attendance->status === 'present' ? 'success' : ($attendance->status === 'absent' ? 'danger' : ($attendance->status === 'late' ? 'warning' : ($attendance->status === 'leave' ? 'primary' : 'info'))) }}">
                                         {{ ucfirst($attendance->status) }}
                                     </span>
                                 </td>

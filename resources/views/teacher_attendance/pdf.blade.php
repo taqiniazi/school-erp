@@ -1,4 +1,4 @@
-﻿﻿<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Teacher Attendance Report</title>
@@ -24,6 +24,7 @@
                 <th>P</th>
                 <th>A</th>
                 <th>L</th>
+                <th>LV</th>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +33,7 @@
                     $teacherAttendances = $attendances->get($teacher->id, collect());
                     $presentCount = $teacherAttendances->where('status', 'present')->count();
                     $absentCount = $teacherAttendances->where('status', 'absent')->count();
+                    $lateCount = $teacherAttendances->where('status', 'late')->count();
                     $leaveCount = $teacherAttendances->where('status', 'leave')->count();
                 @endphp
                 <tr>
@@ -54,6 +56,7 @@
                     @endfor
                     <td>{{ $presentCount }}</td>
                     <td>{{ $absentCount }}</td>
+                    <td>{{ $lateCount }}</td>
                     <td>{{ $leaveCount }}</td>
                 </tr>
             @endforeach
@@ -65,4 +68,3 @@
     </div>
 </body>
 </html>
-

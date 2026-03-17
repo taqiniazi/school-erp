@@ -8,7 +8,7 @@
         <div class="container-fluid px-4">
             <div class="card shadow-sm border-0 rounded-3">
                 <div class="card-body p-4 border-bottom">
-                    <form method="POST" action="{{ route('hr.leave.store') }}">
+                    <form method="POST" action="{{ route('hr.leave.request.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="row row-cols-1 row-cols-md-2 g-3">
                             <div>
@@ -33,6 +33,10 @@
                                 <label class="form-label small fw-bold text-dark">Reason</label>
                                 <textarea name="reason" class="form-control" rows="3"></textarea>
                             </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-dark">Attachment (Optional)</label>
+                                <input type="file" name="attachment" class="form-control">
+                            </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mt-4">
                             <button class="btn btn-primary px-4">Submit</button>
@@ -44,8 +48,6 @@
         </div>
     </div>
 </x-app-layout>
-
-
 
 
 

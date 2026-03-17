@@ -119,6 +119,9 @@ body {
 .vs-hidden{
     visibility: hidden;
 }
+.form-label {
+    font-weight: 500;
+}
 .card-header{
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
 }

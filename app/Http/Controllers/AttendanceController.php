@@ -6,9 +6,12 @@ use App\Models\Attendance;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\Student;
+use App\Models\Teacher;
+use App\Models\TeacherAllocation;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
@@ -18,7 +21,23 @@ class AttendanceController extends Controller
      */
     public function index(Request $request)
     {
+        $user = Auth::user();
+        $isTeacher = $user && $user->hasRole('Teacher');
+
         $classes = SchoolClass::all();
+        $teacher = null;
+        $allocations = collect();
+
+        if ($isTeacher) {
+            $teacher = Teacher::where('user_id', $user->id)->first();
+            if (! $teacher) {
+                abort(403);
+            }
+
+            $allocations = TeacherAllocation::where('teacher_id', $teacher->id)->get(['school_class_id', 'section_id']);
+            $allowedClassIds = $allocations->pluck('school_class_id')->unique()->values();
+            $classes = SchoolClass::whereIn('id', $allowedClassIds)->orderBy('name')->get();
+        }
 
         $selectedClass = $request->input('school_class_id');
         $selectedSection = $request->input('section_id');
@@ -27,10 +46,29 @@ class AttendanceController extends Controller
         $attendances = [];
         $sections = [];
 
+        if ($isTeacher && (! $selectedClass || ! $selectedSection) && $allocations->isNotEmpty()) {
+            $first = $allocations->sortBy(function ($row) {
+                return sprintf('%010d-%010d', (int) $row->school_class_id, (int) $row->section_id);
+            })->first();
+
+            return redirect()->route('attendance.index', [
+                'school_class_id' => $first->school_class_id,
+                'section_id' => $first->section_id,
+                'date' => $date,
+            ]);
+        }
+
         if ($selectedClass) {
-            $sections = Section::where('school_class_id', $selectedClass)->get();
+            if ($isTeacher) {
+                $allowedSectionIds = $allocations->where('school_class_id', (int) $selectedClass)->pluck('section_id')->unique()->values();
+                $sections = Section::where('school_class_id', $selectedClass)->whereIn('id', $allowedSectionIds)->get();
+            } else {
+                $sections = Section::where('school_class_id', $selectedClass)->get();
+            }
 
             if ($selectedSection) {
+                $this->authorizeTeacherForClassSection($selectedClass, $selectedSection);
+
                 $attendances = Attendance::with('student')
                     ->where('school_class_id', $selectedClass)
                     ->where('section_id', $selectedSection)
@@ -47,6 +85,9 @@ class AttendanceController extends Controller
      */
     public function create(Request $request)
     {
+        $user = Auth::user();
+        $isTeacher = $user && $user->hasRole('Teacher');
+
         $classes = Cache::remember('all_classes', 3600, function () {
             return SchoolClass::all();
         });
@@ -58,11 +99,43 @@ class AttendanceController extends Controller
         $students = [];
         $sections = [];
         $existingAttendance = [];
+        $teacher = null;
+        $allocations = collect();
+
+        if ($isTeacher) {
+            $teacher = Teacher::where('user_id', $user->id)->first();
+            if (! $teacher) {
+                abort(403);
+            }
+
+            $allocations = TeacherAllocation::where('teacher_id', $teacher->id)->get(['school_class_id', 'section_id']);
+            $allowedClassIds = $allocations->pluck('school_class_id')->unique()->values();
+            $classes = SchoolClass::whereIn('id', $allowedClassIds)->orderBy('name')->get();
+        }
+
+        if ($isTeacher && (! $selectedClass || ! $selectedSection) && $allocations->isNotEmpty()) {
+            $first = $allocations->sortBy(function ($row) {
+                return sprintf('%010d-%010d', (int) $row->school_class_id, (int) $row->section_id);
+            })->first();
+
+            return redirect()->route('attendance.create', [
+                'school_class_id' => $first->school_class_id,
+                'section_id' => $first->section_id,
+                'date' => $date,
+            ]);
+        }
 
         if ($selectedClass) {
-            $sections = Section::where('school_class_id', $selectedClass)->get();
+            if ($isTeacher) {
+                $allowedSectionIds = $allocations->where('school_class_id', (int) $selectedClass)->pluck('section_id')->unique()->values();
+                $sections = Section::where('school_class_id', $selectedClass)->whereIn('id', $allowedSectionIds)->get();
+            } else {
+                $sections = Section::where('school_class_id', $selectedClass)->get();
+            }
 
             if ($selectedSection) {
+                $this->authorizeTeacherForClassSection($selectedClass, $selectedSection);
+
                 $students = Student::where('school_class_id', $selectedClass)
                     ->where('section_id', $selectedSection)
                     ->where('status', 'active')
@@ -92,12 +165,14 @@ class AttendanceController extends Controller
             'date' => 'required|date',
             'attendances' => 'required|array',
             'attendances.*.student_id' => 'required|exists:students,id',
-            'attendances.*.status' => 'required|in:present,absent,late,half_day,holiday',
+            'attendances.*.status' => 'required|in:present,absent,late,leave,half_day,holiday',
         ]);
 
         $date = $request->input('date');
         $classId = $request->input('school_class_id');
         $sectionId = $request->input('section_id');
+
+        $this->authorizeTeacherForClassSection($classId, $sectionId);
 
         DB::transaction(function () use ($request, $date, $classId, $sectionId) {
             foreach ($request->input('attendances') as $studentId => $data) {
@@ -130,7 +205,24 @@ class AttendanceController extends Controller
      */
     public function report(Request $request)
     {
+        $user = Auth::user();
+        $isTeacher = $user && $user->hasRole('Teacher');
+
         $classes = SchoolClass::all();
+        $teacher = null;
+        $allocations = collect();
+
+        if ($isTeacher) {
+            $teacher = Teacher::where('user_id', $user->id)->first();
+            if (! $teacher) {
+                abort(403);
+            }
+
+            $allocations = TeacherAllocation::where('teacher_id', $teacher->id)->get(['school_class_id', 'section_id']);
+            $allowedClassIds = $allocations->pluck('school_class_id')->unique()->values();
+            $classes = SchoolClass::whereIn('id', $allowedClassIds)->orderBy('name')->get();
+        }
+
         $selectedClass = $request->input('school_class_id');
         $selectedSection = $request->input('section_id');
         $month = $request->input('month', date('m'));
@@ -141,10 +233,30 @@ class AttendanceController extends Controller
         $students = [];
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
+        if ($isTeacher && (! $selectedClass || ! $selectedSection) && $allocations->isNotEmpty()) {
+            $first = $allocations->sortBy(function ($row) {
+                return sprintf('%010d-%010d', (int) $row->school_class_id, (int) $row->section_id);
+            })->first();
+
+            return redirect()->route('attendance.report', [
+                'school_class_id' => $first->school_class_id,
+                'section_id' => $first->section_id,
+                'month' => $month,
+                'year' => $year,
+            ]);
+        }
+
         if ($selectedClass) {
-            $sections = Section::where('school_class_id', $selectedClass)->get();
+            if ($isTeacher) {
+                $allowedSectionIds = $allocations->where('school_class_id', (int) $selectedClass)->pluck('section_id')->unique()->values();
+                $sections = Section::where('school_class_id', $selectedClass)->whereIn('id', $allowedSectionIds)->get();
+            } else {
+                $sections = Section::where('school_class_id', $selectedClass)->get();
+            }
 
             if ($selectedSection) {
+                $this->authorizeTeacherForClassSection($selectedClass, $selectedSection);
+
                 $students = Student::where('school_class_id', $selectedClass)
                     ->where('section_id', $selectedSection)
                     ->orderBy('roll_number')
@@ -170,5 +282,27 @@ class AttendanceController extends Controller
         }
 
         return view('attendance.report', compact('classes', 'sections', 'students', 'attendances', 'selectedClass', 'selectedSection', 'month', 'year', 'daysInMonth'));
+    }
+
+    private function authorizeTeacherForClassSection($classId, $sectionId): void
+    {
+        $user = Auth::user();
+        if (! $user || ! $user->hasRole('Teacher')) {
+            return;
+        }
+
+        $teacher = Teacher::where('user_id', $user->id)->first();
+        if (! $teacher) {
+            abort(403);
+        }
+
+        $allowed = TeacherAllocation::where('teacher_id', $teacher->id)
+            ->where('school_class_id', $classId)
+            ->where('section_id', $sectionId)
+            ->exists();
+
+        if (! $allowed) {
+            abort(403);
+        }
     }
 }

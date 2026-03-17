@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h1 class="h3 fw-bold text-dark mb-0">Take Teacher Attendance</h1>
@@ -85,11 +85,10 @@
 @push('scripts')
 <script>
     function markAll(status) {
-        document.querySelectorAll(`input[value="${status}"]`).forEach(radio => {
+        document.querySelectorAll(`input[type="radio"][value="${status}"]`).forEach(radio => {
             radio.checked = true;
         });
     }
 </script>
 @endpush
 </x-app-layout>
-

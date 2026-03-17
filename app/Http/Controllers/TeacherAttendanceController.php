@@ -8,6 +8,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class TeacherAttendanceController extends Controller
 {
@@ -34,7 +35,11 @@ class TeacherAttendanceController extends Controller
 
         // Get all users with role 'Teacher'
         $teachers = User::role('Teacher')
-            ->where('status', 'active')
+            ->when(Schema::hasTable('teachers'), function ($q) {
+                $q->whereHas('teacherProfile', function ($tq) {
+                    $tq->where('status', 'active');
+                });
+            })
             ->orderBy('name')
             ->get();
 
@@ -90,7 +95,11 @@ class TeacherAttendanceController extends Controller
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
         $teachers = User::role('Teacher')
-            ->where('status', 'active')
+            ->when(Schema::hasTable('teachers'), function ($q) {
+                $q->whereHas('teacherProfile', function ($tq) {
+                    $tq->where('status', 'active');
+                });
+            })
             ->orderBy('name')
             ->get();
 

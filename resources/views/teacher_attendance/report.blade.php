@@ -1,4 +1,4 @@
-﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h1 class="h3 fw-bold text-dark mb-0">Teacher Attendance Monthly Report</h1>
@@ -42,6 +42,7 @@
                                 <th class="p-3 text-center small fw-medium text-secondary text-uppercase">P</th>
                                 <th class="p-3 text-center small fw-medium text-secondary text-uppercase">A</th>
                                 <th class="p-3 text-center small fw-medium text-secondary text-uppercase">L</th>
+                                <th class="p-3 text-center small fw-medium text-secondary text-uppercase">LV</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,6 +51,7 @@
                                     $teacherAttendances = $attendances->get($teacher->id, collect());
                                     $presentCount = $teacherAttendances->where('status', 'present')->count();
                                     $absentCount = $teacherAttendances->where('status', 'absent')->count();
+                                    $lateCount = $teacherAttendances->where('status', 'late')->count();
                                     $leaveCount = $teacherAttendances->where('status', 'leave')->count();
                                 @endphp
                                 <tr>
@@ -81,6 +83,7 @@
                                     @endfor
                                     <td class="p-3 text-center fw-bold text-success">{{ $presentCount }}</td>
                                     <td class="p-3 text-center fw-bold text-danger">{{ $absentCount }}</td>
+                                    <td class="p-3 text-center fw-bold text-warning">{{ $lateCount }}</td>
                                     <td class="p-3 text-center fw-bold text-primary">{{ $leaveCount }}</td>
                                 </tr>
                             @endforeach
@@ -91,4 +94,3 @@
         </div>
     </div>
 </x-app-layout>
-

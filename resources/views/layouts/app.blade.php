@@ -31,6 +31,7 @@
     <!-- Custom CSS for Admin Panel -->
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    @stack('styles')
     
     <!-- Chart.js -->
     <script src="{{ asset('js/chart.js') }}"></script>
@@ -69,6 +70,8 @@
                             @endif
                         </div>
                     @endif
+
+                    <div id="ajaxAlertContainer"></div>
 
                     @if(!empty($flashSuccess))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -153,16 +156,37 @@
                             infoEmpty: 'No entries',
                             emptyTable: $tbl.data('dt-empty-msg') || 'No data available'
                         };
-                        $tbl.DataTable({
-                            paging: true,
-                            pageLength: 10,
-                            lengthChange: true,
+                        const dom = $tbl.attr('data-dt-dom');
+                        const paging = $tbl.attr('data-dt-paging');
+                        const lengthChange = $tbl.attr('data-dt-length-change');
+                        const searching = $tbl.attr('data-dt-searching');
+                        const pageLengthAttr = $tbl.attr('data-dt-page-length');
+                        const pageLength = pageLengthAttr ? parseInt(pageLengthAttr, 10) : 10;
+
+                        const dt = $tbl.DataTable({
+                            paging: paging !== 'false',
+                            pageLength: Number.isFinite(pageLength) ? pageLength : 10,
+                            lengthChange: lengthChange !== 'false',
+                            searching: searching !== 'false',
                             ordering: true,
                             order: [],
                             responsive: true,
                             autoWidth: false,
-                            language
+                            language,
+                            ...(dom ? { dom } : {}),
                         });
+
+                        const tableId = $tbl.attr('id');
+                        if (tableId) {
+                            document.querySelectorAll(`[data-dt-target="${tableId}"]`).forEach((input) => {
+                                if (!(input instanceof HTMLInputElement)) return;
+                                if (input.dataset.dtBound) return;
+                                input.dataset.dtBound = '1';
+                                input.addEventListener('input', function () {
+                                    dt.search(input.value || '').draw();
+                                });
+                            });
+                        }
                         $tbl.data('dt-initialized', true);
                     } catch (e) {
                         console.error('DataTable init failed for a table:', e);
@@ -179,26 +203,118 @@
                 });
             }
 
-            // Global Confirmation Modal Logic
             const confirmationModalEl = document.getElementById('confirmationModal');
             if (confirmationModalEl) {
                 const confirmationModal = new bootstrap.Modal(confirmationModalEl);
                 const confirmButton = document.getElementById('confirmButton');
                 const confirmationMessage = document.getElementById('confirmationMessage');
-                let targetForm = null;
+                const alertContainer = document.getElementById('ajaxAlertContainer');
+                let targetAction = null;
+                let isAjax = false;
 
-                // Handle forms with data-confirm-message attribute
-                document.addEventListener('submit', function(e) {
+                function escapeHtml(text) {
+                    return String(text)
+                        .replaceAll('&', '&amp;')
+                        .replaceAll('<', '&lt;')
+                        .replaceAll('>', '&gt;')
+                        .replaceAll('"', '&quot;')
+                        .replaceAll("'", '&#039;');
+                }
+
+                function showAlert(type, message) {
+                    if (!alertContainer) return;
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = `
+                        <div class="alert alert-${escapeHtml(type)} alert-dismissible fade show shadow-sm border-0" role="alert">
+                            ${escapeHtml(message)}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    `;
+                    alertContainer.appendChild(wrapper.firstElementChild);
+                    window.setTimeout(() => {
+                        const el = alertContainer.querySelector('.alert');
+                        if (!el) return;
+                        const alert = bootstrap.Alert.getOrCreateInstance(el);
+                        alert.close();
+                    }, 3500);
+                }
+
+                function getConfirmMessageFromInline(handler) {
+                    if (!handler) return null;
+                    const m = String(handler).match(/confirm\((['"])(.*?)\1\)/);
+                    return m ? m[2] : null;
+                }
+
+                function isDeleteForm(form) {
+                    if (!form) return false;
+                    const methodAttr = (form.getAttribute('method') || '').toLowerCase();
+                    if (methodAttr === 'delete') return true;
+                    const methodInput = form.querySelector('input[name="_method"]');
+                    return methodAttr === 'post' && methodInput && String(methodInput.value).toUpperCase() === 'DELETE';
+                }
+
+                async function ajaxSubmitForm(form) {
+                    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+                    const formData = new FormData(form);
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': token,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json, text/plain, */*',
+                        },
+                        body: formData,
+                        redirect: 'follow',
+                    });
+
+                    if (!response.ok) {
+                        let message = 'Request failed.';
+                        try {
+                            const data = await response.json();
+                            if (data?.message) message = data.message;
+                        } catch (_) {
+                        }
+                        throw new Error(message);
+                    }
+                }
+
+                function removeRowForForm(form) {
+                    const tr = form.closest('tr');
+                    if (!tr) return;
+                    const table = tr.closest('table');
+                    if (window.jQuery && table) {
+                        const $ = window.jQuery;
+                        const $tbl = $(table);
+                        if ($tbl.data('dt-initialized') && $.fn.DataTable) {
+                            const dt = $tbl.DataTable();
+                            dt.row(tr).remove().draw(false);
+                            return;
+                        }
+                    }
+                    tr.remove();
+                }
+
+                document.addEventListener(
+                    'submit',
+                    function (e) {
                     const form = e.target;
-                    const message = form.getAttribute('data-confirm-message');
-                    
-                    if (message) {
+
+                    if (!(form instanceof HTMLFormElement)) return;
+
+                    const forceConfirm = isDeleteForm(form);
+                    const message =
+                        form.getAttribute('data-confirm-message') ||
+                        getConfirmMessageFromInline(form.getAttribute('onsubmit')) ||
+                        (forceConfirm ? 'Delete this record?' : null);
+
+                    if (message && !form.dataset.skipConfirm) {
                         e.preventDefault();
-                        targetForm = form;
+                        e.stopImmediatePropagation();
+                        targetAction = { type: 'form', el: form };
+                        isAjax = forceConfirm;
                         confirmationMessage.textContent = message;
-                        
-                        // Check if it's a delete/danger action
-                        if (form.getAttribute('data-confirm-style') === 'danger' || message.toLowerCase().includes('delete') || message.toLowerCase().includes('cancel')) {
+
+                        if (forceConfirm || form.getAttribute('data-confirm-style') === 'danger' || message.toLowerCase().includes('delete') || message.toLowerCase().includes('cancel')) {
                             confirmButton.classList.remove('btn-primary');
                             confirmButton.classList.add('btn-danger');
                         } else {
@@ -208,14 +324,69 @@
                         
                         confirmationModal.show();
                     }
-                });
+                    },
+                    true
+                );
 
-                confirmButton.addEventListener('click', function() {
-                    if (targetForm) {
-                        // Remove the attribute to prevent the listener from triggering again
-                        targetForm.removeAttribute('data-confirm-message');
-                        targetForm.submit();
+                document.addEventListener(
+                    'click',
+                    function (e) {
+                        const el = e.target instanceof Element ? e.target.closest('[onclick]') : null;
+                        if (!el) return;
+                        const inline = el.getAttribute('onclick');
+                        const message = getConfirmMessageFromInline(inline);
+                        if (!message) return;
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const form = el.closest('form');
+                        if (form && isDeleteForm(form)) {
+                            targetAction = { type: 'form', el: form };
+                            isAjax = true;
+                        } else if (form) {
+                            targetAction = { type: 'form', el: form };
+                            isAjax = false;
+                        } else {
+                            targetAction = { type: 'link', el };
+                            isAjax = false;
+                        }
+
+                        confirmationMessage.textContent = message;
+                        confirmButton.classList.remove('btn-primary');
+                        confirmButton.classList.add('btn-danger');
+                        confirmationModal.show();
+                    },
+                    true
+                );
+
+                confirmButton.addEventListener('click', async function() {
+                    if (!targetAction) return;
+                    confirmButton.disabled = true;
+
+                    try {
+                        if (targetAction.type === 'form') {
+                            const form = targetAction.el;
+                            if (isAjax) {
+                                await ajaxSubmitForm(form);
+                                removeRowForForm(form);
+                                showAlert('success', 'Deleted successfully.');
+                            } else {
+                                form.dataset.skipConfirm = '1';
+                                form.submit();
+                            }
+                        } else if (targetAction.type === 'link') {
+                            window.location.href = targetAction.el.getAttribute('href') || '#';
+                        }
                         confirmationModal.hide();
+                    } catch (err) {
+                        showAlert('danger', err?.message || 'Delete failed.');
+                    } finally {
+                        confirmButton.disabled = false;
+                        if (targetAction?.type === 'form') {
+                            delete targetAction.el.dataset.skipConfirm;
+                        }
+                        targetAction = null;
+                        isAjax = false;
                     }
                 });
             }

@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         {{ __('Parent Dashboard') }}
     </x-slot>
@@ -91,6 +91,7 @@
                                             <div class="btn-group btn-group-sm flex-shrink-0">
                                                 <a href="{{ route('student.report_card', ['student_id' => $child->id]) }}" class="btn btn-outline-success">Report Card</a>
                                                 <a href="{{ route('student.my-attendance', ['student_id' => $child->id]) }}" class="btn btn-outline-primary">Attendance</a>
+                                                <a href="{{ route('parent.leaves.create', ['student_id' => $child->id]) }}" class="btn btn-outline-warning">Leave</a>
                                             </div>
                                         </div>
                                     </li>
@@ -132,5 +133,4 @@
         </div>
     </div>
 </x-app-layout>
-
 

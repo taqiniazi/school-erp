@@ -154,6 +154,11 @@
              <li>
                 <a href="{{ route('teacher-attendance.index') }}" class="{{ request()->routeIs('teacher-attendance.index') ? 'active' : '' }}">Teacher Attendance</a>
             </li>
+            @if(auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'School Admin', 'Teacher']))
+                <li>
+                    <a href="{{ route('student-leaves.index') }}" class="{{ request()->routeIs('student-leaves.*') ? 'active' : '' }}">Student Leave Approvals</a>
+                </li>
+            @endif
             <li>
                 <a href="{{ route('reports.attendance') }}" class="{{ request()->routeIs('reports.attendance') ? 'active' : '' }}">Attendance Reports</a>
             </li>
@@ -424,7 +429,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('hr.leave.my') }}" class="{{ request()->routeIs('hr.leave.my') || request()->routeIs('hr.leave.create') ? 'active' : '' }}">
+            <a href="{{ route('hr.leave.my') }}" class="{{ request()->routeIs('hr.leave.my') || request()->routeIs('hr.leave.request.*') ? 'active' : '' }}">
                 <i class="fas fa-calendar-minus"></i> Leave Requests
             </a>
         </li>
@@ -478,6 +483,15 @@
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
         </li>
-        <!-- Add more parent links here if available -->
+        <li>
+            <a href="{{ route('student.my-attendance') }}" class="{{ request()->routeIs('student.my-attendance') ? 'active' : '' }}">
+                <i class="fas fa-user-check"></i> Attendance
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('parent.leaves.index') }}" class="{{ request()->routeIs('parent.leaves.*') ? 'active' : '' }}">
+                <i class="fas fa-calendar-minus"></i> Leave Requests
+            </a>
+        </li>
     @endif
 </ul>

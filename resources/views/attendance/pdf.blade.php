@@ -1,4 +1,4 @@
-﻿﻿<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Attendance Report</title>
@@ -32,6 +32,7 @@
                 <th>P</th>
                 <th>A</th>
                 <th>L</th>
+                <th>LV</th>
             </tr>
         </thead>
         <tbody>
@@ -41,6 +42,7 @@
                     $presentCount = $studentAttendances->where('status', 'present')->count();
                     $absentCount = $studentAttendances->where('status', 'absent')->count();
                     $lateCount = $studentAttendances->where('status', 'late')->count();
+                    $leaveCount = $studentAttendances->where('status', 'leave')->count();
                 @endphp
                 <tr>
                     <td class="text-start">{{ $student->roll_number }}</td>
@@ -53,6 +55,7 @@
                                 'present' => 'P',
                                 'absent' => 'A',
                                 'late' => 'L',
+                                'leave' => 'LV',
                                 'half_day' => 'HD',
                                 'holiday' => 'H',
                                 default => '-'
@@ -63,14 +66,14 @@
                     <td>{{ $presentCount }}</td>
                     <td>{{ $absentCount }}</td>
                     <td>{{ $lateCount }}</td>
+                    <td>{{ $leaveCount }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
     <div class="legend">
-        <strong>Legend:</strong> P: Present, A: Absent, L: Late, HD: Half Day, H: Holiday
+        <strong>Legend:</strong> P: Present, A: Absent, L: Late, LV: Leave, HD: Half Day, H: Holiday
     </div>
 </body>
 </html>
-
