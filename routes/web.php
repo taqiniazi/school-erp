@@ -107,6 +107,8 @@ Route::middleware(['auth', 'verified', 'subscribed'])->group(function () {
         Route::resource('payment-methods', \App\Http\Controllers\SuperAdmin\PaymentMethodController::class);
 
         Route::get('schools', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'index'])->name('schools.index');
+        Route::get('schools/create', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'create'])->name('schools.create');
+        Route::post('schools', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'store'])->name('schools.store');
         Route::post('schools/{school}/activate', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'activate'])->name('schools.activate');
         Route::post('schools/{school}/deactivate', [\App\Http\Controllers\SuperAdmin\SchoolController::class, 'deactivate'])->name('schools.deactivate');
 

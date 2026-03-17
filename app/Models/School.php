@@ -34,6 +34,18 @@ class School extends Model
         return $this->hasMany(User::class);
     }
 
+    public function admin()
+    {
+        return $this->hasOne(User::class)
+            ->where(function ($q) {
+                $q->where('role', 'school_admin')
+                    ->orWhereHas('roles', function ($rq) {
+                        $rq->where('name', 'School Admin');
+                    });
+            })
+            ->latest('id');
+    }
+
     public function campuses()
     {
         return $this->hasMany(Campus::class);

@@ -1,7 +1,10 @@
-﻿﻿<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h1 class="h3 fw-bold text-dark mb-0">Schools</h1>
+            <a href="{{ route('super-admin.schools.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus fa-sm text-white-50"></i> Add School
+            </a>
         </div>
     </x-slot>
 
@@ -37,10 +40,16 @@
                             @endphp
                             <tr>
                                 <td class="p-3 text-nowrap">{{ $s->name }}</td>
-                                <td class="p-3 text-nowrap">{{ $s->admin ? $s->admin->name : 'No Admin' }}</td>
+                                <td class="p-3 text-nowrap">
+                                    @if($s->admin)
+                                        {{ $s->admin->name }} ({{ $s->admin->email }})
+                                    @else
+                                        No Admin
+                                    @endif
+                                </td>
                                 <td class="p-3 text-nowrap">{{ $s->students_count }}</td>
                                 <td class="p-3 text-nowrap">{{ $s->teachers_count }}</td>
-                                <td class="p-3 text-nowrap">{{ $s->campuses_count }}</td>
+                                <td class="p-3 text-nowrap">{{ $s->campus_count ?? $s->campuses_count }}</td>
                                 <td class="p-3 text-nowrap">
                                     {{ optional(optional($sub)->plan)->name ?: '—' }}
                                     {{ $sub ? '(' . ucfirst($sub->status) . ')' : '' }}

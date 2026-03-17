@@ -176,8 +176,6 @@ body {
     opacity: 1;
     background: #3F51B5 !important;
 }
-
-/* Dropdown Toggle Icon */
 #sidebar a[data-bs-toggle="collapse"] {
     position: relative;
 }
