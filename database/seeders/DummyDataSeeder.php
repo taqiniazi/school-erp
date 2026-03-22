@@ -214,7 +214,7 @@ class DummyDataSeeder extends Seeder
             }
         }
 
-        $students = Student::take(3)->get();
+        $students = Student::all();
         foreach ($students as $idx => $stu) {
             $invoice = FeeInvoice::firstOrCreate(
                 ['student_id' => $stu->id, 'invoice_no' => 'INV-'.str_pad((string) ($stu->id), 6, '0', STR_PAD_LEFT)],
@@ -238,11 +238,27 @@ class DummyDataSeeder extends Seeder
                 );
                 $total += $amount;
             }
-            $invoice->update(['total_amount' => $total, 'paid_amount' => $total / 2, 'status' => 'partial']);
-            FeePayment::firstOrCreate(
-                ['fee_invoice_id' => $invoice->id, 'amount' => $total / 2, 'payment_date' => now()->toDateString()],
-                ['payment_method' => 'cash', 'transaction_reference' => 'RCPT-'.Str::upper(Str::random(6)), 'remarks' => 'Partial payment', 'collected_by' => $adminUser?->id]
-            );
+            // Some students paid, some partial, some unpaid
+            $paid = 0;
+            if ($idx % 3 === 0) {
+                $paid = $total;
+                $status = 'paid';
+            } elseif ($idx % 3 === 1) {
+                $paid = $total / 2;
+                $status = 'partial';
+            } else {
+                $paid = 0;
+                $status = 'unpaid';
+            }
+
+            $invoice->update(['total_amount' => $total, 'paid_amount' => $paid, 'status' => $status]);
+
+            if ($paid > 0) {
+                FeePayment::firstOrCreate(
+                    ['fee_invoice_id' => $invoice->id, 'amount' => $paid, 'payment_date' => now()->toDateString()],
+                    ['payment_method' => 'cash', 'transaction_reference' => 'RCPT-'.Str::upper(Str::random(6)), 'remarks' => 'Payment received', 'collected_by' => $adminUser?->id]
+                );
+            }
         }
 
         // Payroll: Payslip for first teacher

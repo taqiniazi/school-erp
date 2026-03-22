@@ -138,6 +138,13 @@ class UserSeeder extends Seeder
             ['email' => 'teacher@school.com', 'name' => 'Teacher User'],
             ['email' => 'teacher2@school.com', 'name' => 'Ayesha Khan'],
             ['email' => 'teacher3@school.com', 'name' => 'Usman Ali'],
+            ['email' => 'teacher4@school.com', 'name' => 'Zia Ahmed'],
+            ['email' => 'teacher5@school.com', 'name' => 'Sobia Malik'],
+            ['email' => 'teacher6@school.com', 'name' => 'Irfan Hussain'],
+            ['email' => 'teacher7@school.com', 'name' => 'Nida Shah'],
+            ['email' => 'teacher8@school.com', 'name' => 'Bilal Khan'],
+            ['email' => 'teacher9@school.com', 'name' => 'Zoya Ali'],
+            ['email' => 'teacher10@school.com', 'name' => 'Haris Iqbal'],
         ];
 
         foreach ($teacherSeeds as $t) {
@@ -201,6 +208,26 @@ class UserSeeder extends Seeder
             ['email' => 'student8@school.com', 'name' => 'Hira Malik', 'first' => 'Hira', 'last' => 'Malik', 'gender' => 'female'],
             ['email' => 'student9@school.com', 'name' => 'Saad Khan', 'first' => 'Saad', 'last' => 'Khan', 'gender' => 'male'],
             ['email' => 'student10@school.com', 'name' => 'Noor Fatima', 'first' => 'Noor', 'last' => 'Fatima', 'gender' => 'female'],
+            ['email' => 'student11@school.com', 'name' => 'Umer Ali', 'first' => 'Umer', 'last' => 'Ali', 'gender' => 'male'],
+            ['email' => 'student12@school.com', 'name' => 'Sana Ahmed', 'first' => 'Sana', 'last' => 'Ahmed', 'gender' => 'female'],
+            ['email' => 'student13@school.com', 'name' => 'Hamza Khan', 'first' => 'Hamza', 'last' => 'Khan', 'gender' => 'male'],
+            ['email' => 'student14@school.com', 'name' => 'Dua Malik', 'first' => 'Dua', 'last' => 'Malik', 'gender' => 'female'],
+            ['email' => 'student15@school.com', 'name' => 'Taha Hussain', 'first' => 'Taha', 'last' => 'Hussain', 'gender' => 'male'],
+            ['email' => 'student16@school.com', 'name' => 'Ayesha Noor', 'first' => 'Ayesha', 'last' => 'Noor', 'gender' => 'female'],
+            ['email' => 'student17@school.com', 'name' => 'Zaid Ali', 'first' => 'Zaid', 'last' => 'Ali', 'gender' => 'male'],
+            ['email' => 'student18@school.com', 'name' => 'Laiba Khan', 'first' => 'Laiba', 'last' => 'Khan', 'gender' => 'female'],
+            ['email' => 'student19@school.com', 'name' => 'Abdullah Ahmed', 'first' => 'Abdullah', 'last' => 'Ahmed', 'gender' => 'male'],
+            ['email' => 'student20@school.com', 'name' => 'Khadija Bibi', 'first' => 'Khadija', 'last' => 'Bibi', 'gender' => 'female'],
+            ['email' => 'student21@school.com', 'name' => 'Mustafa Khan', 'first' => 'Mustafa', 'last' => 'Khan', 'gender' => 'male'],
+            ['email' => 'student22@school.com', 'name' => 'Sadia Malik', 'first' => 'Sadia', 'last' => 'Malik', 'gender' => 'female'],
+            ['email' => 'student23@school.com', 'name' => 'Usama Ali', 'first' => 'Usama', 'last' => 'Ali', 'gender' => 'male'],
+            ['email' => 'student24@school.com', 'name' => 'Hafsa Noor', 'first' => 'Hafsa', 'last' => 'Noor', 'gender' => 'female'],
+            ['email' => 'student25@school.com', 'name' => 'Rayyan Ahmed', 'first' => 'Rayyan', 'last' => 'Ahmed', 'gender' => 'male'],
+            ['email' => 'student26@school.com', 'name' => 'Amna Khan', 'first' => 'Amna', 'last' => 'Khan', 'gender' => 'female'],
+            ['email' => 'student27@school.com', 'name' => 'Ibrahim Hussain', 'first' => 'Ibrahim', 'last' => 'Hussain', 'gender' => 'male'],
+            ['email' => 'student28@school.com', 'name' => 'Zainab Bibi', 'first' => 'Zainab', 'last' => 'Bibi', 'gender' => 'female'],
+            ['email' => 'student29@school.com', 'name' => 'Yahya Ali', 'first' => 'Yahya', 'last' => 'Ali', 'gender' => 'male'],
+            ['email' => 'student30@school.com', 'name' => 'Sumaira Malik', 'first' => 'Sumaira', 'last' => 'Malik', 'gender' => 'female'],
         ];
 
         foreach ($studentSeeds as $i => $s) {
