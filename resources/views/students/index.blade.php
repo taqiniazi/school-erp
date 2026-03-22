@@ -15,7 +15,7 @@
         <!-- Main Content Card -->
         <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
             <div class="card-header bg-white py-3 border-bottom border-light d-flex justify-content-between align-items-center flex-wrap gap-2">
-                <h5 class="card-title mb-0 text-primary fw-bold d-flex align-items-center">
+                <h5 class="card-title mb-0 fw-bold d-flex align-items-center">
                     <i class="fas fa-user-graduate me-2"></i>Student List
                 </h5>
                 <div class="d-flex gap-2 flex-wrap justify-content-end">
@@ -25,7 +25,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body">
                 <div class="table-responsive">
                     <table id="studentsTable" class="table table-hover align-middle mb-0" data-dt-dom="rt&lt;'d-flex justify-content-between align-items-center px-4 py-3 border-top'ip&gt;" data-dt-length-change="false">
                         <thead class="table-light">

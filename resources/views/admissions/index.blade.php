@@ -159,12 +159,12 @@
                     <div class="text-muted small">{{ $admissions->count() }} record(s)</div>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('students.create') }}" class="btn btn-sm btn-outline-primary">
+                    <a href="{{ route('students.create') }}" class="btn btn-sm btn-outline-light">
                         <i class="fas fa-plus me-1"></i>New Admission
                     </a>
                 </div>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0 no-datatable">
                         <thead>
