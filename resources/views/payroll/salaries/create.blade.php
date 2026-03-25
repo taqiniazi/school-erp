@@ -1,4 +1,4 @@
-﻿﻿﻿﻿<x-app-layout>
+﻿﻿﻿﻿﻿﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="fw-semibold h4 text-dark lh-sm">
             {{ __('New Salary Structure') }}
